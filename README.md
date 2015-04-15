@@ -20,8 +20,10 @@ releases
 
 ## Requirements
 
-Python 3.3
-Django 1.8
-Postgres 9
+* Python 3.3
+* Django 1.8
+* Postgres 9
+
+
 
 
