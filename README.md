@@ -1,14 +1,14 @@
-#  somaliaims
+#  somaliaims project
 -------------
 
 ## Developer guidelines
 
 The development process of this project follows the gitflow concept
 
-master - production
-develop - staging
-feature branches - this will be for any feature you are working
-releases
+* master - production
+* develop - staging
+* feature branches - this will be for any feature you are working
+* releases
 
 ## Notes
 
@@ -20,10 +20,17 @@ releases
 
 ## Requirements
 
-* Python 3.3
+* Python 3.4
 * Django 1.8
 * Postgres 9
 
+## Setup
+
+* Install Python 3.4
+* Set up virtual environment
+* ```
+   ./manage.py 
+  ```
 
 
 
