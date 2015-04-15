@@ -28,9 +28,14 @@ The development process of this project follows the gitflow concept
 
 * Install Python 3.4
 * Set up virtual environment
-* ```
-   ./manage.py 
   ```
+   ./manage.py migrate
+  ```
+  
+  ```
+   ./manage.py runserver
+   ```
+
 
 
 
