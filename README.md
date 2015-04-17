@@ -1,5 +1,5 @@
 #  somaliaims project
--------------
+----------------------
 
 ## Developer guidelines
 
@@ -9,6 +9,48 @@ The development process of this project follows the gitflow concept
 * develop - staging
 * feature branches - this will be for any feature you are working
 * releases
+
+
+## Git Flow Setup
+
+### Installation
+
+#### Linux
+
+```
+$ apt-get install git-flow
+```
+
+#### Mac
+
+```
+$ brew install git-flow
+```
+
+### Getting Started
+
+1. Initialize your repository with
+
+```
+$ git flow init
+```
+
+2. Start a new feature
+
+```
+$ git flow feature start MYFEATURE
+```
+
+3. Work on the feature and then send a PR and tag either of the developers.
+
+
+4. Merges will be done on the github side rather than the terminal to minimize conflicts.
+
+
+For more into on git-flow you can read this 2 articles
+
+[ Git Flow CheeatSheet](http://danielkummer.github.io/git-flow-cheatsheet/) . Thanks to Daniel Crammer
+[ A successful Git Branching Model](http://nvie.com/posts/a-successful-git-branching-model/) . Thanks to Vincent Driessen
 
 ## Notes
 
@@ -20,9 +62,20 @@ The development process of this project follows the gitflow concept
 
 ## Requirements
 
+
+### Production
+* Ubuntu 14.04
 * Python 3.4
 * Django 1.8
 * Postgres 9
+* VirtualEnv
+
+### Develp
+* Virtual Env
+* Python 3.4
+* Django 1.8
+* SQlite or Postgres
+
 
 ## Setup
 
