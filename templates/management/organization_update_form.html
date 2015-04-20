@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<form id="myForm" method="post" action="">
+            {% csrf_token %}
+
+           {{ form }}
+            <input type="submit" value="Update organization">
+       </form>
+
+{% endblock %}

@@ -1,13 +1,22 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script src="{% static "jquery.min.js" %}"></script>
+    <script src="{% static "jquery.formset.js" %}"></script>
+    <script type="text/javascript">
+          $(function() {
+               $('#myForm tbody tr').formset({
+                   prefix: '{{ formset.prefix }}'
+               });
+           })
+     </script>
     {% load bootstrap3 %}
 
     {# Load CSS and JavaScript #}
     {% bootstrap_css %}
-    {% bootstrap_javascript %}
 </head>
 <body>
 {% block content %}
