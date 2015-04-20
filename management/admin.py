@@ -1,16 +1,23 @@
 from django.contrib import admin
-from .models import Organization, Location, SubLocation, Sector, Currency
+from .models import Organization, Location, SubLocation, Sector, Currency, ExchangeRate
 
 
 class SubLocationInline(admin.TabularInline):
     model = SubLocation
     extra = 1
 
+
 class LocationAdmin(admin.ModelAdmin):
     inlines = [SubLocationInline]
 
+
+class ExchangeRateModelAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False if self.model.objects.count() > 0 else True
+
 admin.site.register(Organization)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(ExchangeRate, ExchangeRateModelAdmin)
 admin.site.register(SubLocation)
 admin.site.register(Sector)
 admin.site.register(Currency)

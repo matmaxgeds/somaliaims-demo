@@ -1,13 +1,6 @@
 from django.contrib import admin
-from management.models import Location, SubLocation
-from .models import Project, ExchangeRate, LocationAllocation, SectorAllocation, Spending, Contact, Document, \
+from .models import Project, LocationAllocation, SectorAllocation, Spending, Contact, Document, \
     UserOrganization
-
-
-class ExchangerateModelAdmin(admin.ModelAdmin):
-
-    def has_add_permission(self, request):
-        return False if self.model.objects.count() > 0 else True
 
 
 class UserOrnanizationInline(admin.TabularInline):
@@ -30,7 +23,7 @@ class SpendingInline(admin.TabularInline):
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    filter_horizontal = ( 'locations',  'sublocations', 'funders', 'implementers')
+    filter_horizontal = ('locations',  'sublocations', 'funders', 'implementers', 'sectors')
     inlines = [
             UserOrnanizationInline, LocationShareInline, SectorShareInline, SpendingInline
     ]
@@ -38,7 +31,6 @@ class ProjectAdmin(admin.ModelAdmin):
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(UserOrganization)
-admin.site.register(ExchangeRate, ExchangerateModelAdmin)
 admin.site.register(LocationAllocation)
 admin.site.register(SectorAllocation)
 admin.site.register(Contact)

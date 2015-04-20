@@ -20,6 +20,7 @@ class Project(models.Model):
     value = models.FloatField()
     locations = models.ManyToManyField(Location)
     sublocations = models.ManyToManyField(SubLocation, blank=True)
+    sectors = models.ManyToManyField(Sector, blank=True)
     currency = models.ForeignKey(Currency)
     rateToUSD = rateToUSD = models.DecimalField(max_digits=4, decimal_places=4)
     active = models.BooleanField(blank=True)
@@ -38,18 +39,6 @@ class Project(models.Model):
         else:
             pass
         super(Project, self).save()
-
-
-class ExchangeRate(models.Model):
-    """Universal conversion rate from USD to SOM. Set by manager."""
-    dateSet = models.DateField(auto_now=True)
-    rateToSOM = models.FloatField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'exchange_rate_to_usd'
-
-    def __str__(self):
-        return  str(self.rateToSOM)
 
 
 class Spending(models.Model):
@@ -137,15 +126,3 @@ class UserOrganization(models.Model):
 
     def __str__(self):
         return self.name
-
-
-#class ProjectLocation(models.Model):
-#    project = models.ForeignKey(Project)
-#    location = models.ManyToManyField(Location)
-#    sublocations = models.ManyToManyField(SubLocation)
-
-#    class Meta:
-#        db_table = 'project_locations_and _sublocations'
-
-#    def __str__(self):
-#        return self.project.name

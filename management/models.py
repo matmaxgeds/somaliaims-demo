@@ -66,3 +66,15 @@ class Currency(models.Model):
         return "{0} - {1}".format(self.abbrev, self.currency)
 
 
+class ExchangeRate(models.Model):
+    """Universal conversion rate from USD to SOM. Set by manager."""
+    dateSet = models.DateField(auto_now=True)
+    rateToSOM = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'exchange_rate_to_usd'
+
+    def __str__(self):
+        return str(self.rateToSOM)
+
+
