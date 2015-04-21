@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    {% if exchange_rate %}
+    <p>EXCHANGE RATE: {{ exchange_rate.rateToSOM }}</p><a href="{% url 'rate_update' %}">Edit</a>
+    {% else %}
+    <p><a href="{% url 'rate_update' %}">Set exchange rate</a></p>
+    {% endif %}
+</div>
+<div class="row">
+<div class="container line">
+{% if object_list %}
+    <table class="table">
+    <tr>
+        <th>Locations</th>
+    </tr>
+    {% for location in object_list %}
+    <tr>
+        <td>
+        <a href="{% url 'location_update' location.id %}">{{ location.name }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </ul>
+    </table>
+{% else %}
+    <p>No locations available</p>
+    <p><a href="{% url 'location_add' %}">Add location</a></p>
+{% endif %}
+</div>
+</div>
+<div class="row">
+    <div class="container line">
+    {% if organizations %}
+        <table class="table">
+            <tr>
+                <th>Organizations</th>
+            </tr>
+    {% for organization in organizations %}
+    <tr>
+        <td>
+        <a href="{% url 'organization_update' organization.id %}">{{ organization.name }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </ul>
+</table>
+    {% else %}
+    <p>No organizations available</p>
+    <p><a href="{% url 'organization_add' %}">Add organization</a></p>
+{% endif %}
+</div>
+</div>
+<div class="row">
+    <div class="container line">
+    {% if sectors %}
+        <table class="table">
+            <tr>
+                <th>Sectors</th>
+            </tr>
+    {% for sector in sectors %}
+    <tr>
+        <td>
+        <a href="{% url 'sector_update' sector.id %}">{{ sector.name }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </ul>
+</table>
+{% else %}
+    <p>No sectors available</p>
+    <p><a href="{% url 'sector_add' %}">Add sector</a></p>
+{% endif %}
+</div>
+</div>
+{% endblock %}
