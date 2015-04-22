@@ -8,3 +8,9 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+BOOTSTRAP3 = {
+    # The complete URL to the Bootstrap CSS file
+    'css_url': '/static/bootstrap/css/bootstrap.min.css',
+
+}
