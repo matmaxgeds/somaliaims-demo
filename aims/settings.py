@@ -129,7 +129,7 @@ GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
 
 try:
     if DEBUG:
-        from local_settings import *
+        from .local_settings import *
 except ImportError:
     pass
 
