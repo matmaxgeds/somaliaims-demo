@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<h5>Update project</h5>
+<br>
+<form id="myForm" method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+            {{ form.non_field_errors }}
+            {{ form.name_of_field.errors }}
+           {{ form.as_p }}
+            {{ form1.non_field_errors }}
+            {{ form1.name_of_field.errors }}
+           {{ form1.as_p }}
+            {{ formset.management_form }}
+           <table border="0" cellpadding="0" cellspacing="0">
+               <tbody id="location">
+
+                    {{ formset.non_form_errors }}
+                    {% for dict in formset.errors %}
+                    {% for error in dict.values %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endfor %}
+                    <th>Locations and allocations</th>
+                   <br>
+                   <tr>
+                       <td>
+                           Location
+                       </td>
+                       <td>
+                           Sublocations
+                       </td>
+                       <td>
+                           Allocation
+                       </td>
+                   </tr>
+                   {% for form in formset %}
+
+                   {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+
+                   <tr>
+                      <td>{{ form.location }}</td>
+                      <td>{{ form.sublocations }}</td>
+                      <td>{{ form.allocatedPercentage }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+
+           <table>
+               <tbody id="sector">
+               <th>Sectors and allocations</th>
+                   <br>
+                   <tr>
+                       <td>
+                           Sector
+                       </td>
+
+                       <td>
+                           Allocation
+                       </td>
+                   </tr>
+                    {{ formset1.management_form }}
+                    {{ formset1.non_form_errors }}
+                    {% for dict in formset1.errors %}
+                    {% for error in dict.values %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endfor %}
+
+                   {% for form in formset1.forms %}
+                   {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+
+                   <tr>
+                      <td>{{ form.sector }}</td>
+                      <td>{{ form.allocatedPercentage }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+
+           <table>
+               <tbody id="user-organizations">
+               <th>Other organizations</th>
+                   <br>
+                   <tr>
+                       <td>
+                           Name
+                       </td>
+
+                       <td>
+                           Role
+                       </td>
+                   </tr>
+                    {{ formset2.management_form }}
+                    {{ formset2.non_form_errors }}
+                    {% for dict in formset2.errors %}
+                    {% for error in dict.values %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endfor %}
+
+                   {% for form in formset2.forms %}
+                   {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+                   <tr>
+                      <td>{{ form.name }}</td>
+                      <td>{{ form.role }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+            <div>
+            <h5>Contact</h5>
+                {{ form2.non_field_errors }}
+                {{ form2.name_of_field.errors }}
+                {{ form2.as_p }}
+            </div>
+           <table>
+               <tbody id="documents">
+               <th>Project files</th>
+                   <br>
+                   <tr>
+                       <td>
+                           Name
+                       </td>
+
+                       <td>
+                           File
+                       </td>
+                   </tr>
+                    {{ formset3.management_form }}
+                    {{ formset3.non_form_errors }}
+                    {% for dict in formset3.errors %}
+                    {% for error in dict.values %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endfor %}
+
+                   {% for form in formset3.forms %}
+                   {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+                   <tr>
+                      <td>{{ form.name }}</td>
+                      <td>{{ form.file }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+
+            <input type="submit" value="Update Project">
+       </form>
+
+
+{% endblock %}

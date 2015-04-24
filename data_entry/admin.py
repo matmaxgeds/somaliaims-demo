@@ -22,10 +22,18 @@ class SpendingInline(admin.TabularInline):
     model = Spending
 
 
+class ContactInline(admin.TabularInline):
+    model = Contact
+
+
+class DocumentInline(admin.TabularInline):
+    model = Document
+
+
 class ProjectAdmin(admin.ModelAdmin):
-    filter_horizontal = ('locations',  'sublocations', 'funders', 'implementers', 'sectors')
+    filter_horizontal = ('funders', 'implementers')
     inlines = [
-            UserOrnanizationInline, LocationShareInline, SectorShareInline, SpendingInline
+            UserOrnanizationInline, LocationShareInline, SectorShareInline, SpendingInline, ContactInline, DocumentInline
     ]
 
 

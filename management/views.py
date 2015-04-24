@@ -43,9 +43,9 @@ class OrganizationCreate(CreateView):
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        set = modelformset_factory(Organization, form=OrganizationForm, fields=('name', ), extra=1,
+        sett = modelformset_factory(Organization, form=OrganizationForm, fields=('name', ), extra=1,
                                    formset=BaseOrganizationFormSet)
-        formset = set(request.POST)
+        formset = sett(request.POST)
         if formset.is_valid():
             return self.form_valid(formset)
         else:

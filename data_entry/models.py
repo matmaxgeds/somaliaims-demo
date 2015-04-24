@@ -6,6 +6,10 @@ import datetime
 import uuid
 
 
+class UnsavedForeighKey(models.ForeignKey):
+    allow_unsaved_instance_assignment = True
+
+
 class Project(models.Model):
     """Projects receiving AID"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -18,12 +22,9 @@ class Project(models.Model):
     funders = models.ManyToManyField(Organization, related_name="funders")
     implementers = models.ManyToManyField(Organization, related_name="implementers")
     value = models.FloatField()
-    locations = models.ManyToManyField(Location)
-    sublocations = models.ManyToManyField(SubLocation, blank=True)
-    sectors = models.ManyToManyField(Sector, blank=True)
     currency = models.ForeignKey(Currency)
     rateToUSD = rateToUSD = models.DecimalField(max_digits=4, decimal_places=4)
-    active = models.BooleanField(blank=True)
+    active = models.BooleanField(default=True, blank=True)
 
     class Meta:
         db_table = 'project'
@@ -32,10 +33,10 @@ class Project(models.Model):
         return self.name
 
     def save(self):
-        if datetime.datetime.now() > self.endDate:
+        if datetime.date.today() > self.endDate:
             self.active = False
         if self.id:
-            self.lastModified = datetime.now()
+            self.lastModified = datetime.datetime.now()
         else:
             pass
         super(Project, self).save()
@@ -72,7 +73,8 @@ class Contact(models.Model):
 
 class Document(models.Model):
     """Documents relevant to a project"""
-    project = models.ForeignKey(Project)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    project = UnsavedForeighKey(Project)
     file = models.FileField(upload_to=settings.DOCUMENT_UPLOAD_DIR)
     name = models.CharField(max_length=150)
 
@@ -80,42 +82,43 @@ class Document(models.Model):
         db_table = 'project_documents'
 
     def __str__(self):
-        return "{0} - {1}".format(self.project.name, self.description)
+        return "{0}".format(self.name)
 
 
 class SectorAllocation(models.Model):
     """Amount of project's value spent in various sectors"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    project = models.ForeignKey(Project)
+    project = UnsavedForeighKey(Project)
     sector = models.ForeignKey(Sector)
-    allocatedPercentage = models.DecimalField(max_digits=3, decimal_places=2)
+    allocatedPercentage = models.DecimalField(max_digits=4, decimal_places=1)
 
     class Meta:
         db_table = 'sector_allocations'
 
     def __str__(self):
-        return "{0} - {1} - {2}".format(self.project.name, self.sector.name, self.shareValue)
+        return "{0} - {1} - {2}".format(self.project.name, self.sector.name, self.allocatedPercentage)
 
 
 class LocationAllocation(models.Model):
     """Amount of project's value spent in various locations"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    project = models.ForeignKey(Project)
+    project = UnsavedForeighKey(Project)
     location = models.ForeignKey(Location)
-    allocatedPercentage = models.DecimalField(max_digits=3, decimal_places=2)
+    sublocations = models.ManyToManyField(SubLocation)
+    allocatedPercentage = models.DecimalField(max_digits=4, decimal_places=1)
 
     class Meta:
         db_table = 'location_allocations'
 
     def __str__(self):
-        return "{0} - {1} - {2}".format(self.project.name, self.location.name, self.shareValue)
+        return "{0} - {1} - {2}".format(self.project.name, self.location.name, self.allocatedPercentage)
 
 
 class UserOrganization(models.Model):
     """Organizations missing in organization list but involved in projects. User defined"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User)
-    project = models.ForeignKey(Project)
+    project = UnsavedForeighKey(Project)
     name = models.CharField(max_length=200,  help_text="Organization involved in project but not in existing list",
                             unique=True)
     role = models.CharField(max_length=12, choices=(('Funder', 'Funder'), ('Implementer', 'Implementer')),

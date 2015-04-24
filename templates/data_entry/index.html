@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav>
+    <h4>Data Entry Dashboard</h4>
+</nav>
+<div id="row">
+{% if object_list %}
+    {% for project in object_list %}
+    <ul>
+        <li>{{ project.name }}</li>
+    </ul>
+    {% endfor %}
+{% endif %}
+</div>
+
+
+{% endblock %}
