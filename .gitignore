@@ -61,3 +61,6 @@ db.sqlite3
 
 # Pycharm project files
 .idea/
+
+# uploaded project documents
+documents/

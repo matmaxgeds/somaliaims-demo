@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
-from .models import Project, Spending, Contact
+from .models import Project, Spending, Contact, Document
 from management.models import SubLocation
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
-    DocumentFormset, SpendingForm, ContactForm
+    DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet
+from django.forms.models import inlineformset_factory
 
 
 class ProjectCreateView(CreateView):
@@ -104,6 +105,7 @@ def ajaxSublocations(request):
 class ProjectUpdateView(UpdateView):
     model = Project
     form_class = ProjectForm
+    template_name = "data_entry/project_update_form.html"
 
     def get_success_url(self):
         return reverse('dashboard')
@@ -116,14 +118,20 @@ class ProjectUpdateView(UpdateView):
             ctx['formset'] = LocationAllocationFormset(self.request.POST, prefix='location', instance=self.object)
             ctx['formset1'] = SectorAllocationFormset(self.request.POST, prefix="sectors", instance=self.object)
             ctx['formset2'] = UserOrganizationFormset(self.request.POST, prefix="user_organizations", instance=self.object)
-            ctx['formset3'] = DocumentFormset(self.request.POST, self.request.FILES, prefix="documents", instance=self.object)
+            doc_values = Document.objects.filter(project=self.object).values()
+            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
+                doc_values), formset=BaseDocumentFormSet)
+            ctx['formset3'] = doc_formset(self.request.POST, self.request.FILES, initial=doc_values, prefix='document')
         else:
             ctx['form1'] = SpendingForm(prefix='spending', instance=Spending.objects.get(project=self.object))
             ctx['form2'] = ContactForm(prefix='contact', instance=Contact.objects.get(project=self.object))
             ctx['formset'] = LocationAllocationFormset(prefix='location', instance=self.object)
             ctx['formset1'] = SectorAllocationFormset(prefix="sectors", instance=self.object)
             ctx['formset2'] = UserOrganizationFormset(prefix="user_organizations", instance=self.object)
-            ctx['formset3'] = DocumentFormset(prefix="documents", instance=self.object)
+            doc_values = Document.objects.filter(project=self.object).values()
+            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
+                doc_values), formset=BaseDocumentFormSet)
+            ctx['formset3'] = doc_formset(prefix='document', initial=doc_values)
         return ctx
 
     def form_valid(self, form):
