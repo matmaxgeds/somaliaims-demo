@@ -15,12 +15,15 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+#loading the somaliaims config
+config_file = os.path.join(BASE_DIR, 'conf', 'general.yml')
+config = yaml.load(open(config_file, 'r'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(rrza$y^**w=h1(4v*mv6k=*b!lf&pz)338(4pq!_9yo3-km73'
+SECRET_KEY = config.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -81,7 +84,7 @@ WSGI_APPLICATION = 'aims.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE =  config.get('TIME_ZONE')
 
 USE_I18N = True
 
@@ -133,10 +136,10 @@ except ImportError:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'' ,
-        'USER':'',
-        'PASSWORD':'',
-        'HOST':'',
-        'PORT':'',
+        'NAME':config.get('SOMAILIAIMS_DB_NAME') ,
+        'USER':config.get('SOMAILIAIMS_DB_USER'),
+        'PASSWORD':config.get('SOMAILIAIMS_DB_PASS'),
+        'HOST':config.get('SOMAILIAIMS_DB_HOST'),
+        'PORT':config.get('SOMAILIAIMS_DB_PORT'),
     }
 }
