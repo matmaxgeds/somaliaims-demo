@@ -97,6 +97,10 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR,  'static')
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
+
+MEDIA_URL = '/files/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -120,7 +124,7 @@ TEMPLATES = [
 
 #Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
-DOCUMENT_UPLOAD_DIR = os.path.join(BASE_DIR, 'documents')
+DOCUMENT_UPLOAD_DIR = MEDIA_ROOT
 GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
 
 try:

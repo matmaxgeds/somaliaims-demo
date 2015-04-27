@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<nav>
+    <h5>Management Dashboard</h5>
+</nav>
 <div>
     {% if exchange_rate %}
     <p>EXCHANGE RATE: {{ exchange_rate.rateToSOM }}</p><a href="{% url 'rate_update' %}">Edit</a>
@@ -8,6 +11,7 @@
     <p><a href="{% url 'rate_update' %}">Set exchange rate</a></p>
     {% endif %}
 </div>
+
 <div class="row">
 <div class="container line">
 {% if object_list %}

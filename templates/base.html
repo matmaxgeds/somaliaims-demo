@@ -4,19 +4,69 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <script src="{% static "jquery.min.js" %}"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
     <script src="{% static "jquery.formset.js" %}"></script>
     <script type="text/javascript">
           $(function() {
-               $('#myForm tbody tr').formset({
+               $('#location tr').formset({
                    prefix: '{{ formset.prefix }}'
-               });
-           })
+               })
+              $('#sector tr').formset({
+                   prefix: '{{ formset1.prefix }}'
+               })
+              $('#user-organizations tr').formset({
+                   prefix: '{{ formset2.prefix }}'
+               })
+              $('#documents tr').formset({
+                   prefix: '{{ formset3.prefix }}'
+               })
+
+            });
      </script>
+
+
+
     {% load bootstrap3 %}
 
     {# Load CSS and JavaScript #}
     {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <script type="text/javascript" src="{% static 'js/bootstrap-multiselect.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-multiselect.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+    <style>
+        .delete-row{
+            padding-left: 3px;
+        }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        $('.add-row').click(function(){
+            $('select').multiselect();
+        });
+    });
+    </script>
+    <script type="text/javascript">
+    $(function() {
+        $('select').multiselect();
+    });
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#id_startDate').datepicker();
+        $('#id_startDate').on('changeDate', function(ev){
+            $(this).datepicker('hide');
+        });
+        $('#id_endDate').datepicker();
+        $('#id_endDate').on('changeDate', function(ev){
+            $(this).datepicker('hide');
+        });
+
+    });
+</script>
+
 </head>
 <body>
 {% block content %}

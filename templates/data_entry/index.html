@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12" style="border:1px solid #c0c0c0; margin-top:20px;">
+            <div class="row">
+                <div class="col-md-4" style="padding-top:10px;">
+                    <div class="col-md-12">
+                        <div class="row>">
+                            <span>Government of Somalia</span>
+                        </div>
+                        <div class="row">
+                            <span>Project Management Portal</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3 style="text-align: center;">Project Management</h3>
+                </div>
+                <div class="col-md-4" style="padding-top:10px;">
+                    <div class="row" style="float: right;">
+                        <div class="col-md-12">
+                            <span>
+                                <a href="#">Menu </a>
+                            </span>
+                            <span>
+                                <a href="#">| Reporting </a>
+                            </span>
+                            <span>
+                                <a href="#">| Logout </a>
+                            </span>
+                            <span>
+                                <a href="#">| Help</a>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row" style="padding-top: 40px;"></div>
+    <div id="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <a href="{% url 'project_add' %}"><h4 style="text-align: center;">Add new project</h4></a>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    </div>
+    <div id="row">
+        <div class="col-md-12">
+        {% if object_list %}
+        <h4>Project list</h4>
+        <table class="table table-bordered" style="padding-top: 20px;">
+
+            {% for project in object_list %}
+            <tr>
+                <td><a href="{% url 'project_update' project.id %}">{{ project.name }}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
