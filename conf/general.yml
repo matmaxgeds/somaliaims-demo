@@ -6,11 +6,11 @@
 # Copyright (c) 2011 UK Citizens Online Democracy. All rights reserved.
 
 
-HERANA_DB_HOST: 'localhost'
-HERANA_DB_PORT: '5432'
-HERANA_DB_USER: 'somaliaims'
-HERANA_DB_NAME: 'somaliaims'
-HERANA_DB_PASS: 'aims.somali'
+SOMALIAIMS_DB_HOST: 'localhost'
+SOMALIAIMS_DB_PORT: '5432'
+SOMALIAIMS_DB_USER: 'somaliaims'
+SOMALIAIMS_DB_NAME: 'somaliaims'
+SOMALIAIMS_DB_PASS: 'aims.somali'
 
 
 STAGING: '0'
