@@ -1,0 +1,28 @@
+#SomaliAIMS  Configuration parameters, in YAML syntax.
+#
+# Copy this file to one called "general.yml" in the same directory.  Or
+# have multiple config files and use a symlink to change between them.
+#
+# Copyright (c) 2011 UK Citizens Online Democracy. All rights reserved.
+
+
+HERANA_DB_HOST: 'localhost'
+HERANA_DB_PORT: '5432'
+HERANA_DB_USER: 'somaliaims'
+HERANA_DB_NAME: 'somaliaims'
+HERANA_DB_PASS: 'aims.somali'
+
+
+STAGING: '0'
+TIME_ZONE: 'Africa/Nairobi'
+DJANGO_SECRET_KEY: '(rrza$y^**w=h1(4v*mv6k=*b!lf&pz)338(4pq!_9yo3-km73'
+# Managers - might be worth having this set to a group email address
+MANAGERS_NAME: 'SomaliAims'
+MANAGERS_EMAIL: 'kenmbugua@gmail.com'
+
+# The email address to which errors should be sent:
+ERRORS_NAME: ' error'
+ERRORS_EMAIL: 'kenmbugua@gmail.com'
+
+# Email address that will be used in the 'From' line
+FROM_EMAIL: 'kenmbugua@gmail.com'
