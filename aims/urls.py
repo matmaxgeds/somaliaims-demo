@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^management/', include('management.urls')),
     url(r'^data-entry/', include('data_entry.urls')),
     url(r'^', include('home.urls')),
+    url(r'^', include('django.contrib.auth.urls')),
     #url(r'^$', 'aims.views.home', name='home'),
 
 
