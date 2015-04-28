@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h5>SET EXCHANGE RATE</h5>
+<form id="myForm" method="post" action="">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+                {{ form }}
+            <input type="submit" value="Update Exchange Rate">
+       </form>
+
+{% endblock %}

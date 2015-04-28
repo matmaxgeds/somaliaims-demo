@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
     'home',
     'data_entry',
     'management',
@@ -75,18 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'aims.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -107,6 +96,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR,  'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
+
+MEDIA_URL = '/files/'
 
 TEMPLATES = [
     {
@@ -129,7 +122,25 @@ TEMPLATES = [
     },
 ]
 
+# Login Settings
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/data-entry/'
+
 #Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
-DOCUMENT_UPLOAD_DIR = os.path.join(BASE_DIR, 'documents')
+DOCUMENT_UPLOAD_DIR = MEDIA_ROOT
 GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
+
+try:
+    if DEBUG:
+        from .local_settings import *
+except ImportError:
+    pass
+
+# Modify to use postgresql for production
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
