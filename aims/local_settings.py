@@ -12,5 +12,5 @@ DATABASES = {
 BOOTSTRAP3 = {
     # The complete URL to the Bootstrap CSS file
     'css_url': '/static/bootstrap/css/bootstrap.min.css',
-
+    'javascript_url': '/static/bootstrap/js/bootstrap.min.js',
 }
