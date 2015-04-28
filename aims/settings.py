@@ -122,6 +122,10 @@ TEMPLATES = [
     },
 ]
 
+# Login Settings
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/data-entry/'
+
 #Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
 DOCUMENT_UPLOAD_DIR = MEDIA_ROOT
@@ -129,7 +133,7 @@ GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
 
 try:
     if DEBUG:
-        from local_settings import *
+        from .local_settings import *
 except ImportError:
     pass
 
