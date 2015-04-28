@@ -89,14 +89,21 @@
                     <div class="row" style="float: right;">
                         <div class="col-md-12">
                             <span>
-                                <a href="#">Menu </a>
+                                <a href="/">Menu </a>
                             </span>
                             <span>
-                                <a href="#">| Reporting </a>
+                                <a href="/data-entry/">| Reporting </a>
                             </span>
+                            {% if user.is_authenticated %}
                             <span>
-                                <a href="#">| Logout </a>
+                                <a href="/logout/">| Logout </a>
                             </span>
+                            {% else %}
+                            <span>
+                                <a href="/login/">| Login </a>
+                            </span>
+                            {% endif %}
+
                             <span>
                                 <a href="#">| Help</a>
                             </span>
