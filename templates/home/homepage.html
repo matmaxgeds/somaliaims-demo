@@ -1,12 +1,28 @@
 {% extends "base.html" %}
 
+{% block title %} Home {% endblock %}
+
 {% block content %}
 
-<div id="row">
-    <nav>
-        <h5>Homepage</h5>
-    </nav>
+<div class="row">
+   <div class="col-md-12">
+    <h3 class="text-center"> Homepage </h3>
+   {% lorem 2 p %}
 
+   &nbsp;
+   &nbsp;
+
+   <h4><a href="#">Projects</a> <small> Browse All Projects </small></h4>
+   <h4><a href="#">Sector Report</a> <small> View your Sector Report </small> </h4>
+   <h4><a href="#">Location Report</a> <small> View your Location Report </small> </h4>
+
+   <h3> Header Text </h3>
+   <ul>
+     <li><a href="#">Request Access to add Projects </a></li>
+     <li><a href="/data-entry/">Edit Projects </a></li>
+     <li><a href="/management/">Open Management Interface </a></li>
+   </ul>
+   </div>
 </div>
 
 {% endblock %}
