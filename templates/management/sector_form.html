@@ -3,28 +3,69 @@
 
 {% block content %}
 
-<form id="myForm" method="post" action="">
-            {% csrf_token %}
+<div class="container">
+<div class="row">
+            <div class="col-md-12" style="border:1px solid #c0c0c0; margin-top:20px;">
+                <div class="row">
+                    <div class="col-md-4" style="padding-top:10px;">
+                        <div class="col-md-12">
+                            <div class="row>">
+                                <span>Government of Somalia</span>
+                            </div>
+                            <div class="row">
+                                <span>Project Management Portal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 style="text-align: center;">Management Dashboard</h3>
+                    </div>
+                    <div class="col-md-4" style="padding-top:10px;">
+                        <div class="row" style="float: right;">
+                            <div class="col-md-12">
+                                <span>
+                                    <a href="{% url 'dashboard' %}">Menu </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Reporting </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Logout </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Help</a>
+                                </span>
+                            </div>
+                        </div>
 
-           <table border="0" cellpadding="0" cellspacing="0">
-               <tbody>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+<div class="row" style="padding-top: 40px"></div>
+
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6">
+<h3>Add Sector</h3>
+<form id="myForm" class="form" method="post" action="">
+            {% csrf_token %}
+           <table class="table table-bordered" border="0" cellpadding="0" cellspacing="0">
+               <tbody id="organization">
                    {% for form in formset.forms %}
                    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
                    <tr>
-                      <td>
-                         {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
-
-                         {{ form.field1 }}
-                      </td>
                       <td>{{ form.name }}</td>
-                      <td>{{ form.description }}</td>
                    </tr>
                    {% endfor %}
                </tbody>
            </table>
            {{ formset.management_form }}
-            <input type="submit" value="Create sector(s)">
+           <button class="btn btn-default btn-large" type="submit">Add sector(s)</button>
        </form>
-
-
+</div>
+<div class="col-md-3"></div>
+</div>
+</div>
 {% endblock %}
