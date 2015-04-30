@@ -48,13 +48,6 @@ INSTALLED_APPS = (
     'management',
 )
 
-#Migration Modules for Django 1.8
-
-{
-    'home': 'home.db_migrations',
-    'data_entry' : 'data_entry.db_migrations',
-    'management': 'management.db_migrations',
-}
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
