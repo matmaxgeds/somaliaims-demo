@@ -102,6 +102,16 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR,  'static')
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
+
+MEDIA_URL = '/files/'
+
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = '/data-entry/'
+
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
