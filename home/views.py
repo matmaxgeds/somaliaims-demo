@@ -1,5 +1,6 @@
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
-from django.shortcuts import HttpResponseRedirect, render_to_response, redirect
+from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.views.generic.edit import FormView
 
@@ -11,11 +12,12 @@ def home(request):
     return render_to_response("home/homepage.html", locals(), context_instance=RequestContext(request))
 
 
-class HelpPageView(FormView):
+class HelpPageView(SuccessMessageMixin, FormView):
     """Help Page"""
     template_name = "home/help.html"
     form_class = ContactForm
     success_url = '/'
+    success_message = "We have received your email. We will get back to you soon."
 
     def form_valid(self, form):
         name = form.cleaned_data['name']
