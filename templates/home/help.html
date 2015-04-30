@@ -12,11 +12,50 @@
   {# TODO: Remove placeholder text #}
   {% lorem 3 p %}
 
-  <h4> Contact Us </h4>
-  <p>
-    If there's anything we've missed in the Help Module,
-    Feel free to contact us below
-  </p>
+  <div class="text-center">
+    <h3> Contact Us </h3>
+    <p>
+      If there's anything we've missed in the Help Module,
+      Please contact us below
+    </p>
+  </div>
+
+      <form method="post" action="/help/" class="form-horizontal">
+
+      {% if form.errors %}
+
+      <div class="has-error form-group">
+        <span class="help-block col-md-3 col-md-offset-1">
+          Please Fill in All the Fields Correctly
+        </span>
+      </div>
+      {% endif %}
+
+      {% csrf_token %}
+
+      {% for field in form %}
+
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}" class="col-md-2 control-label">
+            {{ field.label }}
+          </label>
+
+          <div class="col-md-10">
+          {{ field }}
+          </div>
+        </div>
+
+      {% endfor %}
+
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+          <button type="submit" class="btn btn-default">Send Message</button>
+        </div>
+      </div>
+
+      </form>
+
+  </div>
 
 </div>
 

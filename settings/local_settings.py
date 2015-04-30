@@ -14,3 +14,5 @@ BOOTSTRAP3 = {
     'css_url': '/static/bootstrap/css/bootstrap.min.css',
     'javascript_url': '/static/bootstrap/js/bootstrap.min.js',
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
