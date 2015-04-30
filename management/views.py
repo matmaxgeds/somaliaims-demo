@@ -1,12 +1,13 @@
 from django.shortcuts import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from management.models import Location, Organization, Sector, ExchangeRate
+from management.models import Location, Organization, Sector, ExchangeRate, SubLocation
 from django.views.generic import ListView
 from .forms import LocationForm, SubLocationFormset, OrganizationForm, BaseOrganizationFormSet, ExchangeRateForm, \
-    BaseSectorFormSet, SectorForm
+    BaseSectorFormSet, SectorForm, BaseSubLocationFormset
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelformset_factory
+from django.forms.models import inlineformset_factory
 
 
 class ManagementDashboard(ListView):
@@ -37,14 +38,15 @@ class OrganizationCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationCreate, self).get_context_data(**kwargs)
-        organizationFormset = modelformset_factory(Organization, form=OrganizationForm, fields=('name', ), formset=BaseOrganizationFormSet)
+        organizationFormset = modelformset_factory(Organization, form=OrganizationForm, fields=('name', ),
+                                                   formset=BaseOrganizationFormSet)
         context['formset'] = organizationFormset()
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = None
         sett = modelformset_factory(Organization, form=OrganizationForm, fields=('name', ), extra=1,
-                                   formset=BaseOrganizationFormSet)
+                                    formset=BaseOrganizationFormSet)
         formset = sett(request.POST)
         if formset.is_valid():
             return self.form_valid(formset)
@@ -108,9 +110,16 @@ class LocationUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(LocationUpdate, self).get_context_data(**kwargs)
         if self.request.method == 'POST':
-            context['formset'] = SubLocationFormset(self.request.POST, instance=self.object)
+            sublocations = SubLocation.objects.filter(project=self.object).values()
+            sub_formset = inlineformset_factory(Location, SubLocation, fields=('name',), can_delete=True, extra=len(
+                sublocations), formset=BaseSubLocationFormset)
+            context['formset'] = sub_formset(self.request.POST, self.request.FILES, initial=sublocations,
+                                             prefix='document')
         else:
-            context['formset'] = SubLocationFormset(instance=self.object)
+            sublocations = SubLocation.objects.filter(location=self.object).values()
+            sub_formset = inlineformset_factory(Location, SubLocation, fields=('name',), can_delete=True, extra=len(
+                sublocations), formset=BaseSubLocationFormset)
+            context['formset'] = sub_formset(initial=sublocations, prefix='document')
         return context
 
     def form_valid(self, form):
@@ -146,7 +155,7 @@ class SectorCreate(CreateView):
     def get_context_data(self, **kwargs):
         context = super(SectorCreate, self).get_context_data(**kwargs)
         sectorFormset = modelformset_factory(Sector, form=SectorForm, fields=('name', 'description'),
-                                        formset=BaseSectorFormSet)
+                                             formset=BaseSectorFormSet)
         context['formset'] = sectorFormset()
         return context
 

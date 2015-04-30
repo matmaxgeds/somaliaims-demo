@@ -1,12 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h5>SET EXCHANGE RATE</h5>
+<div class="container">
+<div class="row">
+            <div class="col-md-12" style="border:1px solid #c0c0c0; margin-top:20px;">
+                <div class="row">
+                    <div class="col-md-4" style="padding-top:10px;">
+                        <div class="col-md-12">
+                            <div class="row>">
+                                <span>Government of Somalia</span>
+                            </div>
+                            <div class="row">
+                                <span>Project Management Portal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 style="text-align: center;">Management Dashboard</h3>
+                    </div>
+                    <div class="col-md-4" style="padding-top:10px;">
+                        <div class="row" style="float: right;">
+                            <div class="col-md-12">
+                                <span>
+                                    <a href="{% url 'dashboard' %}">Menu </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Reporting </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Logout </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Help</a>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+<div class="row" style="padding-top: 40px"></div>
+<div class="row">
+<div class="col-md-4"></div>
+<div class="col-md-4">
 <form id="myForm" method="post" action="">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
-                {{ form }}
-            <input type="submit" value="Update Exchange Rate">
+            <div class="form-group">
+                <label for="rateToSOM">USD to SOM rate</label>
+                {{ form.rateToSOM }}
+            </div>
+            <div class="form-group">
+            <button type="submit" class="btn btn-default btn-large">Update exchange rate</button>
+            </div>
        </form>
-
+</div>
+<div class="col-md-4"></div>
+</div>
+</div>
 {% endblock %}
