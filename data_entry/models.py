@@ -23,7 +23,7 @@ class Project(models.Model):
     implementers = models.ManyToManyField(Organization, related_name="implementers")
     value = models.FloatField()
     currency = models.ForeignKey(Currency)
-    rateToUSD = rateToUSD = models.DecimalField(max_digits=4, decimal_places=4)
+    rateToUSD = models.DecimalField(max_digits=6, decimal_places=2)
     active = models.BooleanField(default=True, blank=True)
 
     class Meta:

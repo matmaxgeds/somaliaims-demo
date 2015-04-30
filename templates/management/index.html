@@ -1,66 +1,120 @@
 {% extends "base.html" %}
 
 {% block content %}
-<nav>
-    <h5>Management Dashboard</h5>
-</nav>
-<div>
-    {% if exchange_rate %}
-    <p>EXCHANGE RATE: {{ exchange_rate.rateToSOM }}</p><a href="{% url 'rate_update' %}">Edit</a>
-    {% else %}
-    <p><a href="{% url 'rate_update' %}">Set exchange rate</a></p>
-    {% endif %}
-</div>
-
+<div class="container">
 <div class="row">
-<div class="container line">
+            <div class="col-md-12" style="border:1px solid #c0c0c0; margin-top:20px;">
+                <div class="row">
+                    <div class="col-md-4" style="padding-top:10px;">
+                        <div class="col-md-12">
+                            <div class="row>">
+                                <span>Government of Somalia</span>
+                            </div>
+                            <div class="row">
+                                <span>Project Management Portal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 style="text-align: center;">Management Dashboard</h3>
+                    </div>
+                    <div class="col-md-4" style="padding-top:10px;">
+                        <div class="row" style="float: right;">
+                            <div class="col-md-12">
+                                <span>
+                                    <a href="{% url 'dashboard' %}">Menu </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Reporting </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Logout </a>
+                                </span>
+                                <span>
+                                    <a href="#">| Help</a>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+<div class="row" style="padding-top: 30px;"></div>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="row">
+            {% if exchange_rate %}
+            <h4 style="text-align: center;">Exhange Rate(USD to SOM): {{ exchange_rate.rateToSOM }} &nbsp;<a href=
+                                                                                                    "{% url 'rate_update' %}">Edit</a></h4>
+            {% else %}
+                <h4 style="text-align: center;"><a href="{% url 'rate_update' %}">Set exchange rate</a></h4>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+<div class="row" style="padding-top: 20px;"></div>
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-8">
 {% if object_list %}
-    <table class="table">
+    <table class="table table-bordered table-condensed">
     <tr>
         <th>Locations</th>
     </tr>
-    {% for location in object_list %}
+    {% for location in object_list|slice:":10" %}
     <tr>
         <td>
         <a href="{% url 'location_update' location.id %}">{{ location.name }}</a>
         </td>
     </tr>
     {% endfor %}
-    </ul>
     </table>
+    <p><a href="#">View all locations</a></p>
+    <span><a href="{% url 'location_add' %}">Add location</a></span>
 {% else %}
     <p>No locations available</p>
     <p><a href="{% url 'location_add' %}">Add location</a></p>
 {% endif %}
 </div>
 </div>
+<div class="col-md-2"></div>
+<div class="row" style="padding-top: 30px;"></div>
 <div class="row">
-    <div class="container line">
+<div class="col-md-2"></div>
+<div class="col-md-8">
     {% if organizations %}
-        <table class="table">
+        <table class="table table-bordered table-condensed">
             <tr>
                 <th>Organizations</th>
             </tr>
-    {% for organization in organizations %}
-    <tr>
-        <td>
-        <a href="{% url 'organization_update' organization.id %}">{{ organization.name }}</a>
-        </td>
-    </tr>
-    {% endfor %}
+            {% for organization in organizations|slice:":10" %}
+                <tr>
+                    <td>
+                    <a href="{% url 'organization_update' organization.id %}">{{ organization.name }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
 
-    </ul>
-</table>
+        </table>
+        <p><a href="#">View all organizations</a></p>
+        <span><a href="{% url 'organization_add' %}">Add organization</a></span>
     {% else %}
-    <p>No organizations available</p>
-    <p><a href="{% url 'organization_add' %}">Add organization</a></p>
-{% endif %}
+        <p>No organizations available</p>
+        <p><a href="{% url 'organization_add' %}">Add organization</a></p>
+    {% endif %}
 </div>
+<div class="col-md-2"></div>
 </div>
+<div class="row" style="padding-top: 30px;"></div>
 <div class="row">
-    <div class="container line">
+<div class="col-md-2"></div>
+<div class="col-md-8">
     {% if sectors %}
-        <table class="table">
+        <table class="table table-bordered table-condensed">
             <tr>
                 <th>Sectors</th>
             </tr>
@@ -72,12 +126,15 @@
     </tr>
     {% endfor %}
 
-    </ul>
 </table>
+<p><a href="#">View all organizations</a></p>
+<span><a href="{% url 'sector_add' %}">Add sector</a></span>
 {% else %}
     <p>No sectors available</p>
     <p><a href="{% url 'sector_add' %}">Add sector</a></p>
 {% endif %}
+</div>
+<div class="col-md-2"></div>
 </div>
 </div>
 {% endblock %}
