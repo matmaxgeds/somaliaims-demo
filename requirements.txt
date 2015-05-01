@@ -1,6 +1,7 @@
 Django==1.8
 django-bootstrap3==5.3.1
 django-grappelli==2.6.4
+sendgrid-django==1.2.0
 six==1.9.0
 psycopg2==2.6
 PyYAML==3.11
