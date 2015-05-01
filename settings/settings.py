@@ -138,6 +138,11 @@ CURRENCY_ABBREVIATION_LENGTH = 3
 DOCUMENT_UPLOAD_DIR = os.path.join(BASE_DIR, 'documents')
 GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
 
+# SendGrid Settings
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_USER = "somaliaims"
+SENDGRID_PASSWORD = "aims.somali1"
+
 try:
     if DEBUG:
         from local_settings import *

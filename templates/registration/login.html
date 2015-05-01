@@ -6,14 +6,23 @@
 
 <div class="row">
   <div class="col-md-12">
-    <h3 class="text-center"> Login </h3>
+
+  <h3 class="text-center"> Login </h3>
+
+  <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="text-center">
 
   {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
+
+  <div class="has-error form-group">
+    <span class="help-block">
+      Your username and password didn't match. Please try again.
+    </span>
+  </div>
+
   {% endif %}
 
-  <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="form-horizontal">
   {% csrf_token %}
+
   <div class="form-group">
       {{ form.username.label_tag }}
       {{ form.username }}
