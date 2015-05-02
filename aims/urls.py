@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^management/', include('management.urls')),
     url(r'^data-entry/', include('data_entry.urls', namespace='data-entry')),
+    url(r'^reports/', include('reports.urls', namespace='reports')),
     url(r'^', include('home.urls')),
     url(r'^', include('django.contrib.auth.urls')),
     #url(r'^$', 'aims.views.home', name='home'),

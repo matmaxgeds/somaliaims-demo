@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    #TODO: organize installed apps
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,6 +48,7 @@ INSTALLED_APPS = (
     'data_entry',
     'management',
     'django_filters',
+    'reports',
 )
 
 
