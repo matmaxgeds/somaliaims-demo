@@ -78,10 +78,9 @@
                 <div class="col-md-4" style="padding-top:10px;">
                     <div class="col-md-12">
                         <div class="row>">
-                            <span>Government of Somalia</span>
-                        </div>
-                        <div class="row">
-                            <span>Project Management Portal</span>
+                            <p>Government of Somalia</p>
+                       
+                            <p>Project Management Portal</p>
                         </div>
                     </div>
                 </div>
@@ -92,18 +91,18 @@
                     <div class="row" style="float: right;">
                         <div class="col-md-12">
                             <span>
-                                <a href="/">Menu </a>
+                                <a href="{% url 'home' %}">Menu </a>
                             </span>
                             <span>
-                                <a href="/data-entry/">| Reporting </a>
+                                <a href="{% url 'data-entry:dashboard' %}">| Reporting </a>
                             </span>
                             {% if user.is_authenticated %}
                             <span>
-                                <a href="/logout/">| Logout </a>
+                                <a href="{% url 'logoout' %}">| Logout </a>
                             </span>
                             {% else %}
                             <span>
-                                <a href="/login/">| Login </a>
+                                <a href="{% url 'login' %}">| Login </a>
                             </span>
                             {% endif %}
 
