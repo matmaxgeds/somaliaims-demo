@@ -127,7 +127,7 @@ TEMPLATES = [
 
 # Login Settings
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/data-entry/'
+LOGIN_REDIRECT_URL = '/login_success/'
 
 #Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
@@ -147,3 +147,8 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
+ADMIN_URL = '/admin/'
+DATA_ENTRY_URL = '/data-entry/'
+MANAGEMENT_URL = '/management/'
