@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'home',
     'data_entry',
     'management',
+    'django_filters',
 )
 
 MIDDLEWARE_CLASSES = (
