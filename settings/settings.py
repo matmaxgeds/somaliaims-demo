@@ -12,15 +12,19 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+#loading the somaliaims config
+config_file = os.path.join(BASE_DIR, 'conf', 'general.yml')
+config = yaml.load(open(config_file, 'r'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(rrza$y^**w=h1(4v*mv6k=*b!lf&pz)338(4pq!_9yo3-km73'
+SECRET_KEY = config.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,6 +50,7 @@ INSTALLED_APPS = (
     'django_filters',
     'reports',
 )
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -84,7 +89,7 @@ WSGI_APPLICATION = 'aims.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE =  config.get('TIME_ZONE')
 
 USE_I18N = True
 
@@ -103,6 +108,12 @@ STATIC_ROOT = os.path.join(BASE_DIR,  'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
 
 MEDIA_URL = '/files/'
+
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = '/data-entry/'
+
+
 
 TEMPLATES = [
     {
@@ -129,22 +140,32 @@ TEMPLATES = [
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/login_success/'
 
+
 #Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
-DOCUMENT_UPLOAD_DIR = MEDIA_ROOT
+DOCUMENT_UPLOAD_DIR = os.path.join(BASE_DIR, 'documents')
 GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
+
+# SendGrid Settings
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_USER = "somaliaims"
+SENDGRID_PASSWORD = "aims.somali1"
 
 try:
     if DEBUG:
-        from .local_settings import *
+        from local_settings import *
 except ImportError:
     pass
 
 # Modify to use postgresql for production
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config.get('SOMAILIAIMS_DB_NAME') ,
+        'USER': config.get('SOMAILIAIMS_DB_USER'),
+        'PASSWORD': config.get('SOMAILIAIMS_DB_PASS'),
+        'HOST': config.get('SOMAILIAIMS_DB_HOST'),
+        'PORT': config.get('SOMAILIAIMS_DB_PORT'),
     }
 }
 

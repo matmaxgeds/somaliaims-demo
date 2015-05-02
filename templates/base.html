@@ -107,7 +107,7 @@
                             {% endif %}
 
                             <span>
-                                <a href="#">| Help</a>
+                                <a href="/help/">| Help</a>
                             </span>
                         </div>
                     </div>
@@ -116,6 +116,17 @@
             </div>
         </div>
     </div>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                <span class="text-success">{{ message }} </span>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
 
   {% block content %}
 

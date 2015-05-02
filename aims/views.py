@@ -7,7 +7,7 @@ def login_success(request):
     """
     Redirects users based on whether they are in the admins group
     """
-    if request.user.groups.filter(name="admin").exists():
+    if request.user.groups.filter(name="admin").exists() or request.user.is_superuser:
         # user is an admin
         return redirect(settings.ADMIN_URL)
     elif request.user.groups.filter(name="data_entry").exists():
