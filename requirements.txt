@@ -3,9 +3,8 @@ django-bootstrap3==5.3.1
 django-grappelli==2.6.4
 sendgrid-django==1.2.0
 six==1.9.0
-<<<<<<< HEAD
 psycopg2==2.6
 PyYAML==3.11
-=======
 django-filter-0.9.2
->>>>>>> Adding reporting module. Adding dependency 'django_filter'
+django-filter-0.9.2
+
