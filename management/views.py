@@ -8,12 +8,14 @@ from .forms import LocationForm, SubLocationFormset, OrganizationForm, BaseOrgan
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelformset_factory
 from django.forms.models import inlineformset_factory
+from braces.views import GroupRequiredMixin
 
 
-class ManagementDashboard(ListView):
+class ManagementDashboard(GroupRequiredMixin, ListView):
     model = Organization
     template_name = "management/index.html"
     queryset = Location.objects.all()
+    group_required = [u"admin", u"management"]
 
     def get_context_data(self, **kwargs):
         context = super(ManagementDashboard, self).get_context_data(**kwargs)
@@ -32,9 +34,10 @@ class ManagementDashboard(ListView):
         return Location.objects.all()
 
 
-class OrganizationCreate(CreateView):
+class OrganizationCreate(GroupRequiredMixin, CreateView):
     model = Organization
     form_class = OrganizationForm
+    group_required = [u"admin", u"management"]
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationCreate, self).get_context_data(**kwargs)
@@ -61,25 +64,28 @@ class OrganizationCreate(CreateView):
         return self.render_to_response(self.get_context_data(formset=formset))
 
 
-class OrganizationUpdate(UpdateView):
+class OrganizationUpdate(GroupRequiredMixin, UpdateView):
     model = Organization
     form_class = OrganizationForm
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"management"]
 
     def get_object(self, queryset=None):
         obj = Organization.objects.get(id=self.kwargs['pk'])
         return obj
 
 
-class OrganizationDelete(DeleteView):
+class OrganizationDelete(GroupRequiredMixin, DeleteView):
     model = Organization
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"management"]
 
 
-class LocationCreate(CreateView):
+class LocationCreate(GroupRequiredMixin, CreateView):
     model = Location
     form_class = LocationForm
+    group_required = [u"admin", u"management"]
 
     def get_context_data(self, **kwargs):
         context = super(LocationCreate, self).get_context_data(**kwargs)
@@ -101,11 +107,12 @@ class LocationCreate(CreateView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class LocationUpdate(UpdateView):
+class LocationUpdate(GroupRequiredMixin, UpdateView):
     model = Location
     form_class = LocationForm
     template_name = "management/location_update_form.html"
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"management"]
 
     def get_context_data(self, **kwargs):
         context = super(LocationUpdate, self).get_context_data(**kwargs)
@@ -133,14 +140,16 @@ class LocationUpdate(UpdateView):
             return super(LocationUpdate, self).form_valid(form)
 
 
-class LocationDelete(DeleteView):
+class LocationDelete(GroupRequiredMixin, DeleteView):
     model = Location
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"management"]
 
 
-class ExchangeRateUpdateView(UpdateView):
+class ExchangeRateUpdateView(GroupRequiredMixin, UpdateView):
     form_class = ExchangeRateForm
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"management"]
 
     def get_object(self, queryset=None):
         obj, created = ExchangeRate.objects.get_or_create()
@@ -148,9 +157,10 @@ class ExchangeRateUpdateView(UpdateView):
         return obj
 
 
-class SectorCreate(CreateView):
+class SectorCreate(GroupRequiredMixin, CreateView):
     model = Sector
     form_class = SectorForm
+    group_required = [u"admin", u"management"]
 
     def get_context_data(self, **kwargs):
         context = super(SectorCreate, self).get_context_data(**kwargs)
@@ -177,18 +187,20 @@ class SectorCreate(CreateView):
         return self.render_to_response(self.get_context_data(formset=formset))
 
 
-class SectorUpdate(UpdateView):
+class SectorUpdate(GroupRequiredMixin, UpdateView):
     model = Sector
     form_class = SectorForm
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"management"]
 
     def get_object(self, queryset=None):
         obj = Sector.objects.get(id=self.kwargs['pk'])
         return obj
 
 
-class SectorDelete(DeleteView):
+class SectorDelete(GroupRequiredMixin, DeleteView):
     model = Sector
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"management"]
 

@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
-                    <a href="{% url 'project_add' %}"><h4 style="text-align: center;">Add new project</h4></a>
+                    <a href="{% url 'data-entry:project_add' %}"><h4 style="text-align: center;">Add new project</h4></a>
                 </div>
                 <div class="col-md-4"></div>
             </div>
@@ -25,7 +25,7 @@
 
             {% for project in object_list %}
             <tr>
-                <td><a href="{% url 'project_update' project.id %}">{{ project.name }}</a></td>
+                <td><a href="{% url 'data-entry:project_update' project.id %}">{{ project.name }}</a></td>
             </tr>
             {% endfor %}
         </table>

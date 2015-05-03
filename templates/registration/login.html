@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %} Login {% endblock %}
 
 {% block content %}
 
@@ -10,6 +9,13 @@
   <h3 class="text-center"> Login </h3>
 
   <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="text-center">
+
+<div class="container">
+<div class="row" style="padding-top: 40px;"></div>
+    <div class="col-md-12">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+    <legend>Login </legend>
 
   {% if form.errors %}
 
@@ -25,11 +31,14 @@
 
   <div class="form-group">
       {{ form.username.label_tag }}
-      {{ form.username }}
+
+      <input  class="form-control" id="id_username" maxlength="54" name="username" type="text">
+
   </div>
   <div class="form-group">
       {{ form.password.label_tag }}
-      {{ form.password }}
+
+      <input  class="form-control" id="id_password" name="password" type="password">
   </div>
 
   <button type="submit" class="btn btn-default">Login</button>
@@ -37,6 +46,9 @@
   </form>
 
   </div>
+    <div class="col-md-4"></div>
+  </div>
+  </div>
 </div>
-
+</div>
 {% endblock %}

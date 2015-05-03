@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    #TODO: organize installed apps
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,9 +44,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
+    'aims',
     'home',
     'data_entry',
     'management',
+    'django_filters',
+    'reports',
+    'help',
 )
 
 
@@ -133,6 +138,11 @@ TEMPLATES = [
     },
 ]
 
+# Login Settings
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/login_success/'
+
+
 #Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
 DOCUMENT_UPLOAD_DIR = os.path.join(BASE_DIR, 'documents')
@@ -143,20 +153,25 @@ EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_USER = "somaliaims"
 SENDGRID_PASSWORD = "aims.somali1"
 
+# Modify to use postgresql for production
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config.get('SOMAILIAIMS_DB_NAME'),
+        'USER': config.get('SOMAILIAIMS_DB_USER'),
+        'PASSWORD': config.get('SOMAILIAIMS_DB_PASS'),
+        'HOST': config.get('SOMAILIAIMS_DB_HOST'),
+        'PORT': config.get('SOMAILIAIMS_DB_PORT'),
+    }
+}
+
+
+ADMIN_URL = '/admin/'
+DATA_ENTRY_URL = '/data-entry/'
+MANAGEMENT_URL = '/management/'
+
 try:
     if DEBUG:
         from local_settings import *
 except ImportError:
     pass
-
-# Modify to use postgresql for production
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':config.get('SOMAILIAIMS_DB_NAME') ,
-        'USER':config.get('SOMAILIAIMS_DB_USER'),
-        'PASSWORD':config.get('SOMAILIAIMS_DB_PASS'),
-        'HOST':config.get('SOMAILIAIMS_DB_HOST'),
-        'PORT':config.get('SOMAILIAIMS_DB_PORT'),
-    }
-}
