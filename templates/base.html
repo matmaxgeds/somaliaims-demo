@@ -78,37 +78,36 @@
                 <div class="col-md-4" style="padding-top:10px;">
                     <div class="col-md-12">
                         <div class="row>">
-                            <span>Government of Somalia</span>
-                        </div>
-                        <div class="row">
-                            <span>Project Management Portal</span>
+                            <p>Government of Somalia</p>
+
+                            <p>Project Management Portal</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h3 style="text-align: center;">Project Management</h3>
+                    <h3 style="text-align: center;">Somali AIMS</h3>
                 </div>
                 <div class="col-md-4" style="padding-top:10px;">
                     <div class="row" style="float: right;">
                         <div class="col-md-12">
                             <span>
-                                <a href="/">Menu </a>
+                                <a href="{% url 'home' %}">Menu </a>
                             </span>
                             <span>
-                                <a href="/data-entry/">| Reporting </a>
+                                <a href="{% url 'reports:dashboard' %}">| Reporting </a>
                             </span>
                             {% if user.is_authenticated %}
                             <span>
-                                <a href="/logout/">| Logout </a>
+                                <a href="{% url 'logout' %}">| Logout </a>
                             </span>
                             {% else %}
                             <span>
-                                <a href="/login/">| Login </a>
+                                <a href="{% url 'login' %}">| Login </a>
                             </span>
                             {% endif %}
 
                             <span>
-                                <a href="/help/">| Help</a>
+                                <a href="{% url 'help:help' %}">| Help</a>
                             </span>
                         </div>
                     </div>

@@ -7,11 +7,13 @@ from management.models import SubLocation
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
     DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet
 from django.forms.models import inlineformset_factory
+from braces.views import GroupRequiredMixin
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(GroupRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
+    group_required = [u"admin", u"data_entry"]
 
     def get_success_url(self):
         return reverse('dashboard')
@@ -88,9 +90,13 @@ class ProjectCreateView(CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class ProjectListView(ListView):
+class ProjectListView(GroupRequiredMixin, ListView):
     model = Project
     template_name = "data_entry/index.html"
+    group_required = [u"admin", u"data_entry"]
+
+    def get_context_data(self, **kwargs):
+        super(ProjectListView, self).get_context_data(**kwargs)
 
 
 def ajaxSublocations(request):
@@ -102,10 +108,11 @@ def ajaxSublocations(request):
             return HttpResponse(html_string)
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(GroupRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     template_name = "data_entry/project_update_form.html"
+    group_required = [u"admin", u"data_entry"]
 
     def get_success_url(self):
         return reverse('dashboard')
@@ -185,6 +192,7 @@ class ProjectUpdateView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class ProjectDelete(DeleteView):
+class ProjectDelete(GroupRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('dashboard')
+    group_required = [u"admin", u"data_entry"]
