@@ -1,4 +1,4 @@
-Django==1.8
+Django==1.8.1
 django-bootstrap3==5.3.1
 django-grappelli==2.6.4
 sendgrid-django==1.2.0
