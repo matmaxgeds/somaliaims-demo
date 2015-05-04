@@ -104,7 +104,7 @@ class LocationCreate(GroupRequiredMixin, CreateView):
             for save in saves:
                 save.location = self.object
                 save.save()
-            formset.save()
+            #formset.save()
             return HttpResponseRedirect(reverse('dashboard'))  # assuming your model has ``get_absolute_url`` defined.
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -141,7 +141,7 @@ class LocationUpdate(GroupRequiredMixin, UpdateView):
             for save in saves:
                 save.location = self.object
                 save.save()
-            formset.save()
+            #formset.save()
             return HttpResponseRedirect(self.get_success_url())
         else:
             return super(LocationUpdate, self).form_valid(form)

@@ -3,6 +3,10 @@ from django.conf import settings
 import uuid
 
 
+class UnsavedForeighKey(models.ForeignKey):
+    allow_unsaved_instance_assignment = True
+
+
 class Organization(models.Model):
     """Organizations funding and implementing projects"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -30,7 +34,7 @@ class Location(models.Model):
 class SubLocation(models.Model):
     """Sub locations under Somalia's regions"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    location = models.ForeignKey(Location)
+    location = UnsavedForeighKey(Location)
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
