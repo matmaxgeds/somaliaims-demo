@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, HttpResponseRedirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
 from .models import Project, Spending, Contact, Document
@@ -16,7 +16,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
     group_required = [u"admin", u"data_entry"]
 
     def get_success_url(self):
-        return reverse('dashboard')
+        return redirect('/data-entry/')
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectCreateView, self).get_context_data(**kwargs)
@@ -81,7 +81,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
                 doc.project = project
                 doc.save()
 
-            return redirect(self.get_success_url())
+            return redirect('/data-entry/')
 
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -94,9 +94,7 @@ class ProjectListView(GroupRequiredMixin, ListView):
     model = Project
     template_name = "data_entry/index.html"
     group_required = [u"admin", u"data_entry"]
-
-    def get_context_data(self, **kwargs):
-        super(ProjectListView, self).get_context_data(**kwargs)
+    queryset = Project.objects.all()
 
 
 def ajaxSublocations(request):
@@ -113,9 +111,6 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
     form_class = ProjectForm
     template_name = "data_entry/project_update_form.html"
     group_required = [u"admin", u"data_entry"]
-
-    def get_success_url(self):
-        return reverse('dashboard')
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectUpdateView, self).get_context_data(**kwargs)
@@ -183,7 +178,7 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
                 doc.project = project
                 doc.save()
 
-            return redirect(self.get_success_url())
+            return redirect('/data-entry/')
 
         else:
             return self.render_to_response(self.get_context_data(form=form))
