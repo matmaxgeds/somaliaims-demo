@@ -6,6 +6,82 @@ from .forms import LocationForm, SectorForm, SublocationForm
 from django.template.loader import get_template
 from django.http import HttpResponse
 import weasyprint
+import csv
+
+
+def csv_gen(request):
+    allocated_projects = LocationAllocation.objects.values('project').distinct()
+    pList = allocated_projects
+    import sys
+    if request.GET.getlist('locations') == [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
+            'sublocations') == []:
+        sys.stderr.write("1 called")
+        allocated_projects = LocationAllocation.objects.values('project').distinct()
+        pList = allocated_projects
+    if request.GET.getlist('locations') != [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
+            'sublocations') == []:
+        allocated_projects = LocationAllocation.objects.filter(
+            location__in=request.GET.getlist('locations')).distinct().values('project')
+        pList = allocated_projects
+    if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') == [] and request.GET.get(
+            'sublocations') == []:
+        allocated_sectors = SectorAllocation.objects.filter(
+            sector__in=request.GET.getlist('sectors')).distinct().values('project')
+        pList = allocated_sectors
+    if request.GET.getlist('sublocations') != [] and request.GET.get('locations') == [] and request.GET.get(
+            'sectors') == []:
+        sublocations = LocationAllocation.objects.filter(
+            sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
+        pList = sublocations
+    if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
+            'sublocations') == []:
+        a = LocationAllocation.objects.filter(
+            location__in=request.GET.getlist('locations')).distinct().values('project')
+        b = SectorAllocation.objects.filter(sector__in=request.GET.getlist('sectors')).distinct().values(
+            'project')
+        for x, y in zip(a, b):
+            x.update(y)
+        pList = a
+    if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
+            'sublocations') != []:
+        a = LocationAllocation.objects.filter(
+            location__in=request.GET.getlist('locations')).distinct().values('project')
+        b = SectorAllocation.objects.filter(sector__in=request.GET.getlist('sectors')).distinct().values(
+            'project')
+        c = LocationAllocation.objects.filter(
+            sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
+        for x, y in zip(a, b):
+            x.update(y)
+        for x, y in zip(a, c):
+            x.update(y)
+        pList = a
+    if request.GET.getlist('sectors') != [] and request.GET.getlist('sublocations') != [] and request.GET.getlist(
+            'locations') == []:
+        b = SectorAllocation.objects.filter(sector__in=request.GET.getlist('sectors')).distinct().values(
+            'project')
+        c = LocationAllocation.objects.filter(
+            sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
+        for x, y in zip(b, c):
+            x.update(y)
+        pList = b
+
+    if request.GET.getlist('locations') != [] and request.GET.getlist('sublocations') != [] and request.GET.getlist(
+            'sectors') == []:
+        a = LocationAllocation.objects.filter(
+            location__in=request.GET.getlist('locations')).distinct().values('project')
+        c = LocationAllocation.objects.filter(
+            sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
+        for x, y in zip(a, c):
+            x.update(y)
+        pList = a
+    filtered = ProjectFilter(request.GET, queryset=Project.objects.filter(id__in=pList))
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="projectlist.csv"'
+    writer = csv.writer(response)
+    for i in filtered:
+        writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), i.duration, i.value,
+                         i.percentage_spent])
+    return response
 
 
 def pdf_gen(request):
@@ -90,6 +166,7 @@ def project_list(request):
     pList = allocated_projects
     url = request.GET.urlencode()
     pdf_url = "http://127.0.0.1:8000/reports/export-pdf/?" + url
+    csv_url = "http://127.0.0.1:8000/reports/export-csv/?" + url
     page = request.get_full_path()
     exporters = False
     if "reports" in page:
@@ -151,8 +228,6 @@ def project_list(request):
         for x, y in zip(a, c):
             x.update(y)
         pList = a
-    import sys
-    sys.stderr.write("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    sys.stderr.write(str(pList))
+
     filter = ProjectFilter(request.GET, queryset=Project.objects.filter(id__in=pList))
     return render_to_response('reports/index.html', locals(), context_instance=RequestContext(request))

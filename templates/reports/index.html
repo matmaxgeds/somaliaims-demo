@@ -120,7 +120,8 @@
                         </div>
                     <div class="col-md-12">
                         <p></p>
-                        <p>{% if exporters %}<a href="{{ pdf_url }}">Export pdf</a>{% endif %}</p>
+                        <p>{% if exporters %}Export <a href="{{ pdf_url }}">PDF</a> | <a href="
+                        {{ csv_url }}">CSV</a>{% endif %}</p>
                     </div>
 
                     </div>
@@ -201,7 +202,7 @@
             </td>
             <td>
             {% for funder in obj.funders.all %}
-                {{ funder }}
+                {{ funder }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
             </td>
             <td>{{ obj.duration }}</td>
