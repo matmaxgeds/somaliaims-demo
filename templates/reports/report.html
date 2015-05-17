@@ -1,0 +1,59 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> {% block title %} Project List {% endblock %} | Somalia AIMS </title>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+    {% load bootstrap3 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <style>
+        * {
+            font-size: 13px;
+            line-height: 1;
+        }
+        .container-full {
+            margin: 0 auto;
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+<div class="container-full">
+
+<div class="row" style="padding-top: 20px;"></div>
+    <div class="row">
+    <div class="col-md-12">
+   <table class="table table-bordered table-condensed">
+        <tr>
+            <th>Project Name</th>
+            <th>Funders</th>
+            <th>Duration</th>
+            <th>Value</th>
+            <th>% Spent to Date</th>
+        </tr>
+    {% for obj in filtered %}
+        <tr>
+            <td>{{ obj.name }}</td>
+            <td>
+            {% for funder in obj.funders.all %}
+                {{ funder }}
+            {% endfor %}
+            </td>
+            <td>{{ obj.duration }}</td>
+            <td>{{ obj.value }} {{ obj.currency.abbrev }}</td>
+            <td>{{ obj.percentage_spent }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    </div>
+    </div>
+    </div>
+</div>
+</body>
+</html>
