@@ -1,0 +1,23 @@
+- fields: {abbrev: USD, currency: US Dollar}
+  model: management.currency
+  pk: 1
+- fields: {abbrev: EUR, currency: Euro}
+  model: management.currency
+  pk: 2
+- fields: {abbrev: GBP, currency: Pound}
+  model: management.currency
+  pk: 3
+- fields: {abbrev: CAD, currency: Canadian Dollar}
+  model: management.currency
+  pk: 4
+- fields: {abbrev: JPY, currency: Japanesse Yen}
+  model: management.currency
+  pk: 5
+- fields: {abbrev: AUD, currency: Australian Dollar}
+  model: management.currency
+  pk: 6
+- fields: {abbrev: CHF, currency: Swiss Franc}
+  model: management.currency
+  pk: 7
+
+
