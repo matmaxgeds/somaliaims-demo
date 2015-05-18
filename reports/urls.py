@@ -5,6 +5,7 @@ from reports.views import *
 urlpatterns = [
     url(r'^$', project_list, name='dashboard'),
     url(r'^export-pdf/$', pdf_gen, name='gen-pdf'),
-    url(r'^export-csv/$', csv_gen, name='gen-csv')
+    url(r'^export-csv/$', csv_gen, name='gen-csv'),
+    url(r'^export-xls/$', xls_gen, name='gen-xls')
 
 ]
