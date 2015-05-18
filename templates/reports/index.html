@@ -155,9 +155,9 @@
         </div>
         <div class="col-md-4">
             <label for="funders__icontains">Funders</label>
-            {{ filter.form.funders__icontains }}
+            {{ filtered.form.funders__icontains }}
             <label for="funders__icontains">Implementers</label>
-            {{ filter.form.implementers__icontains }}
+            {{ filtered.form.implementers__icontains }}
 
         </div>
             <div class="col-md-2">
@@ -194,7 +194,7 @@
             <th>Value</th>
             <th>% Spent to Date</th>
         </tr>
-    {% for obj in filter %}
+    {% for obj in filtered %}
         <tr>
             <td>
                 {{ obj.name }}
