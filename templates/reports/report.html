@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load humanize %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -46,7 +47,7 @@
             {% endfor %}
             </td>
             <td>{{ obj.duration }}</td>
-            <td>{{ obj.value }} {{ obj.currency.abbrev }}</td>
+            <td>{{ obj.value|intcomma  }} {{ obj.currency.abbrev }}</td>
             <td>{{ obj.percentage_spent }}</td>
         </tr>
     {% endfor %}

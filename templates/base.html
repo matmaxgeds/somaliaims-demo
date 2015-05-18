@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load humanize %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -49,13 +50,19 @@
     <script type="text/javascript">
     $(function() {
         $('.add-row').click(function(){
-            $('select').multiselect();
+            $('select').multiselect({
+                disableIfEmpty: true,
+                maxHeight: 200,
+            });
         });
     });
     </script>
     <script type="text/javascript">
     $(function() {
-        $('select').multiselect();
+        $('select').multiselect({
+                disableIfEmpty: true,
+                maxHeight: 200,
+            });
     });
     </script>
     <script type="text/javascript">

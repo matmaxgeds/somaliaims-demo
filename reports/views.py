@@ -10,10 +10,8 @@ from django.http import HttpResponse
 def list_generator(request):
     allocated_projects = LocationAllocation.objects.values('project').distinct()
     pList = allocated_projects
-    import sys
     if request.GET.getlist('locations') == [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
             'sublocations') == []:
-        sys.stderr.write("1 called")
         allocated_projects = LocationAllocation.objects.values('project').distinct()
         pList = allocated_projects
     if request.GET.getlist('locations') != [] and request.GET.getlist('sectors') == [] and request.GET.getlist(

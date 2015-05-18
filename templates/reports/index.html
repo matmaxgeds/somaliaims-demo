@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load humanize %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -150,8 +151,8 @@
     <form action="" method="get">
         <div class="col-md-4">
             {{ loc_form }}
-            {{ sec_form }}
             {{ sub_form }}
+            {{ sec_form }}
         </div>
         <div class="col-md-4">
             <label for="funders__icontains">Funders</label>
@@ -196,9 +197,9 @@
         </tr>
     {% for obj in filtered %}
         <tr>
-            <td>
-                {{ obj.name }}
-                <p id="desc" style="display:none">{{ obj.description }}</p>
+            <td class="col-md-5">
+                <a href={% url 'data-entry:project_update' obj.id %}>{{ obj.name }}</a>
+                <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>
 
             </td>
             <td>
@@ -207,7 +208,7 @@
             {% endfor %}
             </td>
             <td>{{ obj.duration }}</td>
-            <td>{{ obj.value }} {{ obj.currency.abbrev }}</td>
+            <td>{{ obj.value|intcomma }} {{ obj.currency.abbrev }}</td>
             <td>{{ obj.percentage_spent }}</td>
         </tr>
     {% endfor %}

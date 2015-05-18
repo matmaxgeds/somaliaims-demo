@@ -35,7 +35,7 @@ class SubLocation(models.Model):
     """Sub locations under Somalia's regions"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     location = UnsavedForeighKey(Location)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=False)
 
     class Meta:
         db_table = 'sublocations'

@@ -1,7 +1,7 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, HttpResponseRedirect
+from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.urlresolvers import reverse_lazy
 from .models import Project, Spending, Contact, Document
 from management.models import SubLocation
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
@@ -13,7 +13,7 @@ from braces.views import GroupRequiredMixin
 class ProjectCreateView(GroupRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]
 
     def get_success_url(self):
         return redirect('/data-entry/')
@@ -93,7 +93,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
 class ProjectListView(GroupRequiredMixin, ListView):
     model = Project
     template_name = "data_entry/index.html"
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]
     queryset = Project.objects.all()
 
 
@@ -110,7 +110,7 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     template_name = "data_entry/project_update_form.html"
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectUpdateView, self).get_context_data(**kwargs)
@@ -190,4 +190,4 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
 class ProjectDelete(GroupRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]
