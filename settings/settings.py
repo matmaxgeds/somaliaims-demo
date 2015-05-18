@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.sites',
     'bootstrap3',
     'aims',
     'home',
@@ -141,7 +142,6 @@ TEMPLATES = [
 
 # Login Settings
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/login_success/'
 
 
 #Module settings
@@ -175,3 +175,5 @@ try:
         from local_settings import *
 except ImportError:
     pass
+
+SITE_ID = 1

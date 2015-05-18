@@ -5,6 +5,7 @@ from django.template import RequestContext
 from .forms import LocationForm, SectorForm, SublocationForm
 from django.template.loader import get_template
 from django.http import HttpResponse
+from django.contrib.sites.models import Site
 
 
 def list_generator(request):
@@ -148,9 +149,12 @@ def project_list(request):
     sec_form = SectorForm()
     sub_form = SublocationForm()
     url = request.GET.urlencode()
-    pdf_url = "http://127.0.0.1:8000/projects/export-pdf/?" + url
-    csv_url = "http://127.0.0.1:8000/projects/export-csv/?" + url
-    xls_url = "http://127.0.0.1:8000/projects/export-xls/?" + url
+    host = Site.objects.get_current().domain
+    import sys
+    sys.stderr.write(host)
+    pdf_url = host + "/projects/export-pdf/?" + url
+    csv_url = host + "/projects/export-csv/?" + url
+    xls_url = host + "/projects/export-xls/?" + url
     page = request.get_full_path()
     exporters = False
     if "projects" in page:

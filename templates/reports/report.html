@@ -41,7 +41,7 @@
     {% for obj in filtered %}
         <tr>
             <td>{{ obj.name }}</td>
-            <td>
+            <td class="col-md-3">
             {% for funder in obj.funders.all %}
                 {{ funder }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
