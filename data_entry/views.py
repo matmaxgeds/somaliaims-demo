@@ -2,12 +2,28 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from .models import Project, Spending, Contact, Document
+from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization
 from management.models import SubLocation
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
     DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet
 from django.forms.models import inlineformset_factory
 from braces.views import GroupRequiredMixin
+from django.views.generic.detail import DetailView
+
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'data_entry/project_details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
+        context['project'] = self.object
+        context['loc_allocations'] = LocationAllocation.objects.filter(project=self.object)
+        context['contact'] = Contact.objects.filter(project=self.object)
+        context['sec_allocations'] = SectorAllocation.objects.filter(project=self.object)
+        context['other_organizations'] = UserOrganization.objects.filter(project=self.object).distinct()
+        context['documents'] = Document.objects.filter(project=self.object)
+        return context
 
 
 class ProjectCreateView(GroupRequiredMixin, CreateView):

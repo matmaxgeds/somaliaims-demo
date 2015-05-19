@@ -198,7 +198,7 @@
     {% for obj in filtered %}
         <tr>
             <td class="col-md-5">
-                <a href={% url 'data-entry:project_update' obj.id %}>{{ obj.name }}</a>
+                <a href={% url 'data-entry:project_details' obj.id %}>{{ obj.name }}</a>
                 <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>
 
             </td>

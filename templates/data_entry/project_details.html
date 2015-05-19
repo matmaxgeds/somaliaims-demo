@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %} Project Details {% endblock %}
+
+{% block content %}
+<div class="rows" style="padding-top: 40px;" ></div>
+<div class="row">
+<div class="col-md-12">
+    <div class="col-md-7">
+        <h4>Project Name:</h4>
+        <h3>{{ project.name }}</h3>
+        <h4>Description</h4>
+        <p>{{ project.description }}</p>
+        <h4>Start date</h4>
+        <p>{{ project.startDate }}</p>
+        <h4>End date</h4>
+        <p>{{ project.endDate }}</p>
+        <h4>Project value</h4>
+        <p>{{ project.value }} {{ project.currency }}</p>
+        <h4>Funders</h4>
+        {% for funder in project.funders.all %}
+            <p>{{ funder.name }}</p>
+        {% endfor %}
+        {% for org in other_organizations %}
+                {% if org.role == "Funder" %}
+                    <p>org.name</p>
+                {% endif %}
+            {% endfor %}
+        <h4>Implementers</h4>
+        {% for implementer in project.implementers.all %}
+            <p>{{ implementer.name }}</p>
+
+        {% endfor %}
+        {% for org in other_organizations %}
+                {% if org.role == "Implementer" %}
+                    <p>{{ org.name }}</p>
+                {% endif %}
+            {% endfor %}
+        <h4>Sectors and allocations</h4>
+        {% for sector in sec_allocations %}
+            <p>{{ sector.sector.name }} - {{ sector.percentage }}</p>
+        {% endfor %}
+        <h4>Locations and respective allocations</h4>
+        {% for location in loc_allocations %}
+            <h4>{{ location.location.name }} - {{ location.percentage }}</h4>
+            <span>Sublocations involved</span>
+            <ol>
+            {% for sublocation in location.sublocations.all %}
+                <li>{{ sublocation.name }}</li>
+            {% endfor %}
+            </ol>
+        {% endfor %}
+    </div>
+    <div class="col-md-5"></div>
+</div>
+</div>
+
+{% endblock %}

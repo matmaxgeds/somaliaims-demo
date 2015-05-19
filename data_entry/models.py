@@ -120,6 +120,11 @@ class SectorAllocation(models.Model):
     def __str__(self):
         return "{0} - {1} - {2}".format(self.project.name, self.sector.name, self.allocatedPercentage)
 
+    @property
+    def percentage(self):
+        precentage = "{0:5.2f} %".format(self.allocatedPercentage)
+        return precentage
+
 
 class LocationAllocation(models.Model):
     """Amount of project's value spent in various locations"""
@@ -134,6 +139,11 @@ class LocationAllocation(models.Model):
 
     def __str__(self):
         return "{0} - {1} - {2}".format(self.project.name, self.location.name, self.allocatedPercentage)
+
+    @property
+    def percentage(self):
+        precentage = "{0:5.2f} %".format(self.allocatedPercentage)
+        return precentage
 
 
 class UserOrganization(models.Model):
