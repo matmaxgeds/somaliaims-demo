@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-
+{% load humanize %}
+{% load filetransfers %}
 {% block title %} Project Details {% endblock %}
 
 {% block content %}
+
 <div class="rows" style="padding-top: 40px;" ></div>
 <div class="row">
 <div class="col-md-12">
@@ -16,7 +18,7 @@
         <h4>End date</h4>
         <p>{{ project.endDate }}</p>
         <h4>Project value</h4>
-        <p>{{ project.value }} {{ project.currency }}</p>
+        <p>{{ project.value|intcomma }} {{ project.currency }}</p>
         <h4>Funders</h4>
         {% for funder in project.funders.all %}
             <p>{{ funder.name }}</p>
@@ -50,9 +52,19 @@
             {% endfor %}
             </ol>
         {% endfor %}
+        {% if documents %}
+        <h4>Project files</h4>
+        {% for document in documents %}
+            <p>{{ document.name }}
+                <a href="{% url 'data-entry:download' pk=document.id %}">Download</a>
+            </p>
+        {% endfor %}
+        {% endif %}
     </div>
     <div class="col-md-5"></div>
 </div>
 </div>
+<div class="row" style="padding-top: 10px;"></div>
+
 
 {% endblock %}

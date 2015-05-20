@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django.contrib.sites',
+    'filetransfers',
     'bootstrap3',
     'aims',
     'home',
@@ -169,6 +170,7 @@ DATABASES = {
 ADMIN_URL = '/admin/'
 DATA_ENTRY_URL = '/data-entry/'
 MANAGEMENT_URL = '/management/'
+
 
 try:
     if DEBUG:

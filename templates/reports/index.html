@@ -206,6 +206,7 @@
             {% for funder in obj.funders.all %}
                 {{ funder }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
+
             </td>
             <td>{{ obj.duration }}</td>
             <td>{{ obj.value|intcomma }} {{ obj.currency.abbrev }}</td>

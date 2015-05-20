@@ -9,6 +9,8 @@ from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationForms
 from django.forms.models import inlineformset_factory
 from braces.views import GroupRequiredMixin
 from django.views.generic.detail import DetailView
+from filetransfers.api import serve_file
+from django.shortcuts import get_object_or_404
 
 
 class ProjectDetailView(DetailView):
@@ -24,6 +26,11 @@ class ProjectDetailView(DetailView):
         context['other_organizations'] = UserOrganization.objects.filter(project=self.object).distinct()
         context['documents'] = Document.objects.filter(project=self.object)
         return context
+
+
+def download_handler(request, pk):
+    document = get_object_or_404(Document, id=pk)
+    return serve_file(request, document.file)
 
 
 class ProjectCreateView(GroupRequiredMixin, CreateView):
