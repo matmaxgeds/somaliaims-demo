@@ -1,0 +1,76 @@
+[
+{
+    "pk": 1,
+    "model": "auth.user",
+    "fields": {
+        "groups": [],
+        "email": "superuser@gmail.com",
+        "last_login": null,
+        "is_superuser": true,
+        "last_name": "",
+        "date_joined": "2015-05-20T15:03:00.099Z",
+        "is_active": true,
+        "password": "pbkdf2_sha256$20000$vUlmuzv1NrvL$gTZj+ZvJW3RFlpURLk/8P+iNg+ns1rW/kuIubYJ694s=",
+        "first_name": "",
+        "username": "superuser",
+        "user_permissions": [],
+        "is_staff": true
+    }
+},
+{
+    "pk": 2,
+    "model": "auth.user",
+    "fields": {
+        "groups": [],
+        "email": "admin@gmail.com",
+        "last_login": null,
+        "is_superuser": false,
+        "last_name": "",
+        "date_joined": "2015-05-20T15:03:00.099Z",
+        "is_active": true,
+        "password": "pbkdf2_sha256$20000$YIXyc2aId8v3$Jr2p5K2tJ2NYxcSB2bnoNLvoYI5Pd3bN5tM4XBo+yIU=",
+        "first_name": "",
+        "username": "admin",
+        "user_permissions": [],
+        "is_staff": true
+    }
+},
+{
+    "pk": 3,
+    "model": "auth.user",
+    "fields": {
+        "groups": [],
+        "email": "manager@gmail.com",
+        "last_login": null,
+        "is_superuser": false,
+        "last_name": "",
+        "date_joined": "2015-05-20T15:03:00.099Z",
+        "is_active": true,
+        "password": "pbkdf2_sha256$20000$vfoaAknRehzS$lcC5XNSeFDoCr+a4HGNLOe+SU1iqRkIRFzmIqzbv88A=",
+        "first_name": "",
+        "username": "manager",
+        "user_permissions": [],
+        "is_staff": false
+    }
+},
+
+{
+    "pk": 4,
+    "model": "auth.user",
+    "fields": {
+        "groups": [],
+        "email": "data@gmail.com",
+        "last_login": null,
+        "is_superuser": false,
+        "last_name": "",
+        "date_joined": "2015-05-20T15:03:00.099Z",
+        "is_active": true,
+        "password": "pbkdf2_sha256$20000$dHNZulSd62ow$gJzlktMJV7kx/lLKWTuJpWLHgDKZG9KVPCbl7/IKK0M=",
+        "first_name": "",
+        "username": "data",
+        "user_permissions": [],
+        "is_staff": false
+    }
+}
+
+]
