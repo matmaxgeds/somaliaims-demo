@@ -30,7 +30,7 @@ class ProjectDetailView(DetailView):
 
 def download_handler(request, pk):
     document = get_object_or_404(Document, id=pk)
-    return serve_file(request, document.file)
+    return serve_file(request, document.file, save_as=True)
 
 
 class ProjectCreateView(GroupRequiredMixin, CreateView):
