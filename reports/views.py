@@ -157,7 +157,7 @@ def project_list(request):
     xls_url = host + "/projects/export-xls/?" + url
     page = request.get_full_path()
     exporters = False
-    if "projects" in page:
+    if "project_list" in page:
         exporters = True
     filtered = list_generator(request)
     return render_to_response('reports/index.html', locals(), context_instance=RequestContext(request))
