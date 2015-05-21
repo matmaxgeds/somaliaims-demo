@@ -10,7 +10,7 @@ def login_success(request):
     if request.user.groups.filter(name="admin").exists() or request.user.is_superuser:
         # user is an admin
         return redirect(settings.ADMIN_URL)
-    elif request.user.groups.filter(name="data_entry").exists():
+    elif request.user.groups.filter(name="data").exists():
         return redirect(settings.DATA_ENTRY_URL)
     elif request.user.groups.filter(name="management").exists():
         return redirect(settings.MANAGEMENT_URL)

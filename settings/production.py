@@ -11,3 +11,6 @@ DATABASES = {
         'PORT': '10043',
     }
 }
+
+# Enable XSendfile in web server config
+SERVE_FILE_BACKEND = 'filetransfers.backends.xsendfile.serve_file'

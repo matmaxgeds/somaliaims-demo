@@ -58,7 +58,6 @@ target/
 
 # Database
 *.sqlite3
-db.sqlite3
 
 # Pycharm project files
 .idea/
@@ -66,3 +65,5 @@ db.sqlite3
 # uploaded project documents
 documents/
 
+# temporary generated pdfs
+*.pdf

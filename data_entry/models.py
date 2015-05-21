@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 import datetime
+from datetime import timedelta
+from calendar import monthrange
 import uuid
 
 
@@ -40,6 +42,26 @@ class Project(models.Model):
         else:
             pass
         super(Project, self).save()
+
+    @property
+    def duration(self):
+        delta = 0
+        while True:
+            mdays = monthrange(self.startDate.year, self.startDate.month)[1]
+            self.startDate += timedelta(days=mdays)
+            if self.startDate <= self.endDate:
+                delta += 1
+            else:
+                break
+        out = "{0} months".format(delta)
+        return out
+
+    @property
+    def percentage_spent(self):
+        spending = Spending.objects.get(project=self).spendingToDate
+        percentage = (spending/self.value)*100
+        out = "{0:5.2f} %".format(percentage)
+        return out
 
 
 class Spending(models.Model):
@@ -98,6 +120,11 @@ class SectorAllocation(models.Model):
     def __str__(self):
         return "{0} - {1} - {2}".format(self.project.name, self.sector.name, self.allocatedPercentage)
 
+    @property
+    def percentage(self):
+        precentage = "{0:5.2f} %".format(self.allocatedPercentage)
+        return precentage
+
 
 class LocationAllocation(models.Model):
     """Amount of project's value spent in various locations"""
@@ -112,6 +139,11 @@ class LocationAllocation(models.Model):
 
     def __str__(self):
         return "{0} - {1} - {2}".format(self.project.name, self.location.name, self.allocatedPercentage)
+
+    @property
+    def percentage(self):
+        precentage = "{0:5.2f} %".format(self.allocatedPercentage)
+        return precentage
 
 
 class UserOrganization(models.Model):

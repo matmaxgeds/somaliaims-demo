@@ -1,19 +1,42 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, HttpResponseRedirect
+from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse, reverse_lazy
-from .models import Project, Spending, Contact, Document
+from django.core.urlresolvers import reverse_lazy
+from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization
 from management.models import SubLocation
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
     DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet
 from django.forms.models import inlineformset_factory
 from braces.views import GroupRequiredMixin
+from django.views.generic.detail import DetailView
+from filetransfers.api import serve_file
+from django.shortcuts import get_object_or_404
+
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'data_entry/project_details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
+        context['project'] = self.object
+        context['loc_allocations'] = LocationAllocation.objects.filter(project=self.object)
+        context['contact'] = Contact.objects.filter(project=self.object)
+        context['sec_allocations'] = SectorAllocation.objects.filter(project=self.object)
+        context['other_organizations'] = UserOrganization.objects.filter(project=self.object).distinct()
+        context['documents'] = Document.objects.filter(project=self.object)
+        return context
+
+
+def download_handler(request, pk):
+    document = get_object_or_404(Document, id=pk)
+    return serve_file(request, document.file, save_as=True)
 
 
 class ProjectCreateView(GroupRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]
 
     def get_success_url(self):
         return redirect('/data-entry/')
@@ -93,7 +116,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
 class ProjectListView(GroupRequiredMixin, ListView):
     model = Project
     template_name = "data_entry/index.html"
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]
     queryset = Project.objects.all()
 
 
@@ -110,7 +133,7 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     template_name = "data_entry/project_update_form.html"
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectUpdateView, self).get_context_data(**kwargs)
@@ -190,4 +213,4 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
 class ProjectDelete(GroupRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"data_entry"]
+    group_required = [u"admin", u"data"]

@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load humanize %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -40,18 +41,28 @@
         .delete-row{
             padding-left: 3px;
         }
+        .container-full {
+            margin: 0 auto;
+            width: 100%;
+        }
     </style>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript">
     $(function() {
         $('.add-row').click(function(){
-            $('select').multiselect();
+            $('select').multiselect({
+                disableIfEmpty: true,
+                maxHeight: 200,
+            });
         });
     });
     </script>
     <script type="text/javascript">
     $(function() {
-        $('select').multiselect();
+        $('select').multiselect({
+                disableIfEmpty: true,
+                maxHeight: 200,
+            });
     });
     </script>
     <script type="text/javascript">
@@ -67,7 +78,9 @@
 
     });
 </script>
-
+<style type="text/css">
+      #map-canvas { height: 400px; margin: 0; padding: 0;}
+    </style>
 </head>
 <body>
 <div class="container">
@@ -94,7 +107,7 @@
                                 <a href="{% url 'home' %}">Menu </a>
                             </span>
                             <span>
-                                <a href="{% url 'reports:dashboard' %}">| Reporting </a>
+                                <a href="{% url 'projects:dashboard' %}">| Project List </a>
                             </span>
                             {% if user.is_authenticated %}
                             <span>
