@@ -1,6 +1,5 @@
 import psycopg2
 import logging
-#from geopy.geocoders import Nominatim
 import urllib.request
 import json
 
@@ -23,7 +22,7 @@ if conn:
     locations = cur.fetchall()
     car = conn.cursor()
     for location in locations:
-        final_loc = location[1] + "+" + "somalia"
+        final_loc = location[1].replace(" ", "+") + "+" + "somalia"
         try:
             address=final_loc
             url="https://maps.googleapis.com/maps/api/geocode/json?address=%s" % address
@@ -46,7 +45,7 @@ if conn:
         car.execute(s)
         sublocations = car.fetchall()
         for sublocation in sublocations:
-            complete = sublocation[1] + "+" + location[1] + "+" + "somalia"
+            complete = sublocation[1].replace(" ", "+") + "+" + location[1].replace(" ", "+") + "+" + "somalia"
             try:
                 address = complete
                 url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s" % address
