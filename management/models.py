@@ -23,6 +23,8 @@ class Location(models.Model):
     """Regions within Somalia e.g Jubaland"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=250, unique=True)
+    lng = models.CharField(max_length=50, blank=True)
+    lat = models.CharField(max_length=50, blank=True)
 
     class Meta:
         db_table = 'locations'
@@ -36,6 +38,8 @@ class SubLocation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     location = UnsavedForeighKey(Location)
     name = models.CharField(max_length=100, unique=False)
+    lng = models.CharField(max_length=50, blank=True)
+    lat = models.CharField(max_length=50, blank=True)
 
     class Meta:
         db_table = 'sublocations'
