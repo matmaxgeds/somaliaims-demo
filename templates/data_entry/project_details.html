@@ -66,5 +66,78 @@
 </div>
 <div class="row" style="padding-top: 10px;"></div>
 <div id="map-canvas"></div>
+<script>
+function initialize() {
+  country = new google.maps.LatLng(5.134736, 46.186371)
+  var mapOptions = {
+    zoom: 5,
+    center: country
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+  var markers = [
+        {% for allocation in loc_allocations %}
+        ['{{ allocation.project }}', '{{ allocation.location.lat }}',
+            '{{ allocation.location.lng }}', '{{ allocation.location.name }}'],
+        {% endfor %}
+    ];
+  console.log(markers);
+  for( i = 0; i < markers.length; i++ ) {
+      var infoWindow = new google.maps.InfoWindow(), marker, i;
+      var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+      marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: markers[i][0]
+        });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                var content = "<p>" + markers[i][3] + "</p>" + "<p>" + markers[i][0] + "</p>"
+                infoWindow.setContent(content);
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));
+  }
+ var subs = [
+ {% for allocation in loc_allocations %}
+     {% for sub in allocation.sublocations.all %}
+        ['{{ allocation.project }}', '{{ allocation.location.name }}', '{{ sub.name }}', '{{ sub.lat }}',
+            '{{ sub.lng }}'],
+        {% endfor %}
+ {% endfor %}
+ ];
+
+for( i = 0; i < subs.length; i++ ) {
+      var infoWindow = new google.maps.InfoWindow(), marker, i;
+      var position = new google.maps.LatLng(subs[i][3], subs[i][4]);
+      marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: subs[i][0]
+        });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                var content = "<p>" + subs[i][2] + " - " + subs[i][1] + "</p>" + "<p>" + subs[i][0] + "</p>"
+                infoWindow.setContent(content);
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));
+  }
+console.log(subs)
+}
+
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp' +
+      '&signed_in=false&callback=initialize';
+  document.body.appendChild(script);
+}
+
+window.onload = loadScript;
+</script>
 
 {% endblock %}
