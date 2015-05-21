@@ -13,4 +13,4 @@ DATABASES = {
 }
 
 # Enable XSendfile in web server config
-SERVE_FILE_BACKEND = 'filetransfers.backends.xsendfile.serve_file'
+#SERVE_FILE_BACKEND = 'filetransfers.backends.xsendfile.serve_file'
