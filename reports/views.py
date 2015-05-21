@@ -152,9 +152,9 @@ def project_list(request):
     host = Site.objects.get_current().domain
     import sys
     sys.stderr.write(host)
-    pdf_url = host + "/projects/export-pdf/?" + url
-    csv_url = host + "/projects/export-csv/?" + url
-    xls_url = host + "/projects/export-xls/?" + url
+    pdf_url = "/export-pdf/?" + url
+    csv_url = "/export-csv/?" + url
+    xls_url = "/export-xls/?" + url
     page = request.get_full_path()
     exporters = False
     if "project_list" in page:
