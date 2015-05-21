@@ -1,0 +1,665 @@
+[
+{
+    "fields": {
+        "name": "Intl Commitee of the Red Cross"
+    },
+    "pk": "1551eec6-b58e-4b18-8efb-1e0fbb1f3622",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "Norwegian Refugee Council"
+    },
+    "pk": "1a4279e3-30a9-4485-8225-ff4d3bf73252",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "World Food Programme"
+    },
+    "pk": "56d2c9fe-92c4-4491-832c-5869833fe19b",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "African Union"
+    },
+    "pk": "7098f27c-8da8-4179-9988-75b07b6a2643",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "Brazil"
+    },
+    "pk": "951e6862-17dc-47a2-9e3e-61c2bb807db2",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "Saudi Arabia"
+    },
+    "pk": "9b8dc764-d3e8-4bb5-a941-44589498a3ff",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "Asian Development Bank"
+    },
+    "pk": "9e1e6d5e-5042-4c96-b6a9-8943011d0a82",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "United Nations Children's Fund"
+    },
+    "pk": "a7425512-1798-4ae5-847a-5ba96c6953b0",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "UN SERF Common Funds and Agencies"
+    },
+    "pk": "add79573-1ebe-4478-a422-2e895f0bcc37",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "Food & Agricultural Organization"
+    },
+    "pk": "bdbab833-d324-4a3a-9ea3-9005a8eb1fa1",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "World bank"
+    },
+    "pk": "d5031a52-0f14-404a-807f-8d7917d001dc",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "Atlas Corps"
+    },
+    "pk": "e4d6ea6d-fc7c-4884-877c-3da6371dc8d0",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "name": "USA"
+    },
+    "pk": "ff1f2d40-94d3-4e37-b134-6f4ecca81f48",
+    "model": "management.organization"
+},
+{
+    "fields": {
+        "lat": "9.786588100000001",
+        "name": "Puntland",
+        "lng": "49.36531489999999"
+    },
+    "pk": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "6.0404458",
+        "name": "Galmudug",
+        "lng": "47.7637565"
+    },
+    "pk": "33528abd-d698-49e1-ade4-0f192062a58d",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "6.0404458",
+        "name": "Awdalland",
+        "lng": "47.7637565"
+    },
+    "pk": "4cb2cb64-2786-4771-980f-ebc0eebdf024",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "6.0404458",
+        "name": "Himan & Heeb",
+        "lng": "47.7637565"
+    },
+    "pk": "60ae5a5c-7c20-42e5-9d16-1226b2703c0c",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "6.0404458",
+        "name": "Jubaland",
+        "lng": "47.7637565"
+    },
+    "pk": "7462b0f5-e9b9-41c3-b163-9cc847829c23",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "6.0404458",
+        "name": "Central Regions State",
+        "lng": "47.7637565"
+    },
+    "pk": "86bf9235-4f59-4f7a-b552-3f08c102273d",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "9.786588100000001",
+        "name": "South West State",
+        "lng": "49.36531489999999"
+    },
+    "pk": "97150a50-0c1e-408b-ba27-498adc5a9480",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "6.0404458",
+        "name": "Zelia & Laghaya State",
+        "lng": "47.7637565"
+    },
+    "pk": "ca7605df-84c4-42fd-b518-073db435c77c",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "9.411743399999999",
+        "name": "Somaliland",
+        "lng": "46.8252838"
+    },
+    "pk": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "6.0404458",
+        "name": "Khatumo State",
+        "lng": "47.7637565"
+    },
+    "pk": "f9fde116-9f49-4874-bb06-18f5664a4b4d",
+    "model": "management.location"
+},
+{
+    "fields": {
+        "lat": "10.6334285",
+        "name": "Awdal",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "43.329466"
+    },
+    "pk": "01ee444c-7fdb-4a3d-a899-3089a111eeec",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Fiqifuliye",
+        "location": "f9fde116-9f49-4874-bb06-18f5664a4b4d",
+        "lng": "48.52555599999999"
+    },
+    "pk": "025bb9d6-f286-44c0-bbaa-1c2f94290c12",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "10.6936502",
+        "name": "Salal",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "46.33938089999999"
+    },
+    "pk": "0ef1854c-2c6d-4634-99c5-b2b9b11811a4",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "11.284722",
+        "name": "Bay",
+        "location": "97150a50-0c1e-408b-ba27-498adc5a9480",
+        "lng": "49.1825"
+    },
+    "pk": "19c610e0-92c8-4f0f-bad7-9ca7a5806e42",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "11.284722",
+        "name": "Bakool",
+        "location": "97150a50-0c1e-408b-ba27-498adc5a9480",
+        "lng": "49.1825"
+    },
+    "pk": "2569daa6-78d8-43d6-9ddd-7c367f2c15de",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "6.769722",
+        "name": "Galkayo",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "47.430833"
+    },
+    "pk": "2b13baab-af42-4eb0-a2f9-34d67f127bc0",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "10.713889",
+        "name": "Badhan",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "48.334722"
+    },
+    "pk": "3577be4d-9f19-496b-836f-769d0abc46f6",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "10.6936502",
+        "name": "Sarar",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "46.33938089999999"
+    },
+    "pk": "381542f4-2ad3-4a27-82cc-766da89ae239",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "11.284722",
+        "name": "Lower Shabelle",
+        "location": "97150a50-0c1e-408b-ba27-498adc5a9480",
+        "lng": "49.1825"
+    },
+    "pk": "39c073b4-3660-4e9f-adde-0eddaafb0bdc",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "-0.358056",
+        "name": "South Mudug",
+        "location": "86bf9235-4f59-4f7a-b552-3f08c102273d",
+        "lng": "42.545278"
+    },
+    "pk": "44ee4663-3887-44ec-978a-621f1d415c2e",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "9.5625",
+        "name": "Hargeisa",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "44.0697"
+    },
+    "pk": "531be6df-89dd-499a-8280-7623a40bbd8c",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "8.230556",
+        "name": "Las Anod",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "46.326667"
+    },
+    "pk": "5db4f803-1de3-4981-8e17-a7b5ceb2ae5e",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "9.749167",
+        "name": "Dhahar",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "48.82194399999999"
+    },
+    "pk": "6c195e14-163a-4959-8f5d-9cff430259ab",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "-0.358056",
+        "name": "Bu'ale",
+        "location": "7462b0f5-e9b9-41c3-b163-9cc847829c23",
+        "lng": "42.545278"
+    },
+    "pk": "6cc9144f-9d14-4bf2-9925-9a1cc4556695",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "11.284722",
+        "name": "Bosaso",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "49.1825"
+    },
+    "pk": "77fa43d9-4ddb-46f5-8067-f97d5a64acf0",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Godinlabe",
+        "location": "60ae5a5c-7c20-42e5-9d16-1226b2703c0c",
+        "lng": "48.52555599999999"
+    },
+    "pk": "7d256ec0-56c3-4bd6-bb77-70f679c6c41d",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "9.808152200000002",
+        "name": "Gabiley",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "43.7142484"
+    },
+    "pk": "88682b34-e37f-461f-b489-36458f61d9fa",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "9.414347",
+        "name": "Hawd",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "45.5267859"
+    },
+    "pk": "88d62901-05c8-43ab-af21-ff00b2c99273",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Borama",
+        "location": "4cb2cb64-2786-4771-980f-ebc0eebdf024",
+        "lng": "48.52555599999999"
+    },
+    "pk": "8f07f560-59a8-480b-b86e-c8d84c75f278",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Heeb",
+        "location": "60ae5a5c-7c20-42e5-9d16-1226b2703c0c",
+        "lng": "48.52555599999999"
+    },
+    "pk": "9510fac4-9116-41ea-9ad9-d669ce270f86",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "9.524167",
+        "name": "Burao",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "45.536944"
+    },
+    "pk": "9f06826f-c113-4a19-b9d7-4bb294b55420",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "8.230556",
+        "name": "Buhoodle",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "46.326667"
+    },
+    "pk": "a4d7f507-af36-4791-8421-5a511858aedf",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "8.4",
+        "name": "Gorowe",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "48.48333299999999"
+    },
+    "pk": "afedd7ed-cc21-4291-8140-ffeeaceebcdc",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Ayan",
+        "location": "f9fde116-9f49-4874-bb06-18f5664a4b4d",
+        "lng": "48.52555599999999"
+    },
+    "pk": "bfda57ea-ed1c-475a-9c64-71713cbfcb66",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "-0.358056",
+        "name": "Gido",
+        "location": "7462b0f5-e9b9-41c3-b163-9cc847829c23",
+        "lng": "42.545278"
+    },
+    "pk": "cdaddc01-de0c-40da-ae33-1cbb1566ff16",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "6.769722",
+        "name": "Galkayo",
+        "location": "33528abd-d698-49e1-ade4-0f192062a58d",
+        "lng": "47.430833"
+    },
+    "pk": "d168ab4e-1296-46a4-b1e4-2405c9edfe91",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "10.4392",
+        "name": "Berbera",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "45.0101"
+    },
+    "pk": "d89b57df-94ff-4a4f-8450-6dabc74ca2e3",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "-0.358056",
+        "name": "Galguduud",
+        "location": "86bf9235-4f59-4f7a-b552-3f08c102273d",
+        "lng": "42.545278"
+    },
+    "pk": "e0913423-1094-48ad-a4e9-de862525f931",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "10.3938218",
+        "name": "Sanaag",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "47.7637565"
+    },
+    "pk": "e2f77b42-174f-4199-be70-ef03ec90f21e",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "-0.358056",
+        "name": "Kismayo",
+        "location": "7462b0f5-e9b9-41c3-b163-9cc847829c23",
+        "lng": "42.545278"
+    },
+    "pk": "e33cd238-2e63-464c-ad2a-ce8dada744ac",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Las Adon",
+        "location": "f9fde116-9f49-4874-bb06-18f5664a4b4d",
+        "lng": "48.52555599999999"
+    },
+    "pk": "e71c8f75-5595-46ca-ac77-675fc46e44fc",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "9.9125",
+        "name": "Kaarkar",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "49.3925"
+    },
+    "pk": "ea333b52-73f2-43a5-9a3e-f0e9d3c7da91",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "10.713889",
+        "name": "Erigawe",
+        "location": "0a2a82dd-f680-4bdf-aba7-2f2ba8cbe9ad",
+        "lng": "48.334722"
+    },
+    "pk": "ec60d954-deae-442e-aff4-fed5b3827339",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Hobyo",
+        "location": "33528abd-d698-49e1-ade4-0f192062a58d",
+        "lng": "48.52555599999999"
+    },
+    "pk": "f2fcee96-5aa4-4f36-a881-5f2fae38eb0a",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "5.35",
+        "name": "Zeila",
+        "location": "ca7605df-84c4-42fd-b518-073db435c77c",
+        "lng": "48.52555599999999"
+    },
+    "pk": "f80de8a4-8bd8-4da4-b359-4ab1dcf1671d",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "8.722155599999999",
+        "name": "Sool",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "47.7637565"
+    },
+    "pk": "f8306ebe-efd6-4d29-a157-e17280c90925",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "lat": "9.410198200000002",
+        "name": "Odwenye",
+        "location": "f946fa33-bd2c-4d25-a92f-1ae9f79da8aa",
+        "lng": "45.06299019999999"
+    },
+    "pk": "fc4a2d20-7d7e-4455-a1a8-638ebc77477a",
+    "model": "management.sublocation"
+},
+{
+    "fields": {
+        "name": "Disaster Preparedness",
+        "description": "Disaster preparedness description."
+    },
+    "pk": "02b8fd96-bf1b-4b81-ac56-6b781196efad",
+    "model": "management.sector"
+},
+{
+    "fields": {
+        "name": "General Budget Support",
+        "description": "General budget and support description."
+    },
+    "pk": "1a4b14e6-99cf-4241-8674-e0b5e20ad47b",
+    "model": "management.sector"
+},
+{
+    "fields": {
+        "name": "Multisector",
+        "description": "Multisector description."
+    },
+    "pk": "3fb44408-dd69-448c-a2b5-bef5bd1c7db6",
+    "model": "management.sector"
+},
+{
+    "fields": {
+        "name": "Food Aid",
+        "description": "Food aid description. "
+    },
+    "pk": "4bdb194f-b817-4697-8aae-ddf8ef2ba53c",
+    "model": "management.sector"
+},
+{
+    "fields": {
+        "name": "Energy Generation and Supply",
+        "description": "Energy generation and supply description."
+    },
+    "pk": "534df688-6328-40f4-9fca-84aa4d695b7a",
+    "model": "management.sector"
+},
+{
+    "fields": {
+        "name": "Others",
+        "description": "Other sectors description."
+    },
+    "pk": "fff590fb-5ee5-46fa-80d8-e789f583fe97",
+    "model": "management.sector"
+},
+{
+    "fields": {
+        "abbrev": "USD",
+        "currency": "US Dollar"
+    },
+    "pk": 1,
+    "model": "management.currency"
+},
+{
+    "fields": {
+        "abbrev": "EUR",
+        "currency": "Euro"
+    },
+    "pk": 2,
+    "model": "management.currency"
+},
+{
+    "fields": {
+        "abbrev": "GBP",
+        "currency": "Pound"
+    },
+    "pk": 3,
+    "model": "management.currency"
+},
+{
+    "fields": {
+        "abbrev": "CAD",
+        "currency": "Canadian Dollar"
+    },
+    "pk": 4,
+    "model": "management.currency"
+},
+{
+    "fields": {
+        "abbrev": "JPY",
+        "currency": "Japanesse Yen"
+    },
+    "pk": 5,
+    "model": "management.currency"
+},
+{
+    "fields": {
+        "abbrev": "AUD",
+        "currency": "Australian Dollar"
+    },
+    "pk": 6,
+    "model": "management.currency"
+},
+{
+    "fields": {
+        "abbrev": "CHF",
+        "currency": "Swiss Franc"
+    },
+    "pk": 7,
+    "model": "management.currency"
+},
+{
+    "fields": {
+        "rateToSOM": 0.01,
+        "dateSet": "2015-05-03"
+    },
+    "pk": 1,
+    "model": "management.exchangerate"
+}
+]

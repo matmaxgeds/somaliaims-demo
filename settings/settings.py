@@ -43,6 +43,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django.contrib.sites',
+    'filetransfers',
     'bootstrap3',
     'aims',
     'home',
@@ -91,7 +94,7 @@ WSGI_APPLICATION = 'aims.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE =  config.get('TIME_ZONE')
+TIME_ZONE = config.get('TIME_ZONE')
 
 USE_I18N = True
 
@@ -140,7 +143,6 @@ TEMPLATES = [
 
 # Login Settings
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/login_success/'
 
 
 #Module settings
@@ -157,11 +159,10 @@ SENDGRID_PASSWORD = "aims.somali1"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config.get('SOMAILIAIMS_DB_NAME'),
-        'USER': config.get('SOMAILIAIMS_DB_USER'),
-        'PASSWORD': config.get('SOMAILIAIMS_DB_PASS'),
-        'HOST': config.get('SOMAILIAIMS_DB_HOST'),
-        'PORT': config.get('SOMAILIAIMS_DB_PORT'),
+        'NAME': 'somaliaims',
+        'USER': 'somaliaims',
+        'PASSWORD': 'aims.somali',
+        'HOST': 'localhost',
     }
 }
 
@@ -170,8 +171,11 @@ ADMIN_URL = '/admin/'
 DATA_ENTRY_URL = '/data-entry/'
 MANAGEMENT_URL = '/management/'
 
+
 try:
     if DEBUG:
         from local_settings import *
 except ImportError:
     pass
+
+SITE_ID = 1

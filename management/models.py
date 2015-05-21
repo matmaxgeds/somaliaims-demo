@@ -23,6 +23,8 @@ class Location(models.Model):
     """Regions within Somalia e.g Jubaland"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=250, unique=True)
+    lng = models.CharField(max_length=50, blank=True)
+    lat = models.CharField(max_length=50, blank=True)
 
     class Meta:
         db_table = 'locations'
@@ -35,7 +37,9 @@ class SubLocation(models.Model):
     """Sub locations under Somalia's regions"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     location = UnsavedForeighKey(Location)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=False)
+    lng = models.CharField(max_length=50, blank=True)
+    lat = models.CharField(max_length=50, blank=True)
 
     class Meta:
         db_table = 'sublocations'
@@ -67,7 +71,7 @@ class Currency(models.Model):
         db_table = 'currencies'
 
     def __str__(self):
-        return "{0} - {1}".format(self.abbrev, self.currency)
+        return "{0}({1})".format(self.abbrev, self.currency)
 
 
 class ExchangeRate(models.Model):
