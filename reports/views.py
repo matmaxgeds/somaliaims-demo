@@ -121,6 +121,7 @@ def xls_gen(request):
         columns.insert(1, (u"Sectors", 12000))
 
     import sys
+
     sys.stderr.write(str(columns))
 
     font_style = xlwt.XFStyle()
@@ -185,15 +186,15 @@ def csv_gen(request):
                               delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), i.duration, i.value,
+            writer.writerow([i.name, ','.join([x for x in i.funders.all()]), i.duration, i.value,
                              i.percentage_spent])
     elif q and not r and not s:
         head = csv.DictWriter(response, fieldnames=["Locations", "Project Name", "Funders", "Duration", "Value",
                                                     "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), i.name, ','.join([x.name for x in
-                                                                                        i.funders.all()]), i.duration,
+            writer.writerow([','.join([x for x in i.locations]), i.name, ','.join([x.name for x in
+                                                                                   i.funders.all()]), i.duration,
                              i.value,
                              i.percentage_spent])
     elif q and r and not s:
@@ -201,7 +202,7 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
+            writer.writerow([','.join([x for x in i.locations]), ','.join([x for x in i.sublocations]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
@@ -211,8 +212,8 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
-                             ','.join([x.name for x in i.sectors]),
+            writer.writerow([','.join([x for x in i.locations]), ','.join([x for x in i.sublocations]),
+                             ','.join([x for x in i.sectors]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
@@ -223,7 +224,7 @@ def csv_gen(request):
         head.writeheader()
         for i in filtered:
             writer.writerow([','.join([x for x in i.sublocations]),
-                             ','.join([x.name for x in i.sectors]),
+                             ','.join([x for x in i.sectors]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
@@ -233,7 +234,7 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x.name for x in i.sectors]),
+            writer.writerow([','.join([x for x in i.sectors]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
