@@ -28,10 +28,7 @@
         .btns{
             padding-top: 20px;
         }
-        * {
-            font-size: 12px;
-            line-height: 1;
-        }
+
     </style>
     <script type="text/javascript">
     $(function() {
@@ -39,7 +36,7 @@
             $('select').multiselect({
                 disableIfEmpty: true,
                 maxHeight: 200,
-                buttonWidth: '300px'
+                buttonWidth: '150px'
             });
         });
     });
@@ -62,7 +59,7 @@
         $('select').multiselect({
                 disableIfEmpty: true,
                 maxHeight: 200,
-                buttonWidth: '400px'
+                buttonWidth: '150px'
             });
     });
     </script>
@@ -149,16 +146,32 @@
 <div class="row">
     <div class="col-lg-12">
     <form action="" method="get">
-        <div class="col-md-4">
-            {{ loc_form }}
-            {{ sub_form }}
-            {{ sec_form }}
+        <div class="col-md-5">
+            <div class="col-md-4">
+                <p>Locations</p>
+                {{ loc_form }}
+            </div>
+            <div class="col-md-4">
+                <p>Sublocations</p>
+                {{ sub_form }}
+            </div>
+            <div class="col-md-4">
+                <p>Sectors</p>
+                {{ sec_form }}
+            </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <div class="col-md-12">
             <label for="funders__icontains">Funders</label>
-            {{ filtered.form.funders__icontains }}
+            <div class="form-group">
+
+                {{ filtered.form.funders__icontains }}
+            </div>
             <label for="funders__icontains">Implementers</label>
-            {{ filtered.form.implementers__icontains }}
+            <div class="form-group">
+                {{ filtered.form.implementers__icontains }}
+            </div>
+            </div>
 
         </div>
             <div class="col-md-2">
@@ -189,6 +202,15 @@
     <div class="col-md-12">
     <table class="table table-bordered table-condensed">
         <tr>
+            {% if loc_display %}
+            <th>Locations</th>
+            {% endif %}
+            {% if sub_display %}
+            <th>Sublocations</th>
+            {% endif %}
+            {% if sec_display %}
+            <th>Sectors</th>
+            {% endif %}
             <th>Project Name</th>
             <th>Funders</th>
             <th>Duration</th>
@@ -197,6 +219,30 @@
         </tr>
     {% for obj in filtered %}
         <tr>
+            {% if loc_display %}
+            <td class="col-md-1">
+                {% for location in obj.locations %}
+                {{ location }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
+            {% if sub_display %}
+            <td class="col-md-1">
+                {% for sublocation in obj.sublocations %}
+                {{ sublocation }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
+            {% if sec_display %}
+            <td class="col-md-1">
+                {% for sector in obj.sectors %}
+                {{ sector }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
             <td class="col-md-5">
                 <a href={% url 'data-entry:project_details' obj.id %}>{{ obj.name }}</a>
                 <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>

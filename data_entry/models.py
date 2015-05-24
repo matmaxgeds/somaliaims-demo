@@ -63,6 +63,30 @@ class Project(models.Model):
         out = "{0:5.2f} %".format(percentage)
         return out
 
+    @property
+    def locations(self):
+        l = LocationAllocation.objects.filter(project=self).values_list('location')
+        f = Location.objects.filter(id__in=l).values_list('name')
+        location_list = [' '.join(item) for item in f]
+        import sys
+        sys.stderr.write(str(location_list))
+        return location_list
+
+    @property
+    def sublocations(self):
+        l = LocationAllocation.objects.filter(project=self).values_list('sublocations')
+        f = SubLocation.objects.filter(id__in=l).values_list('name')
+        sublocation_list = [' '.join(item) for item in f]
+        return sublocation_list
+
+
+    @property
+    def sectors(self):
+        l = SectorAllocation.objects.filter(project=self).values_list('sector')
+        f = Sector.objects.filter(id__in=l).values_list('name')
+        sector_list = [' '.join(item) for item in f]
+        return sector_list
+
 
 class Spending(models.Model):
     """How a project's value has and is intended to been spent"""
