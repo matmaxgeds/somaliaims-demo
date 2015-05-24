@@ -73,7 +73,13 @@
         });
     });
     </script>
-
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $('#myTable').dataTable();
+        });
+    </script>
 </head>
 <body>
 <div class="container-full">
@@ -200,7 +206,9 @@
     <div class="row" style="padding-top: 30px;"></div>
     <div class="row">
     <div class="col-md-12">
-    <table class="table table-bordered table-condensed">
+    <!--<table class="table table-bordered table-condensed">-->
+        <table id="myTable" class="display table" width="100%">
+        <thead>
         <tr>
             {% if loc_display %}
             <th>Locations</th>
@@ -217,6 +225,7 @@
             <th>Value</th>
             <th>% Spent to Date</th>
         </tr>
+        </thead>
     {% for obj in filtered %}
         <tr>
             {% if loc_display %}
