@@ -36,7 +36,8 @@
             $('select').multiselect({
                 disableIfEmpty: true,
                 maxHeight: 200,
-                buttonWidth: '150px'
+                buttonWidth: '150px',
+                enableFiltering: true
             });
         });
     });
@@ -59,7 +60,8 @@
         $('select').multiselect({
                 disableIfEmpty: true,
                 maxHeight: 200,
-                buttonWidth: '150px'
+                buttonWidth: '170px',
+                enableFiltering: true
             });
     });
     </script>
@@ -78,6 +80,30 @@
     <script>
         $(document).ready(function(){
         $('#myTable').dataTable();
+
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('option', $('#id_funders__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('option', $('#id_implementers__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('#id_funders__icontains').multiselect('refresh');
+                $('#id_implementers__icontains').multiselect('refresh');
+            $('#reset').on('click', function () {
+                $('option', $('#id_funders__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('option', $('#id_implementers__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('#id_funders__icontains').multiselect('refresh');
+                $('#id_implementers__icontains').multiselect('refresh');
+            });
+
         });
     </script>
 </head>
@@ -188,7 +214,7 @@
                 <input class="form-control" id="id_name__icontains" name="name__icontains" type="text" placeholder="project name">
                 <div class="btns">
                     <button type="submit">Submit</button>
-                    <button type="reset">Reset</button>
+                    <button type="reset" id="reset">Reset</button>
                 </div>
             </div>
             <div class="col-md-2">
@@ -206,7 +232,6 @@
     <div class="row" style="padding-top: 30px;"></div>
     <div class="row">
     <div class="col-md-12">
-    <!--<table class="table table-bordered table-condensed">-->
         <table id="myTable" class="display table" width="100%">
         <thead>
         <tr>
