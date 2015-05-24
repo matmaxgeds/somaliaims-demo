@@ -32,6 +32,15 @@
     <div class="col-md-12">
    <table class="table table-bordered table-condensed">
         <tr>
+            {% if loc_display %}
+            <th>Locations</th>
+            {% endif %}
+            {% if sub_display %}
+            <th>Sublocations</th>
+            {% endif %}
+            {% if sec_display %}
+            <th>Sectors</th>
+            {% endif %}
             <th>Project Name</th>
             <th>Funders</th>
             <th>Duration</th>
@@ -40,6 +49,30 @@
         </tr>
     {% for obj in filtered %}
         <tr>
+            {% if loc_display %}
+            <td class="col-md-1">
+                {% for location in obj.locations %}
+                {{ location }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
+            {% if sub_display %}
+            <td class="col-md-1">
+                {% for sublocation in obj.sublocations %}
+                {{ sublocation }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
+            {% if sec_display %}
+            <td class="col-md-1">
+                {% for sector in obj.sectors %}
+                {{ sector }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
             <td>{{ obj.name }}</td>
             <td class="col-md-3">
             {% for funder in obj.funders.all %}
