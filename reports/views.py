@@ -2,11 +2,10 @@ from django.shortcuts import render_to_response
 from .filters import ProjectFilter
 from data_entry.models import Project, LocationAllocation, SectorAllocation
 from django.template import RequestContext
-from .forms import LocationForm, SectorForm, SublocationForm, SectorReportForm, LocationReportForm
+from .forms import LocationForm, SectorForm, SublocationForm, SectorReportForm
 from django.template.loader import get_template
 from django.http import HttpResponse
 from django.contrib.sites.models import Site
-from management.models import Sector, Location
 
 
 def list_generator(request):
@@ -317,7 +316,6 @@ def sector_report(request):
     form = SectorReportForm()
     if request.GET.get('sector'):
         project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
             h = Project.objects.get(id=project_id)
@@ -327,31 +325,8 @@ def sector_report(request):
                     key = str('_'.join(funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
-                    value = 1
+                    value = 0
                     key = str('_'.join(funder.name.split()))
-                    allocation_dict[key] = value
-        sector = Sector.objects.get(id=request.GET.get('sector'))
-        exporters = True
+                    allocation_dict[key] == value
+        don = str(allocation_dict)
     return render_to_response("reports/sector_report.html", locals(), context_instance=RequestContext(request))
-
-
-def location_report(request):
-    form = LocationReportForm()
-    if request.GET.get('location'):
-        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
-        allocation_dict = {}
-        for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
-            funders = h.funders.all()
-            for funder in funders:
-                try:
-                    key = str('_'.join(funder.name.split()))
-                    allocation_dict[key] += 1
-                except KeyError:
-                    value = 1
-                    key = str('_'.join(funder.name.split()))
-                    allocation_dict[key] = value
-        location = Location.objects.get(id=request.GET.get('location'))
-        exporters = True
-    return render_to_response("reports/location_report.html", locals(), context_instance=RequestContext(request))
