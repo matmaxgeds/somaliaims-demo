@@ -28,10 +28,7 @@
         .btns{
             padding-top: 20px;
         }
-        * {
-            font-size: 12px;
-            line-height: 1;
-        }
+
     </style>
     <script type="text/javascript">
     $(function() {
@@ -39,7 +36,8 @@
             $('select').multiselect({
                 disableIfEmpty: true,
                 maxHeight: 200,
-                buttonWidth: '300px'
+                buttonWidth: '150px',
+                enableFiltering: true
             });
         });
     });
@@ -62,7 +60,8 @@
         $('select').multiselect({
                 disableIfEmpty: true,
                 maxHeight: 200,
-                buttonWidth: '400px'
+                buttonWidth: '170px',
+                enableFiltering: true
             });
     });
     </script>
@@ -76,7 +75,37 @@
         });
     });
     </script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $('#myTable').dataTable();
 
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('option', $('#id_funders__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('option', $('#id_implementers__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('#id_funders__icontains').multiselect('refresh');
+                $('#id_implementers__icontains').multiselect('refresh');
+            $('#reset').on('click', function () {
+                $('option', $('#id_funders__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('option', $('#id_implementers__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('#id_funders__icontains').multiselect('refresh');
+                $('#id_implementers__icontains').multiselect('refresh');
+            });
+
+        });
+    </script>
 </head>
 <body>
 <div class="container-full">
@@ -149,16 +178,32 @@
 <div class="row">
     <div class="col-lg-12">
     <form action="" method="get">
-        <div class="col-md-4">
-            {{ loc_form }}
-            {{ sub_form }}
-            {{ sec_form }}
+        <div class="col-md-5">
+            <div class="col-md-4">
+                <p>Locations</p>
+                {{ loc_form }}
+            </div>
+            <div class="col-md-4">
+                <p>Sublocations</p>
+                {{ sub_form }}
+            </div>
+            <div class="col-md-4">
+                <p>Sectors</p>
+                {{ sec_form }}
+            </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <div class="col-md-12">
             <label for="funders__icontains">Funders</label>
-            {{ filtered.form.funders__icontains }}
+            <div class="form-group">
+
+                {{ filtered.form.funders__icontains }}
+            </div>
             <label for="funders__icontains">Implementers</label>
-            {{ filtered.form.implementers__icontains }}
+            <div class="form-group">
+                {{ filtered.form.implementers__icontains }}
+            </div>
+            </div>
 
         </div>
             <div class="col-md-2">
@@ -169,7 +214,7 @@
                 <input class="form-control" id="id_name__icontains" name="name__icontains" type="text" placeholder="project name">
                 <div class="btns">
                     <button type="submit">Submit</button>
-                    <button type="reset">Reset</button>
+                    <button type="reset" id="reset">Reset</button>
                 </div>
             </div>
             <div class="col-md-2">
@@ -187,16 +232,51 @@
     <div class="row" style="padding-top: 30px;"></div>
     <div class="row">
     <div class="col-md-12">
-    <table class="table table-bordered table-condensed">
+        <table id="myTable" class="display table" width="100%">
+        <thead>
         <tr>
+            {% if loc_display %}
+            <th>Locations</th>
+            {% endif %}
+            {% if sub_display %}
+            <th>Sublocations</th>
+            {% endif %}
+            {% if sec_display %}
+            <th>Sectors</th>
+            {% endif %}
             <th>Project Name</th>
             <th>Funders</th>
             <th>Duration</th>
             <th>Value</th>
             <th>% Spent to Date</th>
         </tr>
+        </thead>
     {% for obj in filtered %}
         <tr>
+            {% if loc_display %}
+            <td class="col-md-1">
+                {% for location in obj.locations %}
+                {{ location }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
+            {% if sub_display %}
+            <td class="col-md-1">
+                {% for sublocation in obj.sublocations %}
+                {{ sublocation }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
+            {% if sec_display %}
+            <td class="col-md-1">
+                {% for sector in obj.sectors %}
+                {{ sector }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+            </td>
+            {% endif %}
+
             <td class="col-md-5">
                 <a href={% url 'data-entry:project_details' obj.id %}>{{ obj.name }}</a>
                 <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>
