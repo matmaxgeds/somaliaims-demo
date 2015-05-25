@@ -52,7 +52,7 @@
         $('.add-row').click(function(){
             $('select').multiselect({
                 disableIfEmpty: true,
-                maxHeight: 200,
+                maxHeight: 200
             });
         });
     });
@@ -61,7 +61,7 @@
     $(function() {
         $('select').multiselect({
                 disableIfEmpty: true,
-                maxHeight: 200,
+                maxHeight: 200
             });
     });
     </script>
@@ -78,9 +78,7 @@
 
     });
 </script>
-<style type="text/css">
-      #map-canvas { height: 400px; margin: 0; padding: 0;}
-    </style>
+
 </head>
 <body>
 <div class="container">
@@ -101,7 +99,7 @@
                     <h3 style="text-align: center;">Somali AIMS</h3>
                 </div>
                 <div class="col-md-4" style="padding-top:10px;">
-                    <div class="row" style="float: right;">
+                    <div class="row" style="float: right; padding-left: 41%;">
                         <div class="col-md-12">
                             <span>
                                 <a href="{% url 'home' %}">Menu</a>
@@ -123,6 +121,12 @@
                                 <a href="{% url 'help:help' %}">| Help</a>
                             </span>
                         </div>
+                        <div class="col-md-12">
+                        <p></p>
+                        <p>{% if exporters %}Export <a href="{{ pdf_url }}">PDF</a> | <a href="
+                        {{ csv_url }}">CSV</a> | <a href="
+                        {{ xls_url }}">XLS</a>{% endif %}</p>
+                    </div>
                     </div>
 
                 </div>
