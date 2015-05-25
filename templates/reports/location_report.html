@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% load report_extras %}
-{% block title %} Sector report {% endblock %}
+{% block title %} Location report {% endblock %}
 {% block content %}
 <div class="row" style="padding-top: 20px;"></div>
 <div class="row">
@@ -10,9 +10,9 @@
         <div class="col-md-4" style="text-align: center;">
             <form method="get" action="">
                 <div class="form-group">
-                <label for="sector">Sector</label>
+                <label for="location">Location</label>
 
-                {{ form.sector }}
+                {{ form.location }}
                 </div>
             </form>
         </div>
@@ -24,7 +24,7 @@
     <div class="col-md-12">
         {% if projects %}
         <table id="myTable" class="display table table-condensed table-bordered" width="100%">
-        <caption>Projects in {{ sector }} sector.</caption>
+        <caption>Projects in {{ location.name }} location.</caption>
         <thead>
         <tr>
             <th>Project Name</th>
@@ -100,7 +100,7 @@
         ]);
 
         // Set chart options
-        var title = "{{ sector.name }}" + " sector funders"
+        var title = "{{ location.name }}" + " location project funders"
         var options = {'title':title,
                        'width':600,
                        'height':500};
