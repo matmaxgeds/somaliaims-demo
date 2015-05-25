@@ -174,7 +174,7 @@ MANAGEMENT_URL = '/management/'
 
 try:
     if DEBUG:
-        from local_settings import *
+        from .local_settings import *
 except ImportError:
     pass
 
