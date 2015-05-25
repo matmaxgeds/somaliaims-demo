@@ -14,4 +14,3 @@ class ProjectFilter(django_filters.FilterSet):
                   'implementers': ['icontains'],
 
         }
-
