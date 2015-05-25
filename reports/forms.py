@@ -12,12 +12,12 @@ SUBLOCATIONS = [[x.id, x.name] for x in SubLocation.objects.all()]
 
 
 class LocationForm(forms.Form):
-    locations = forms.MultipleChoiceField(choices=LOCATIONS)
+    locations = forms.MultipleChoiceField(choices=LOCATIONS, label="")
 
 
 class SectorForm(forms.Form):
-    sectors = forms.MultipleChoiceField(choices=SECTORS)
+    sectors = forms.MultipleChoiceField(choices=SECTORS, label="")
 
 
 class SublocationForm(forms.Form):
-    sublocations = forms.MultipleChoiceField(choices=SUBLOCATIONS)
+    sublocations = forms.MultipleChoiceField(choices=SUBLOCATIONS, label="")
