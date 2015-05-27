@@ -2,6 +2,8 @@
 
 {% block title %} Management {% endblock %}
 
+{% block header_text%} Management {% endblock %}
+
 {% block content %}
 <div class="container">
 
@@ -11,8 +13,9 @@
     <div class="col-md-4">
         <div class="row">
             {% if exchange_rate %}
-            <h4 style="text-align: center;">Exhange Rate(USD to SOM): {{ exchange_rate.rateToSOM }} &nbsp;<a href=
-                                                                                                    "{% url 'rate_update' %}">Edit</a></h4>
+            <h4 style="text-align: center;">Exhange Rate(USD to SOM): {{ exchange_rate.rateToSOM }} &nbsp;
+                <a href="{% url 'rate_update' %}">Edit</a>
+            </h4>
             {% else %}
                 <h4 style="text-align: center;"><a href="{% url 'rate_update' %}">Set exchange rate</a></h4>
             {% endif %}
