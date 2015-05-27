@@ -126,9 +126,14 @@
                         </div>
                         <div class="col-md-12">
                         <p></p>
-                        <p>{% if exporters %}Export <a href="{{ pdf_url }}">PDF</a> | <a href="
+                        <p>
+                        <form method="get" action="">
+                        {% if exporters %}Export <a href="{{ pdf_url }}">PDF</a> | <a href="
                         {{ csv_url }}">CSV</a> | <a href="
-                        {{ xls_url }}">XLS</a>{% endif %}</p>
+                        {{ xls_url }}">XLS</a>{% endif %}
+                        <input type="hidden" value="">
+                        </form>
+                        </p>
                     </div>
                     </div>
 

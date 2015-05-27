@@ -1,31 +1,42 @@
-{% extends 'base.html' %}
+{% load staticfiles %}
 {% load humanize %}
 {% load report_extras %}
-{% block title %} Sector report {% endblock %}
-{% block content %}
-<div class="row" style="padding-top: 20px;"></div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="col-md-4"></div>
-        <div class="col-md-4" style="text-align: center;">
-            <form method="get" action="">
-                <div class="form-group">
-                <label for="sector">Sector</label>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title> {% block title %} Location Report {% endblock %} | Somalia AIMS </title>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 
-                {{ form.sector }}
-                </div>
-            </form>
-        </div>
-        <div class="col-md-4"></div>
-    </div>
-</div>
-<div class="row" style="padding-top: 30px;"></div>
+    {% load bootstrap3 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <style>
+        * {
+            font-size: 11px;
+            line-height: 1;
+        }
+        .container-full {
+            margin: 0 auto;
+            width: 90%;
+        }
+    </style>
+
+
+</head>
+<body>
+<div class="container-full">
+
+<div class="row" style="padding-top: 20px;"></div>
     <div class="row">
     <div class="col-md-12">
         {% if projects %}
         <table id="myTable" class="display table table-condensed table-bordered" width="100%" style="font-size: 11px;
         line-height: 1">
-        <caption>Projects in {{ sector }} sector.</caption>
+        <caption>Projects in {{ location.name }} location.</caption>
         <thead>
         <tr>
             <th>Project Name</th>
@@ -39,7 +50,7 @@
     {% for obj in projects %}
         <tr>
             <td>
-                <a href={% url 'data-entry:project_details' obj.id %}>{{ obj.name }}</a>
+                <p>{{ obj.name }}</p>
                 <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>
 
             </td>
@@ -102,14 +113,17 @@
           ]);
 
           // Set chart options
-          var title = "{{ sector.name }}" + " sector funders"
+          var title = "{{ location.name }}" + " location funders"
           var options = {'title': title,
               'width': 600,
               'height': 500};
 
           var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
           chart.draw(data, options);
+
       }
     </script>
-    {% endif %}
-{% endblock %}
+{% endif %}
+</div>
+</body>
+</html>
