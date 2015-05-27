@@ -6,7 +6,7 @@ LOCATIONS = [[x.id, x.name] for x in Location.objects.all()]
 
 SECTORS = [[x.id, x.name] for x in Sector.objects.all()]
 
-#SUBLOCATIONS = [[x.id, x.name] for x in LocationAllocation.sublocations.all()]
+# SUBLOCATIONS = [[x.id, x.name] for x in LocationAllocation.sublocations.all()]
 
 SUBLOCATIONS = [[x.id, x.name] for x in SubLocation.objects.all()]
 
@@ -21,3 +21,13 @@ class SectorForm(forms.Form):
 
 class SublocationForm(forms.Form):
     sublocations = forms.MultipleChoiceField(choices=SUBLOCATIONS, label="")
+
+
+class SectorReportForm(forms.Form):
+    sector = forms.ChoiceField(choices=[('', '----------'), ] + SECTORS, label="Sector",
+                               widget=forms.Select(attrs={'onChange': "this.form.submit();"}))
+
+
+class LocationReportForm(forms.Form):
+    location = forms.ChoiceField(choices=[('', '----------'), ] + LOCATIONS, label="Location",
+                               widget=forms.Select(attrs={'onChange': "this.form.submit();"}))
