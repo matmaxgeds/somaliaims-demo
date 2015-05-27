@@ -2,47 +2,49 @@
 
 {% block title %} Home {% endblock %}
 
+{% block header_text%} Menu {% endblock %}
+
 {% block content %}
 <div class="row" style="padding-top: 30px;"></div>
 <div class="row">
    <div class="col-md-12">
     <h3 class="text-center"> Homepage </h3>
-   {% lorem 2 p %}
 
+   <p class="text-center">
+       Welcome to the Somali Aid Information Management System (AIMS). <br/>
+       Here you can view and edit projects and produce reports.  <br/>
+       Please use the links below to access the AIMS
+   </p>
    </div>
 </div>
-<div class="row" style="padding-top: 15px;"></div>
 <hr>
-<div class="row" style="padding-top: 15px;"></div>
 <div class="row">
-    <p><a href="{% url 'reports:sector-report' %}">Sector reports</a></p>
-    <p><a href="{% url 'reports:location-report' %}">Location reports</a></p>
-</div>
-<div class="row">
-<div class="col-md-12">
-    <div class="col-md-4">
+    <div class="col-md-6 col-md-offset-3">
         <h4 class="text-center">General</h4>
-
-            <li class="text-center"><a href="#">View projects</a></li>
-            <li class="text-center"><a href="{% url 'reports:dashboard' %}">Reports</a></li>
-            <li class="text-center"><a href="#">General help</a></li>
-    </div>
-    <div class="col-md-4">
-        <h4 class="text-center">Data Entry</h4>
-
-        <li class="text-center"><a href="#">Account requests </a></li>
-        <li class="text-center"><a href="{% url 'data-entry:dashboard' %}">Add/Edit projects </a></li>
-        <li class="text-center"><a href="#">Data entry help </a></li>
-
-    </div>
-    <div class="col-md-4">
-        <h4 class="text-center">Management</h4>
-
-            <li class="text-center"><a href="#">Account approval</a></li>
-            <li class="text-center"><a href="{% url 'dashboard' %}">Data management</a></li>
-            <li class="text-center"><a href="#">Management Help</a></li>
-
+          <li class="text-center">
+          <a href="{% url 'projects:dashboard' %}">Projects</a> - Click here to browse all Projects </li>
+          <li class="text-center">
+          <a href="{% url 'reports:sector-report' %}">Sector Reports</a> - View a Report for your Sector</li>
+          <li class="text-center">
+          <a href="{% url 'reports:location-report' %}">Location Reports</a> - View a Report for your Location</li>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <h4 class="text-center">Data Entry</h4>
+
+      {# <li class="text-center"><a href="#">Account Registration </a></li> #}
+      <li class="text-center">
+      <a href="{% url 'data-entry:dashboard' %}">Add/Edit projects</a> - Click here to manage your Projects</li>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h4 class="text-center">Management Interface</h4>
+        <li class="text-center">
+        <a href="{% url 'dashboard' %}">Management</a>  - Click here to manage Sectors, Locations and Organizations</li>
+    </div>
+</div>
+<div class="row" style="padding-bottom: 40px;"></div>
 </div>
 {% endblock %}
