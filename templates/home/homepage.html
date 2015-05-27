@@ -19,24 +19,28 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <h4 class="text-center">General</h4>
-
-            <li class="text-center"><a href="{% url 'projects:dashboard' %}">View projects</a></li>
-            <li class="text-center"><a href="{% url 'reports:sector-report' %}">Sector Reports</a></li>
-            <li class="text-center"><a href="{% url 'reports:location-report' %}">Location Reports</a></li>
+          <li class="text-center">
+          <a href="{% url 'projects:dashboard' %}">Projects</a> - Click here to browse all Projects </li>
+          <li class="text-center">
+          <a href="{% url 'reports:sector-report' %}">Sector Reports</a> - View a Report for your Sector</li>
+          <li class="text-center">
+          <a href="{% url 'reports:location-report' %}">Location Reports</a> - View a Report for your Location</li>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <h4 class="text-center">Data Entry</h4>
+      <h4 class="text-center">Data Entry</h4>
 
-        {# <li class="text-center"><a href="#">Account Registration </a></li> #}
-        <li class="text-center"><a href="{% url 'data-entry:dashboard' %}">Add/Edit projects </a></li>
+      {# <li class="text-center"><a href="#">Account Registration </a></li> #}
+      <li class="text-center">
+      <a href="{% url 'data-entry:dashboard' %}">Add/Edit projects</a> - Click here to manage your Projects</li>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <h4 class="text-center">Management</h4>
-        <li class="text-center"><a href="{% url 'dashboard' %}">Data management</a></li>
+        <h4 class="text-center">Management Interface</h4>
+        <li class="text-center">
+        <a href="{% url 'dashboard' %}">Management</a>  - Click here to manage Sectors, Locations and Organizations</li>
     </div>
 </div>
 <div class="row" style="padding-bottom: 40px;"></div>
