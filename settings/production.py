@@ -3,6 +3,8 @@ from .settings import *
 
 DEBUG = False
 
+ALLOWED_HOSTS = ['somaliaims.pythonanywhere.com']
+
 # Modify to use postgresql for production on python anywhere
 DATABASES = {
     'default': {
