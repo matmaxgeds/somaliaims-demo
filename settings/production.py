@@ -1,5 +1,8 @@
 from .settings import *
 
+
+DEBUG = False
+
 # Modify to use postgresql for production on python anywhere
 DATABASES = {
     'default': {
