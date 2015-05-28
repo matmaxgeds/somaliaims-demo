@@ -26,3 +26,8 @@ class SublocationForm(forms.Form):
 class SectorReportForm(forms.Form):
     sector = forms.ChoiceField(choices=[('', '----------'), ] + SECTORS, label="Sector",
                                widget=forms.Select(attrs={'onChange': "this.form.submit();"}))
+
+
+class LocationReportForm(forms.Form):
+    location = forms.ChoiceField(choices=[('', '----------'), ] + LOCATIONS, label="Location",
+                               widget=forms.Select(attrs={'onChange': "this.form.submit();"}))
