@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, HttpResponseRedirect
 from .filters import ProjectFilter
 from data_entry.models import Project, LocationAllocation, SectorAllocation
 from django.template import RequestContext
@@ -315,6 +315,13 @@ def project_list(request):
 
 def sector_report(request):
     form = SectorReportForm()
+    url = request.GET.urlencode()
+    host = Site.objects.get_current().domain
+    red_url = host + "/reports/sector/export-pdf?" + url
+    csv_url = "/reports/sector/export-csv/?" + url
+    xls_url = "/reports/sector/export-xls/?" + url
+    pdf_url = """http://api.phantomjscloud.com/single/browser/v1/7935aba662a4bb6d9e7036bd23c049b94d779bca/?targetUrl={0}&loadImages=true&requestType=pdf&resourceUrlBlacklist=[]""".format(red_url)
+    reports = True
     if request.GET.get('sector'):
         project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
         projects = Project.objects.filter(id__in=list(set(project_ids)))
@@ -335,8 +342,133 @@ def sector_report(request):
     return render_to_response("reports/sector_report.html", locals(), context_instance=RequestContext(request))
 
 
+def sector_pdf(request):
+    context = {}
+    if request.GET.get('sector'):
+        project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
+        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        allocation_dict = {}
+        for project_id in project_ids:
+            h = Project.objects.get(id=project_id)
+            funders = h.funders.all()
+            for funder in funders:
+                try:
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] += 1
+                except KeyError:
+                    value = 1
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] = value
+        sector = Sector.objects.get(id=request.GET.get('sector'))
+        context['projects'] = projects
+        context['sector'] = sector
+        context['allocation_dict'] = allocation_dict
+        template = get_template('reports/sector_export.html')
+        html = template.render(RequestContext(request, context))
+        response = HttpResponse(html)
+
+    return response
+
+
+def sector_csv(request):
+    import csv
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    if request.GET.get('sector'):
+        project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
+        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        allocation_dict = {}
+        for project_id in project_ids:
+            h = Project.objects.get(id=project_id)
+            funders = h.funders.all()
+            for funder in funders:
+                try:
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] += 1
+                except KeyError:
+                    value = 1
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] = value
+        head = csv.DictWriter(response, fieldnames=["Project Name", "Funders", "Implementers", "Duration", "Value",
+                                                    "Percentage Spent"], delimiter=',')
+        head.writeheader()
+        for i in projects:
+            writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), ','.join([x.name for x in
+                                                                                            i.implementers.all()]), i.duration, i.value, i.percentage_spent])
+
+    return response
+
+
+def sector_xls(request):
+    import xlwt
+    from django.utils.six import moves
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=projectlist.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet("Projects")
+    row_num = 0
+
+    columns = [
+        (u"Project Name", 6000),
+        (u"Funders", 8000),
+        (u"Implemeters", 8000),
+        (u"Duration", 6000),
+        (u"Value", 6000),
+        (u"Percentage Spent", 6000),
+    ]
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    for col_num in moves.xrange(len(columns)):
+        ws.write(row_num, col_num, columns[col_num][0], font_style)
+        ws.col(col_num).width = columns[col_num][1]
+    font_style = xlwt.XFStyle()
+    font_style.alignment.wrap = 1
+
+    if request.GET.get('sector'):
+        project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
+        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        allocation_dict = {}
+        for project_id in project_ids:
+            h = Project.objects.get(id=project_id)
+            funders = h.funders.all()
+            for funder in funders:
+                try:
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] += 1
+                except KeyError:
+                    value = 1
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] = value
+
+    for obj in projects:
+        row_num += 1
+        row = [
+            obj.name,
+            ','.join([x.name for x in obj.funders.all()]),
+            ','.join([x.name for x in obj.implementers.all()]),
+            obj.duration,
+            obj.value,
+            obj.percentage_spent,
+        ]
+
+        for col_num in moves.xrange(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+
 def location_report(request):
     form = LocationReportForm()
+    url = request.GET.urlencode()
+    host = Site.objects.get_current().domain
+    red_url = host + "/reports/location/export-pdf?" + url
+    csv_url = "/reports/location/export-csv/?" + url
+    xls_url = "/reports/location/export-xls/?" + url
+    pdf_url = """http://api.phantomjscloud.com/single/browser/v1/7935aba662a4bb6d9e7036bd23c049b94d779bca/?targetUrl={0}&loadImages=true&requestType=pdf&resourceUrlBlacklist=[]""".format(red_url)
+    reports = True
     if request.GET.get('location'):
         project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
         projects = Project.objects.filter(id__in=list(set(project_ids)))
@@ -355,3 +487,121 @@ def location_report(request):
         location = Location.objects.get(id=request.GET.get('location'))
         exporters = True
     return render_to_response("reports/location_report.html", locals(), context_instance=RequestContext(request))
+
+
+def loc_pdf(request):
+    context = {}
+    if request.GET.get('location'):
+        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
+        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        allocation_dict = {}
+        for project_id in project_ids:
+            h = Project.objects.get(id=project_id)
+            funders = h.funders.all()
+            for funder in funders:
+                try:
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] += 1
+                except KeyError:
+                    value = 1
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] = value
+        location = Location.objects.get(id=request.GET.get('location'))
+        context['projects'] = projects
+        context['location'] = location
+        context['allocation_dict'] = allocation_dict
+        template = get_template('reports/location_export.html')
+        html = template.render(RequestContext(request, context))
+        response = HttpResponse(html)
+
+    return response
+
+
+def loc_csv(request):
+    import csv
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+    if request.GET.get('location'):
+        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
+        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        allocation_dict = {}
+        for project_id in project_ids:
+            h = Project.objects.get(id=project_id)
+            funders = h.funders.all()
+            for funder in funders:
+                try:
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] += 1
+                except KeyError:
+                    value = 1
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] = value
+        head = csv.DictWriter(response, fieldnames=["Project Name", "Funders", "Implementers", "Duration", "Value",
+                                                    "Percentage Spent"], delimiter=',')
+        head.writeheader()
+        for i in projects:
+            writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), ','.join([x.name for x in
+                                                                                            i.implementers.all()]), i.duration, i.value, i.percentage_spent])
+
+    return response
+
+
+def loc_xls(request):
+    import xlwt
+    from django.utils.six import moves
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=projectlist.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet("Projects")
+    row_num = 0
+
+    columns = [
+        (u"Project Name", 6000),
+        (u"Funders", 8000),
+        (u"Implemeters", 8000),
+        (u"Duration", 6000),
+        (u"Value", 6000),
+        (u"Percentage Spent", 6000),
+    ]
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    for col_num in moves.xrange(len(columns)):
+        ws.write(row_num, col_num, columns[col_num][0], font_style)
+        ws.col(col_num).width = columns[col_num][1]
+    font_style = xlwt.XFStyle()
+    font_style.alignment.wrap = 1
+
+    if request.GET.get('location'):
+        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
+        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        allocation_dict = {}
+        for project_id in project_ids:
+            h = Project.objects.get(id=project_id)
+            funders = h.funders.all()
+            for funder in funders:
+                try:
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] += 1
+                except KeyError:
+                    value = 1
+                    key = str('_'.join(funder.name.split()))
+                    allocation_dict[key] = value
+
+    for obj in projects:
+        row_num += 1
+        row = [
+            obj.name,
+            ','.join([x.name for x in obj.funders.all()]),
+            ','.join([x.name for x in obj.implementers.all()]),
+            obj.duration,
+            obj.value,
+            obj.percentage_spent,
+        ]
+
+        for col_num in moves.xrange(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
