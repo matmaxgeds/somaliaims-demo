@@ -116,7 +116,7 @@ MEDIA_URL = '/files/'
 
 LOGIN_URL = '/login/'
 
-LOGIN_REDIRECT_URL = '/data-entry/'
+LOGIN_REDIRECT_URL = '/login_success/'
 
 
 
