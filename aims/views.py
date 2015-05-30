@@ -1,5 +1,4 @@
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
 from django.conf import settings
 
 
@@ -12,7 +11,7 @@ def login_success(request):
         return redirect(settings.ADMIN_URL)
     elif request.user.groups.filter(name="data").exists():
         return redirect(settings.DATA_ENTRY_URL)
-    elif request.user.groups.filter(name="management").exists():
+    elif request.user.groups.filter(name="management").exists() or request.user.groups.filter(name="manager").exists():
         return redirect(settings.MANAGEMENT_URL)
     else:
         return redirect(settings.LOGIN_URL)

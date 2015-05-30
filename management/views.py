@@ -15,7 +15,7 @@ class ManagementDashboard(GroupRequiredMixin, ListView):
     model = Organization
     template_name = "management/index.html"
     queryset = Location.objects.all()
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_context_data(self, **kwargs):
         context = super(ManagementDashboard, self).get_context_data(**kwargs)
@@ -37,7 +37,7 @@ class ManagementDashboard(GroupRequiredMixin, ListView):
 class OrganizationCreate(GroupRequiredMixin, CreateView):
     model = Organization
     form_class = OrganizationForm
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationCreate, self).get_context_data(**kwargs)
@@ -69,7 +69,7 @@ class OrganizationUpdate(GroupRequiredMixin, UpdateView):
     form_class = OrganizationForm
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_object(self, queryset=None):
         obj = Organization.objects.get(id=self.kwargs['pk'])
@@ -79,13 +79,13 @@ class OrganizationUpdate(GroupRequiredMixin, UpdateView):
 class OrganizationDelete(GroupRequiredMixin, DeleteView):
     model = Organization
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
 
 class LocationCreate(GroupRequiredMixin, CreateView):
     model = Location
     form_class = LocationForm
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_context_data(self, **kwargs):
         context = super(LocationCreate, self).get_context_data(**kwargs)
@@ -115,7 +115,7 @@ class LocationUpdate(GroupRequiredMixin, UpdateView):
     form_class = LocationForm
     template_name = "management/location_update_form.html"
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_context_data(self, **kwargs):
         context = super(LocationUpdate, self).get_context_data(**kwargs)
@@ -150,13 +150,13 @@ class LocationUpdate(GroupRequiredMixin, UpdateView):
 class LocationDelete(GroupRequiredMixin, DeleteView):
     model = Location
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
 
 class ExchangeRateUpdateView(GroupRequiredMixin, UpdateView):
     form_class = ExchangeRateForm
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_object(self, queryset=None):
         obj, created = ExchangeRate.objects.get_or_create()
@@ -167,7 +167,7 @@ class ExchangeRateUpdateView(GroupRequiredMixin, UpdateView):
 class SectorCreate(GroupRequiredMixin, CreateView):
     model = Sector
     form_class = SectorForm
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_context_data(self, **kwargs):
         context = super(SectorCreate, self).get_context_data(**kwargs)
@@ -199,7 +199,7 @@ class SectorUpdate(GroupRequiredMixin, UpdateView):
     form_class = SectorForm
     template_name_suffix = '_update_form'
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
     def get_object(self, queryset=None):
         obj = Sector.objects.get(id=self.kwargs['pk'])
@@ -209,5 +209,5 @@ class SectorUpdate(GroupRequiredMixin, UpdateView):
 class SectorDelete(GroupRequiredMixin, DeleteView):
     model = Sector
     success_url = reverse_lazy('dashboard')
-    group_required = [u"admin", u"management"]
+    group_required = [u"admin", u"management", "manager"]
 
