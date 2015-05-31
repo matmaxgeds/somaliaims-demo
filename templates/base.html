@@ -102,9 +102,6 @@
                             <span>
                                 <a href="{% url 'home' %}">Menu</a>
                             </span>
-                            <span>
-                                <a href="{% url 'projects:dashboard' %}">| Project List</a>
-                            </span>
                             {% if user.is_authenticated %}
                             <span>
                                 <a href="{% url 'logout' %}">| Logout </a>
