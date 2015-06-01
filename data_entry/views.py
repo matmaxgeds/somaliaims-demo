@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render_to_response
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization
@@ -11,6 +11,8 @@ from braces.views import GroupRequiredMixin
 from django.views.generic.detail import DetailView
 from filetransfers.api import serve_file
 from django.shortcuts import get_object_or_404
+from django.template.context import RequestContext
+from django.template.loader import get_template
 
 
 class ProjectDetailView(DetailView):
@@ -25,7 +27,25 @@ class ProjectDetailView(DetailView):
         context['sec_allocations'] = SectorAllocation.objects.filter(project=self.object)
         context['other_organizations'] = UserOrganization.objects.filter(project=self.object).distinct()
         context['documents'] = Document.objects.filter(project=self.object)
+        context['exporters'] = True
+        context['pdf_url'] = "/data-entry/project/export/" + str(self.object.id)
         return context
+
+
+def project_export(request, pk):
+    import weasyprint
+    context = {}
+    project = Project.objects.get(id=pk)
+    context['project'] = project
+    context['loc_allocations'] = LocationAllocation.objects.filter(project=project)
+    context['contact'] = Contact.objects.filter(project=project)
+    context['sec_allocations'] = SectorAllocation.objects.filter(project=project)
+    context['other_organizations'] = UserOrganization.objects.filter(project=project).distinct()
+    template = get_template('data_entry/project_export.html')
+    html = template.render(RequestContext(request, context))
+    response = HttpResponse(content_type='application/pdf')
+    weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response)
+    return response
 
 
 def download_handler(request, pk):

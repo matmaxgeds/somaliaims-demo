@@ -32,7 +32,7 @@
     <tr>
         <th>Locations</th>
     </tr>
-    {% for location in object_list|slice:":10" %}
+    {% for location in object_list|slice:":" %}
     <tr>
         <td>
         <a href="{% url 'location_update' location.id %}">{{ location.name }}</a>
@@ -58,7 +58,7 @@
             <tr>
                 <th>Organizations</th>
             </tr>
-            {% for organization in organizations|slice:":10" %}
+            {% for organization in organizations|slice:":" %}
                 <tr>
                     <td>
                     <a href="{% url 'organization_update' organization.id %}">{{ organization.name }}</a>
