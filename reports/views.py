@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from .filters import ProjectFilter
 from data_entry.models import Project, LocationAllocation, SectorAllocation
 from django.template import RequestContext
