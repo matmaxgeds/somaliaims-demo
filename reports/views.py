@@ -147,24 +147,24 @@ def xls_gen(request):
         if not q and not r and not s:
             pass
         elif q and not r and not s:
-            row.insert(0, ','.join([x for x in obj.locations]))
+            row.insert(0, ','.join([x.name for x in obj.locations]))
         elif q and r and not s:
-            row.insert(0, ','.join([x for x in obj.locations]))
-            row.insert(1, ','.join([x for x in obj.sublocations]))
+            row.insert(0, ','.join([x.name for x in obj.locations]))
+            row.insert(1, ','.join([x.name for x in obj.sublocations]))
         elif q and r and s:
-            row.insert(0, ','.join([x for x in obj.locations]))
-            row.insert(1, ','.join([x for x in obj.sublocations]))
-            row.insert(2, ','.join([x for x in obj.sectors]))
+            row.insert(0, ','.join([x.name for x in obj.locations]))
+            row.insert(1, ','.join([x.name for x in obj.sublocations]))
+            row.insert(2, ','.join([x.name for x in obj.sectors]))
         elif not q and r and not s:
-            row.insert(1, ','.join([x for x in obj.sublocations]))
+            row.insert(1, ','.join([x.name for x in obj.sublocations]))
         elif not q and not r and s:
-            row.insert(2, ','.join([x for x in obj.sectors]))
+            row.insert(2, ','.join([x.name for x in obj.sectors]))
         elif q and not r and s:
-            row.insert(0, ','.join([x for x in obj.locations]))
-            row.insert(1, ','.join([x for x in obj.sectors]))
+            row.insert(0, ','.join([x.name for x in obj.locations]))
+            row.insert(1, ','.join([x.name for x in obj.sectors]))
         elif not q and r and s:
-            row.insert(0, ','.join([x for x in obj.sublocations]))
-            row.insert(1, ','.join([x for x in obj.sectors]))
+            row.insert(0, ','.join([x.name for x in obj.sublocations]))
+            row.insert(1, ','.join([x.name for x in obj.sectors]))
         for col_num in moves.xrange(len(row)):
             ws.write(row_num, col_num, row[col_num], font_style)
 
@@ -187,14 +187,14 @@ def csv_gen(request):
                               delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([i.name, ','.join([x for x in i.funders.all()]), i.duration, i.value,
+            writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), i.duration, i.value,
                              i.percentage_spent])
     elif q and not r and not s:
         head = csv.DictWriter(response, fieldnames=["Locations", "Project Name", "Funders", "Duration", "Value",
                                                     "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x for x in i.locations]), i.name, ','.join([x.name for x in
+            writer.writerow([','.join([x.name for x in i.locations]), i.name, ','.join([x.name for x in
                                                                                    i.funders.all()]), i.duration,
                              i.value,
                              i.percentage_spent])
@@ -203,7 +203,7 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x for x in i.locations]), ','.join([x for x in i.sublocations]),
+            writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
@@ -213,8 +213,8 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x for x in i.locations]), ','.join([x for x in i.sublocations]),
-                             ','.join([x for x in i.sectors]),
+            writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
+                             ','.join([x.name for x in i.sectors]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
@@ -224,8 +224,8 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x for x in i.sublocations]),
-                             ','.join([x for x in i.sectors]),
+            writer.writerow([','.join([x.name for x in i.sublocations]),
+                             ','.join([x.name for x in i.sectors]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
@@ -235,7 +235,7 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x for x in i.sectors]),
+            writer.writerow([','.join([x.name for x in i.sectors]),
                              i.name,
                              ','.join([x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
@@ -245,7 +245,7 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x for x in i.sublocations]), i.name, ','.join([x.name for x in i.funders.all(
+            writer.writerow([','.join([x.name for x in i.sublocations]), i.name, ','.join([x.name for x in i.funders.all(
 
             )]), i.duration, i.value, i.percentage_spent])
 
