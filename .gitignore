@@ -67,3 +67,6 @@ documents/
 
 # temporary generated pdfs
 *.pdf
+
+# Local settings
+settings/local_settings.py
