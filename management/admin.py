@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Organization, Location, SubLocation, Sector, Currency, ExchangeRate
+from .models import Organization, Location, SubLocation, Sector, Currency, ExchangeRate, PSG, SubPSG
 
 
 class SubLocationInline(admin.TabularInline):
@@ -9,6 +9,15 @@ class SubLocationInline(admin.TabularInline):
 
 class LocationAdmin(admin.ModelAdmin):
     inlines = [SubLocationInline]
+
+
+class SubPSGInline(admin.TabularInline):
+    model = SubPSG
+    extra = 1
+
+
+class PSGAdmin(admin.ModelAdmin):
+    inlines = [SubPSGInline]
 
 
 class ExchangeRateModelAdmin(admin.ModelAdmin):
@@ -21,3 +30,5 @@ admin.site.register(ExchangeRate, ExchangeRateModelAdmin)
 admin.site.register(SubLocation)
 admin.site.register(Sector)
 admin.site.register(Currency)
+admin.site.register(PSG, PSGAdmin)
+admin.site.register(SubPSG)
