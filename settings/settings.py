@@ -12,19 +12,14 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#loading the somaliaims config
-config_file = os.path.join(BASE_DIR, 'conf', 'general.yml')
-config = yaml.load(open(config_file, 'r'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.get('DJANGO_SECRET_KEY')
+SECRET_KEY = '(rrza$y^**w=h1(4v*mv6k=*b!lf&pz)338(4pq!_9yo3-km73'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,7 +89,7 @@ WSGI_APPLICATION = 'aims.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = config.get('TIME_ZONE')
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
