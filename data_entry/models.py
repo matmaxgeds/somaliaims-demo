@@ -57,7 +57,7 @@ class Project(models.Model):
     @property
     def percentage_spent(self):
         spending = Spending.objects.get(project=self).spendingToDate
-        percentage = (spending/self.value)*100
+        percentage = (spending / self.value) * 100
         out = "{0:5.2f} %".format(percentage)
         return out
 
@@ -67,6 +67,7 @@ class Project(models.Model):
         f = Location.objects.filter(id__in=l).values_list('name')
         location_list = [' '.join(item) for item in f]
         import sys
+
         sys.stderr.write(str(location_list))
         return location_list
 
@@ -76,7 +77,6 @@ class Project(models.Model):
         f = SubLocation.objects.filter(id__in=l).values_list('name')
         sublocation_list = [' '.join(item) for item in f]
         return sublocation_list
-
 
     @property
     def sectors(self):
@@ -173,7 +173,7 @@ class UserOrganization(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     project = UnsavedForeighKey(Project)
-    name = models.CharField(max_length=200,  help_text="Organization involved in project but not in existing list",
+    name = models.CharField(max_length=200, help_text="Organization involved in project but not in existing list",
                             unique=True)
     role = models.CharField(max_length=12, choices=(('Funder', 'Funder'), ('Implementer', 'Implementer')),
                             help_text="Role of organization in project")
