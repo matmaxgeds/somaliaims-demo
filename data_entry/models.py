@@ -15,10 +15,10 @@ class UnsavedForeighKey(models.ForeignKey):
 class Project(models.Model):
     """Projects receiving AID"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     name = models.CharField(max_length=250)
     description = models.TextField()
-    lastModified = models.DateField(blank=True, null=True)
+    lastModified = models.DateField(auto_now=True, blank=True, null=True)
     startDate = models.DateField()
     endDate = models.DateField()
     funders = models.ManyToManyField(Organization, related_name="funders")
@@ -37,8 +37,6 @@ class Project(models.Model):
     def save(self):
         if datetime.date.today() > self.endDate:
             self.active = False
-        if self.id:
-            self.lastModified = datetime.datetime.now()
         else:
             pass
         super(Project, self).save()
@@ -173,7 +171,7 @@ class LocationAllocation(models.Model):
 class UserOrganization(models.Model):
     """Organizations missing in organization list but involved in projects. User defined"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     project = UnsavedForeighKey(Project)
     name = models.CharField(max_length=200,  help_text="Organization involved in project but not in existing list",
                             unique=True)
