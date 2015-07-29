@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import inlineformset_factory
-from management.models import Location, SubLocation, Organization, ExchangeRate, Sector
-from django.forms.models import BaseModelFormSet
+from management.models import Location, SubLocation, Organization, ExchangeRate, Sector, PSG, SubPSG
+from django.forms.models import BaseModelFormSet, BaseInlineFormSet
 
 
 class LocationForm(forms.ModelForm):
@@ -15,10 +15,6 @@ class LocationForm(forms.ModelForm):
 
 
 class SubLocationForm(forms.ModelForm):
-    #def __init__(self, *args, **kwargs):
-    #    super(SubLocationForm, self).__init__(*args, **kwargs)
-    #    self.fields['name'].widget.attrs['class'] = 'form-control'
-
     class Meta:
         model = SubLocation
         exclude = ('id',)
@@ -34,10 +30,16 @@ class OrganizationForm(forms.ModelForm):
         fields = ('name',)
 
 
-class BaseSubLocationFormset(BaseModelFormSet):
+class BaseSubLocationFormset(BaseInlineFormSet):
     def __init__(self, *args, **kwargs):
         super(BaseSubLocationFormset, self).__init__(*args, **kwargs)
         self.queryset = SubLocation.objects.none()
+
+
+class BaseSubPSGFormset(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BaseSubPSGFormset, self).__init__(*args, **kwargs)
+        self.queryset = SubPSG.objects.none()
 
 
 class BaseOrganizationFormSet(BaseModelFormSet):
@@ -73,5 +75,26 @@ class SectorForm(forms.ModelForm):
         model = Sector
         fields = ('name', 'description')
 
+
+class PSGForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(PSGForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = PSG
+        exclude = ('id',)
+
+
+class SubPSGForm(forms.ModelForm):
+    class Meta:
+        model = SubPSG
+        exclude = ('id', 'description',)
+
+
 SubLocationFormset = inlineformset_factory(Location, SubLocation, fields=('name',), can_delete=True, extra=1,
                                            formset=BaseSubLocationFormset, form=SubLocationForm)
+
+SubPSGFormset = inlineformset_factory(PSG, SubPSG, fields=('name',), can_delete=True, extra=1,
+                                      formset=BaseSubPSGFormset, form=PSGForm)

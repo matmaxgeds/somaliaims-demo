@@ -70,11 +70,15 @@
                 {{ form1.spendingToDate }}
             </div>
             <div class="form-group">
-                <label for="spending-spendingLastYear">Spending last year</label>
+                <label for="spending-spendingLastYear">Spending in 2014</label>
                 {{ form1.lastYearSpending }}
             </div>
             <div class="form-group">
-                <label for="spending-spendingNextYear">Expected spending next year</label>
+                <label for="spending-spendingThisYear">Expected spending in 2015</label>
+                {{ form1.thisYearSpending }}
+            </div>
+            <div class="form-group">
+                <label for="spending-spendingNextYear">Expected spending in 2016</label>
                 {{ form1.nextYearSpending }}
             </div>
             <hr>
@@ -117,6 +121,48 @@
                </tbody>
            </table>
             <hr>
+
+            <hr>
+            <legend>
+                PSG - SubPSG allocations
+            </legend>
+           <div class="form-group">
+                 {{ formset4.non_form_errors }}
+                    {% for dict in formset4.errors %}
+                    {% for error in dict.values %}
+                        {{ error }}
+                    {% endfor %}
+                    {% endfor %}
+           </div>
+
+           <table class="table table-bordered table-condensed">
+               <tbody id="location">
+               {{ formset4.management_form }}
+                   {% for form in formset4 %}
+
+                   {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+                   <tr>
+                       <td>
+                           PSG
+                       </td>
+                       <td>
+                           Sub-PSG
+                       </td>
+                       <td>
+                           Percentage allocated
+                       </td>
+                   </tr>
+                   <tr>
+                      <td>{{ form.psg }}</td>
+                      <td>{{ form.subpsg }}</td>
+                      <td>{{ form.allocatedPercentage }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+            <hr>
+
             <legend>
                 Sectors and allocations
             </legend>
