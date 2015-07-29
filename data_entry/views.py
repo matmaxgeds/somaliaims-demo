@@ -1,11 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization
+from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization, SubPSGAllocation
 from management.models import SubLocation
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
-    DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet
+    DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet, SubPSGAllocationFormset
 from django.forms.models import inlineformset_factory
 from braces.views import GroupRequiredMixin
 from django.views.generic.detail import DetailView
@@ -23,6 +23,7 @@ class ProjectDetailView(DetailView):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         context['project'] = self.object
         context['loc_allocations'] = LocationAllocation.objects.filter(project=self.object)
+        context['subpsg_allocations'] = SubPSGAllocation.objects.filter(project=self.object)
         context['contact'] = Contact.objects.filter(project=self.object)
         context['sec_allocations'] = SectorAllocation.objects.filter(project=self.object)
         context['other_organizations'] = UserOrganization.objects.filter(project=self.object).distinct()
@@ -69,6 +70,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
             ctx['form2'] = ContactForm(self.request.POST, prefix='contact')
             ctx['formset'] = LocationAllocationFormset(self.request.POST, prefix='location')
             ctx['formset1'] = SectorAllocationFormset(self.request.POST, prefix="sectors")
+            ctx['formset4'] = SubPSGAllocationFormset(self.request.POST, prefix='psg')
             ctx['formset2'] = UserOrganizationFormset(self.request.POST, prefix="user_organizations")
             ctx['formset3'] = DocumentFormset(self.request.POST, self.request.FILES, prefix="documents")
         else:
@@ -77,6 +79,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
             ctx['form2'] = ContactForm(prefix='contact')
             ctx['formset'] = LocationAllocationFormset(prefix='location')
             ctx['formset1'] = SectorAllocationFormset(prefix="sectors")
+            ctx['formset4'] = SubPSGAllocationFormset(prefix='psg')
             ctx['formset2'] = UserOrganizationFormset(prefix="user_organizations")
             ctx['formset3'] = DocumentFormset(prefix="documents")
         return ctx
@@ -89,9 +92,10 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
         formset1 = ctx['formset1']
         formset2 = ctx['formset2']
         formset3 = ctx['formset3']
+        formset4 = ctx['formset4']
 
         if formset.is_valid() and form.is_valid() and form1.is_valid() and form2.is_valid() and formset1.is_valid() \
-                and formset2.is_valid() and formset3.is_valid():
+                and formset2.is_valid() and formset3.is_valid() and formset4.is_valid():
             self.object = form.save(commit=False)
             self.object.user = self.request.user
             self.object.save()
@@ -101,6 +105,10 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
                 object.project = self.object
                 object.save()
             formset.save_m2m()
+            psg_allocs = formset4.save(commit=False)
+            for alloc in psg_allocs:
+                alloc.project = self.object
+                alloc.save()
             spending = form1.save(commit=False)
             spending.project = self.object
             spending.save()
@@ -139,7 +147,7 @@ class ProjectListView(GroupRequiredMixin, ListView):
     group_required = [u"admin", u"data"]
     queryset = Project.objects.all()
 
-
+# TODO Kevin should work on the ajaxSublocations views. An ajaxSubPSGs view is also needed.
 def ajaxSublocations(request):
     html_string = ""
     if request.is_ajax():
@@ -162,6 +170,7 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
             ctx['form2'] = ContactForm(self.request.POST, prefix='contact', instance=Contact.objects.get(project=self.object))
             ctx['formset'] = LocationAllocationFormset(self.request.POST, prefix='location', instance=self.object)
             ctx['formset1'] = SectorAllocationFormset(self.request.POST, prefix="sectors", instance=self.object)
+            ctx['formset4'] = SubPSGAllocationFormset(self.request.POST, prefix='psg', instance=self.object)
             ctx['formset2'] = UserOrganizationFormset(self.request.POST, prefix="user_organizations", instance=self.object)
             doc_values = Document.objects.filter(project=self.object).values()
             doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
@@ -172,6 +181,7 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
             ctx['form2'] = ContactForm(prefix='contact', instance=Contact.objects.get(project=self.object))
             ctx['formset'] = LocationAllocationFormset(prefix='location', instance=self.object)
             ctx['formset1'] = SectorAllocationFormset(prefix="sectors", instance=self.object)
+            ctx['formset4'] = SubPSGAllocationFormset(prefix='psg', instance=self.object)
             ctx['formset2'] = UserOrganizationFormset(prefix="user_organizations", instance=self.object)
             doc_values = Document.objects.filter(project=self.object).values()
             doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
@@ -187,9 +197,10 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
         formset1 = ctx['formset1']
         formset2 = ctx['formset2']
         formset3 = ctx['formset3']
+        formset4 = ctx['formset4']
 
         if formset.is_valid() and form.is_valid() and form1.is_valid() and form2.is_valid() and formset1.is_valid() \
-                and formset2.is_valid() and formset3.is_valid():
+                and formset2.is_valid() and formset3.is_valid() and formset4.is_valid():
             self.object = form.save(commit=False)
             self.object.user = self.request.user
             self.object.save()
@@ -198,6 +209,10 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
             for object in objects:
                 object.project = self.object
                 object.save()
+            sub_allocs = formset4.save(commit=False)
+            for alloc in sub_allocs:
+                alloc.project = self.object
+                alloc.save()
             formset.save_m2m()
             spending = form1.save(commit=False)
             spending.project = self.object
