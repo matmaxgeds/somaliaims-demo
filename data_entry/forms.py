@@ -122,6 +122,7 @@ class SpendingForm(ModelForm):
         super(SpendingForm, self).__init__(*args, **kwargs)
         self.fields['spendingToDate'].widget.attrs['class'] = 'form-control'
         self.fields['nextYearSpending'].widget.attrs['class'] = 'form-control'
+        self.fields['thisYearSpending'].widget.attrs['class'] = 'form-control'
         self.fields['lastYearSpending'].widget.attrs['class'] = 'form-control'
 
     class Meta:

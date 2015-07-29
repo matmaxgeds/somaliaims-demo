@@ -88,9 +88,11 @@ class Project(models.Model):
 class Spending(models.Model):
     """How a project's value has and is intended to been spent"""
     project = models.OneToOneField(Project)
-    spendingToDate = models.FloatField(help_text="Total amount of aid spent up to date")
-    lastYearSpending = models.FloatField(help_text="Total amount of aid spent last year")
-    nextYearSpending = models.FloatField(help_text="Total amount of aid anticipated to be spent next year")
+    spendingToDate = models.FloatField(help_text="Total amount of aid spent up to date", blank=True, null=True)
+    lastYearSpending = models.FloatField(help_text="Total amount of aid spent last year", blank=True, null=True)
+    thisYearSpending = models.FloatField(help_text="Amount expected to be spent this year", blank=True)
+    nextYearSpending = models.FloatField(help_text="Total amount of aid anticipated to be spent next year", blank=True,
+                                         null=True)
 
     class Meta:
         db_table = 'project_spending'
