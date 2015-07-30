@@ -14,6 +14,7 @@ from filetransfers.api import serve_file
 from django.shortcuts import get_object_or_404
 from django.template.context import RequestContext
 from django.template.loader import get_template
+from django.contrib import messages
 
 
 class ProjectDetailView(DetailView):
@@ -174,9 +175,15 @@ class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
         _funders = self.object.funders.all().values_list('name')
         _implementers = self.object.implementers.all().values_list('name')
         _user_organizations = UserOrganization.objects.filter(project=self.object).values_list('name')
-        _my_org = (self.request.user.userprofile.organization.name,)
+        try:
+            _my_org = (self.request.user.userprofile.organization.name,)
+        except Exception:
+            messages.warning(request, "You need to belong to an organization to edit a project.")
+            return HttpResponseRedirect(reverse('data-entry:dashboard'))
 
         if _my_org not in _funders and _my_org not in _implementers and _my_org not in _user_organizations:
+            messages.warning(request,
+                             "Sorry, your organization is not involved in this project. You have no edit permissions.")
             return HttpResponseRedirect(reverse('data-entry:dashboard'))
         return UpdateView.dispatch(self, request, *args, **kwargs)
 
