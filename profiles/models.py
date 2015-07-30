@@ -7,7 +7,7 @@ class UserProfile(models.Model):
     """User profiles"""
     profile = models.Manager()
     user = models.OneToOneField(User)
-    organization = models.OneToOneField(Organization)
+    organization = models.ForeignKey(Organization)
 
     def __str__(self):
         return self.user.username
