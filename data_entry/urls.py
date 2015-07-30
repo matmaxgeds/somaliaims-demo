@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .views import *
 
 urlpatterns = [
-    url(r'^$', login_required(ProjectListView.as_view()), name='dashboard'),
+    # url(r'^$', login_required(ProjectListView.as_view()), name='dashboard'),
+    url(r'^$', login_required(ProjectListView), name='dashboard'),
     url(r'^project/create/$', login_required(ProjectCreateView.as_view()), name='project_add'),
     url(r'^project/update/(?P<pk>[^/]+)/$', login_required(ProjectUpdateView.as_view()), name='project_update'),
     url(r'^project/details/(?P<pk>[^/]+)/$', ProjectDetailView.as_view(), name='project_details'),
