@@ -187,15 +187,18 @@ def csv_gen(request):
                               delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([i.name, ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]), i.duration, i.value,
-                             i.percentage_spent])
+            writer.writerow(
+                [i.name, ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]), i.duration,
+                 i.value,
+                 i.percentage_spent])
     elif q and not r and not s:
         head = csv.DictWriter(response, fieldnames=["Locations", "Project Name", "Funders", "Duration", "Value",
                                                     "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), i.name, ','.join([x.short_name for x in
-                                                                                        i.funders.all()]), i.duration,
+            writer.writerow([','.join([x.name for x in i.locations]), i.name,
+                             ','.join([x.short_name if x.short_name else x.name for x in
+                                       i.funders.all()]), i.duration,
                              i.value,
                              i.percentage_spent])
     elif q and r and not s:
@@ -397,7 +400,7 @@ def sector_csv(request):
         head.writeheader()
         for i in projects:
             writer.writerow([i.name, ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
-                             ','.join([x.short_name for x in
+                             ','.join([x.short_name if x.short_name else x.name for x in
                                        i.implementers.all()]),
                              i.duration, i.value, i.percentage_spent])
 
@@ -547,8 +550,9 @@ def loc_csv(request):
                                                     "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in projects:
-            writer.writerow([i.name, ','.join([x.short_name for x in i.funders.all()]), ','.join([x.short_name for x in
-                                                                                                  i.implementers.all()]),
+            writer.writerow([i.name, ','.join([x.short_name for x in i.funders.all()]),
+                             ','.join([x.short_name if x.short_name else x.name for x in
+                                       i.implementers.all()]),
                              i.duration, i.value, i.percentage_spent])
 
     return response
