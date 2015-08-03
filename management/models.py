@@ -17,7 +17,10 @@ class Organization(models.Model):
         db_table = 'organizations'
 
     def __str__(self):
-        return self.name
+        if self.short_name:
+            return self.short_name
+        else:
+            return self.name
 
 
 class Location(models.Model):

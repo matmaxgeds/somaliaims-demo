@@ -139,7 +139,7 @@ def xls_gen(request):
         row_num += 1
         row = [
             obj.name,
-            ','.join([x.name for x in obj.funders.all()]),
+            ','.join([x.short_name if x.short_name else x.name for x in obj.funders.all()]),
             obj.duration,
             obj.value,
             obj.percentage_spent,
@@ -187,15 +187,15 @@ def csv_gen(request):
                               delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), i.duration, i.value,
+            writer.writerow([i.name, ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]), i.duration, i.value,
                              i.percentage_spent])
     elif q and not r and not s:
         head = csv.DictWriter(response, fieldnames=["Locations", "Project Name", "Funders", "Duration", "Value",
                                                     "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), i.name, ','.join([x.name for x in
-                                                                                   i.funders.all()]), i.duration,
+            writer.writerow([','.join([x.name for x in i.locations]), i.name, ','.join([x.short_name for x in
+                                                                                        i.funders.all()]), i.duration,
                              i.value,
                              i.percentage_spent])
     elif q and r and not s:
@@ -205,7 +205,7 @@ def csv_gen(request):
         for i in filtered:
             writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
                              i.name,
-                             ','.join([x.name for x in i.funders.all()]),
+                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
     elif q and r and s:
         head = csv.DictWriter(response, fieldnames=["Locations", "Sublocations", "Sectors", "Project Name", "Funders",
@@ -216,7 +216,7 @@ def csv_gen(request):
             writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
                              ','.join([x.name for x in i.sectors]),
                              i.name,
-                             ','.join([x.name for x in i.funders.all()]),
+                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
     elif not q and r and s:
         head = csv.DictWriter(response, fieldnames=["Sublocations", "Sectors", "Project Name", "Funders",
@@ -227,7 +227,7 @@ def csv_gen(request):
             writer.writerow([','.join([x.name for x in i.sublocations]),
                              ','.join([x.name for x in i.sectors]),
                              i.name,
-                             ','.join([x.name for x in i.funders.all()]),
+                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
     elif not q and not r and s:
         head = csv.DictWriter(response, fieldnames=["Sectors", "Project Name", "Funders",
@@ -237,7 +237,7 @@ def csv_gen(request):
         for i in filtered:
             writer.writerow([','.join([x.name for x in i.sectors]),
                              i.name,
-                             ','.join([x.name for x in i.funders.all()]),
+                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
                              i.duration, i.value, i.percentage_spent])
     elif not q and r and not s:
         head = csv.DictWriter(response, fieldnames=["Sublocations", "Project Name", "Funders",
@@ -245,9 +245,10 @@ def csv_gen(request):
                                                     "Value", "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in filtered:
-            writer.writerow([','.join([x.name for x in i.sublocations]), i.name, ','.join([x.name for x in i.funders.all(
-
-            )]), i.duration, i.value, i.percentage_spent])
+            writer.writerow(
+                [','.join([x.name for x in i.sublocations]), i.name,
+                 ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]), i.duration, i.value,
+                 i.percentage_spent])
 
     return response
 
@@ -320,7 +321,8 @@ def sector_report(request):
     red_url = host + "/reports/sector/export-pdf?" + url
     csv_url = "/reports/sector/export-csv/?" + url
     xls_url = "/reports/sector/export-xls/?" + url
-    pdf_url = """http://api.phantomjscloud.com/single/browser/v1/7935aba662a4bb6d9e7036bd23c049b94d779bca/?targetUrl={0}&loadImages=true&requestType=pdf&resourceUrlBlacklist=[]""".format(red_url)
+    pdf_url = """http://api.phantomjscloud.com/single/browser/v1/7935aba662a4bb6d9e7036bd23c049b94d779bca/?targetUrl={0}&loadImages=true&requestType=pdf&resourceUrlBlacklist=[]""".format(
+        red_url)
     reports = True
     if request.GET.get('sector'):
         project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
@@ -331,11 +333,11 @@ def sector_report(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         sector = Sector.objects.get(id=request.GET.get('sector'))
         exporters = True
@@ -353,11 +355,11 @@ def sector_pdf(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         sector = Sector.objects.get(id=request.GET.get('sector'))
         context['projects'] = projects
@@ -372,6 +374,7 @@ def sector_pdf(request):
 
 def sector_csv(request):
     import csv
+
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
     if request.GET.get('sector'):
@@ -383,18 +386,20 @@ def sector_csv(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         head = csv.DictWriter(response, fieldnames=["Project Name", "Funders", "Implementers", "Duration", "Value",
                                                     "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in projects:
-            writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), ','.join([x.name for x in
-                                                                                            i.implementers.all()]), i.duration, i.value, i.percentage_spent])
+            writer.writerow([i.name, ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
+                             ','.join([x.short_name for x in
+                                       i.implementers.all()]),
+                             i.duration, i.value, i.percentage_spent])
 
     return response
 
@@ -435,19 +440,19 @@ def sector_xls(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
 
     for obj in projects:
         row_num += 1
         row = [
             obj.name,
-            ','.join([x.name for x in obj.funders.all()]),
-            ','.join([x.name for x in obj.implementers.all()]),
+            ','.join([x.short_name if x.short_name else x.name for x in obj.funders.all()]),
+            ','.join([x.short_name if x.short_name else x.name for x in obj.implementers.all()]),
             obj.duration,
             obj.value,
             obj.percentage_spent,
@@ -467,7 +472,8 @@ def location_report(request):
     red_url = host + "/reports/location/export-pdf?" + url
     csv_url = "/reports/location/export-csv/?" + url
     xls_url = "/reports/location/export-xls/?" + url
-    pdf_url = """http://api.phantomjscloud.com/single/browser/v1/7935aba662a4bb6d9e7036bd23c049b94d779bca/?targetUrl={0}&loadImages=true&requestType=pdf&resourceUrlBlacklist=[]""".format(red_url)
+    pdf_url = """http://api.phantomjscloud.com/single/browser/v1/7935aba662a4bb6d9e7036bd23c049b94d779bca/?targetUrl={0}&loadImages=true&requestType=pdf&resourceUrlBlacklist=[]""".format(
+        red_url)
     reports = True
     if request.GET.get('location'):
         project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
@@ -478,11 +484,11 @@ def location_report(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         location = Location.objects.get(id=request.GET.get('location'))
         exporters = True
@@ -500,11 +506,11 @@ def loc_pdf(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         location = Location.objects.get(id=request.GET.get('location'))
         context['projects'] = projects
@@ -519,6 +525,7 @@ def loc_pdf(request):
 
 def loc_csv(request):
     import csv
+
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
     if request.GET.get('location'):
@@ -530,18 +537,19 @@ def loc_csv(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         head = csv.DictWriter(response, fieldnames=["Project Name", "Funders", "Implementers", "Duration", "Value",
                                                     "Percentage Spent"], delimiter=',')
         head.writeheader()
         for i in projects:
-            writer.writerow([i.name, ','.join([x.name for x in i.funders.all()]), ','.join([x.name for x in
-                                                                                            i.implementers.all()]), i.duration, i.value, i.percentage_spent])
+            writer.writerow([i.name, ','.join([x.short_name for x in i.funders.all()]), ','.join([x.short_name for x in
+                                                                                                  i.implementers.all()]),
+                             i.duration, i.value, i.percentage_spent])
 
     return response
 
@@ -582,19 +590,19 @@ def loc_xls(request):
             funders = h.funders.all()
             for funder in funders:
                 try:
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] += 1
                 except KeyError:
                     value = 1
-                    key = str('_'.join(funder.name.split()))
+                    key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
 
     for obj in projects:
         row_num += 1
         row = [
             obj.name,
-            ','.join([x.name for x in obj.funders.all()]),
-            ','.join([x.name for x in obj.implementers.all()]),
+            ','.join([x.short_name if x.short_name else x.name for x in obj.funders.all()]),
+            ','.join([x.short_name if x.short_name else x.name for x in obj.implementers.all()]),
             obj.duration,
             obj.value,
             obj.percentage_spent,
