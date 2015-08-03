@@ -129,7 +129,8 @@ def LocationUpdate(request, pk=False):
     else:
         form = LocationForm(instance=location)
         formset = formset(instance=location)
-    return render_to_response('management/location_update_form.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('management/location_update_form.html', locals(),
+                              context_instance=RequestContext(request))
 
 
 class LocationDelete(GroupRequiredMixin, DeleteView):
@@ -249,6 +250,3 @@ class PSGDelete(GroupRequiredMixin, DeleteView):
     model = PSG
     success_url = reverse_lazy('dashboard')
     group_required = [u"admin", "manager"]
-
-
-
