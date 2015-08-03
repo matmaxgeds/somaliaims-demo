@@ -52,7 +52,6 @@ INSTALLED_APPS = (
     'profiles',
 )
 
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -104,7 +103,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,  'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
 
@@ -114,13 +113,11 @@ LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/login_success/'
 
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR,  'templates'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -141,7 +138,7 @@ TEMPLATES = [
 LOGIN_URL = '/login/'
 
 
-#Module settings
+# Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
 DOCUMENT_UPLOAD_DIR = os.path.join(BASE_DIR, 'documents')
 GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
@@ -162,11 +159,9 @@ DATABASES = {
     }
 }
 
-
 ADMIN_URL = '/admin/'
 DATA_ENTRY_URL = '/data-entry/'
 MANAGEMENT_URL = '/management/'
-
 
 try:
     if DEBUG:
@@ -175,3 +170,55 @@ except ImportError:
     pass
 
 SITE_ID = 1
+
+BOOLEAN_CHOICES = (
+    (None, ' '),
+    (True, 'Yes'),
+    (False, 'No')
+)
+
+SDRF_SSA_CHOICES = (
+    (None, ' '),
+    ('WB Multi-Partner Fund (MPF)', 'WB Multi-Partner Fund (MPF)'),
+    ('UN Multi-Partner Trust Fund (MPTF)', 'UN Multi-Partner Trust Fund (MPTF)'),
+    ('African Development Bank Multi-Partner Programme (AMPP)',
+     'African Development Bank Multi-Partner Programme (AMPP)'),
+    ('Special Financing Facility (SFF)', 'Special Financing Facility (SFF)'),
+    ('Somalia Stability Fund (SSF)', 'Somalia Stability Fund (SSF)'),
+    ('Not using SDRF', 'Not using SDRF'),
+)
+
+FUNDING_INSTRUMENTS = (
+    (None, ' '),
+    ('General Budget Support', 'General Budget Support'),
+    ('Sector Budget Support', 'Sector Budget Support'),
+    ('Pooled fund', 'Pooled fund'),
+    ('Project/program', 'Project/program')
+)
+
+FUNDING_CHANNELS = (
+    (None, ' '),
+    ('Channel 1', 'Channel 1'),
+    ('Channel 2', 'Channel 2'),
+    ('Channel 3', 'Channel 3')
+)
+
+MULTIFIELD_CHOICES = (
+    (None, ' '),
+    ('Principal', 'Principal'),
+    ('Significant', 'Significant'),
+    ('Not targeted', 'Not targeted'),
+    ('NA', 'NA')
+)
+
+SENSITIVITY_ANALYSIS_CHOICES = (
+    (None, ' '),
+    ('Conflict analysis conducted and updated regularly', 'Conflict analysis conducted and updated regularly'),
+    ('Conflict analysis conducted once but not updated', 'Conflict analysis conducted once but not updated'),
+    ('No conflict analysis conducted for activity', 'No conflict analysis conducted for activity')
+)
+
+
+
+
+

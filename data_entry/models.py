@@ -1,10 +1,10 @@
 from django.db import models
 from management.models import Organization, Currency, Location, Sector, SubLocation, SubPSG, PSG
-from django.conf import settings
 import datetime
 from datetime import timedelta
 from calendar import monthrange
 import uuid
+from django.conf import settings
 
 
 class UnsavedForeighKey(models.ForeignKey):
@@ -26,6 +26,16 @@ class Project(models.Model):
     currency = models.ForeignKey(Currency)
     rateToUSD = models.DecimalField(max_digits=6, decimal_places=2)
     active = models.BooleanField(default=True, blank=True)
+    ocha_fts_reported = models.NullBooleanField(blank=True, null=True, choices=settings.BOOLEAN_CHOICES)
+    sdrf_ssa = models.CharField(max_length=100, blank=True, null=True, choices=settings.SDRF_SSA_CHOICES)
+    funding_instrument = models.CharField(max_length=100, blank=True, null=True, choices=settings.FUNDING_INSTRUMENTS)
+    funding_channel = models.CharField(max_length=20, blank=True, null=True, choices=settings.FUNDING_CHANNELS)
+    gender = models.CharField(max_length=20, blank=True, null=True, choices=settings.MULTIFIELD_CHOICES)
+    capacity_building = models.CharField(max_length=20, blank=True, null=True, choices=settings.MULTIFIELD_CHOICES)
+    stabilization = models.CharField(max_length=20, blank=True, null=True, choices=settings.MULTIFIELD_CHOICES)
+    conflict_sensitivity_analysis = models.CharField(max_length=100, blank=True, null=True,
+                                                     choices=settings.SENSITIVITY_ANALYSIS_CHOICES)
+    conflict_sensitivity_monitoring = models.NullBooleanField(blank=True, null=True, choices=settings.BOOLEAN_CHOICES)
 
     class Meta:
         db_table = 'project'
