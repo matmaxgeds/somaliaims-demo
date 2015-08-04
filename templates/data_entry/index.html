@@ -28,6 +28,7 @@
             {% for project in object_list %}
             <tr>
                 <td><a href="{% url 'data-entry:project_details' project.id %}">{{ project.name }}</a></td>
+                <td><a href="{% url 'data-entry:project_update' project.id %}">Edit</a></td>
             </tr>
             {% endfor %}
         </table>

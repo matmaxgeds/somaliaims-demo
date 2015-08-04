@@ -54,6 +54,14 @@
             {% endfor %}
             </ol>
         {% endfor %}
+        <h4>Sub-PSGs and respective allocations</h4>
+        {% if subpsg_allocations %}
+        {% for subpsg in subpsg_allocations %}
+            <p>{{ subpsg.subpsg.name }} - {{ subpsg.percentage }}</p>
+        {% endfor %}
+        {% else %}
+            <span>No data available</span>
+        {% endif %}
         {% if documents %}
         <h4>Project files</h4>
         {% for document in documents %}

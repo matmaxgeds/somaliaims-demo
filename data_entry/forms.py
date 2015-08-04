@@ -1,5 +1,6 @@
-from django.forms import ModelForm, FileField
-from .models import Project, LocationAllocation, SectorAllocation, UserOrganization, Document, Spending, Contact
+from django.forms import ModelForm
+from .models import Project, LocationAllocation, SectorAllocation, UserOrganization, Document, Spending, Contact, \
+    SubPSGAllocation
 from django.forms.models import BaseModelFormSet
 from django.forms.models import inlineformset_factory
 
@@ -29,8 +30,13 @@ class BaseLocationAllocationFormSet(BaseModelFormSet):
         self.queryset = LocationAllocation.objects.none()
 
 
-class BaseSectorAllocationFormSet(BaseModelFormSet):
+class BaseSubPSGAllocationFormSet(BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BaseSubPSGAllocationFormSet, self).__init__(*args, **kwargs)
+        self.queryset = SubPSGAllocation.objects.none()
 
+
+class BaseSectorAllocationFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         super(BaseLocationAllocationFormSet, self).__init__(*args, **kwargs)
         self.queryset = SectorAllocation.objects.none()
@@ -77,6 +83,18 @@ class LocationAllocationForm(ModelForm):
         exclude = ('id', 'project')
 
 
+class SubPSGAllocationForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SubPSGAllocationForm, self).__init__(*args, **kwargs)
+        self.fields['psg'].widget.attrs['class'] = 'form-control'
+        self.fields['subpsg'].widget.attrs['class'] = 'form-control'
+        self.fields['allocatedPercentage'].widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = SubPSGAllocation
+        exclude = ('id', 'project')
+
+
 class UserOrganizationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserOrganizationForm, self).__init__(*args, **kwargs)
@@ -104,6 +122,7 @@ class SpendingForm(ModelForm):
         super(SpendingForm, self).__init__(*args, **kwargs)
         self.fields['spendingToDate'].widget.attrs['class'] = 'form-control'
         self.fields['nextYearSpending'].widget.attrs['class'] = 'form-control'
+        self.fields['thisYearSpending'].widget.attrs['class'] = 'form-control'
         self.fields['lastYearSpending'].widget.attrs['class'] = 'form-control'
 
     class Meta:
@@ -128,11 +147,15 @@ LocationAllocationFormset = inlineformset_factory(Project, LocationAllocation, f
                                                                                        'allocatedPercentage'),
                                                   can_delete=True, extra=1, form=LocationAllocationForm)
 
+SubPSGAllocationFormset = inlineformset_factory(Project, SubPSGAllocation, fields=('psg', 'subpsg',
+                                                                                   'allocatedPercentage'),
+                                                can_delete=True, extra=1, form=SubPSGAllocationForm)
+
 SectorAllocationFormset = inlineformset_factory(Project, SectorAllocation, fields=('sector', 'allocatedPercentage'),
                                                 can_delete=True, extra=1, form=SectorAllocationForm)
 
 UserOrganizationFormset = inlineformset_factory(Project, UserOrganization, fields=('name', 'role'),
                                                 can_delete=True, extra=1, form=UserOrganizationForm)
 
-DocumentFormset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=1, form=DocumentForm)
-
+DocumentFormset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=1,
+                                        form=DocumentForm)
