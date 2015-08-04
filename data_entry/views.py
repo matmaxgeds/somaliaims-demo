@@ -1,18 +1,20 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, HttpResponseRedirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse_lazy
-from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization, SubPSGAllocation
+from django.core.urlresolvers import reverse_lazy, reverse
+from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization, \
+    SubPSGAllocation
 from management.models import SubLocation
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
     DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet, SubPSGAllocationFormset
 from django.forms.models import inlineformset_factory
-from braces.views import GroupRequiredMixin
+from braces.views import GroupRequiredMixin, UserPassesTestMixin
 from django.views.generic.detail import DetailView
 from filetransfers.api import serve_file
 from django.shortcuts import get_object_or_404
 from django.template.context import RequestContext
 from django.template.loader import get_template
+from django.contrib import messages
 
 
 class ProjectDetailView(DetailView):
@@ -35,6 +37,7 @@ class ProjectDetailView(DetailView):
 
 def project_export(request, pk):
     import weasyprint
+
     context = {}
     project = Project.objects.get(id=pk)
     context['project'] = project
@@ -126,13 +129,13 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
                 org.save()
             project = Project.objects.get(id=self.object.id)
 
-            #doc_forms = DocumentFormset(self.request.POST, self.request.FILES, prefix="documents", instance=project)
+            # doc_forms = DocumentFormset(self.request.POST, self.request.FILES, prefix="documents", instance=project)
             docs = formset3.save(commit=False)
             for doc in docs:
                 doc.project = project
                 doc.save()
 
-            return redirect('/data-entry/')
+            return HttpResponseRedirect(reverse('dashboard'))
 
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -147,6 +150,7 @@ class ProjectListView(GroupRequiredMixin, ListView):
     group_required = [u"admin", u"data"]
     queryset = Project.objects.all()
 
+
 # TODO Kevin should work on the ajaxSublocations views. An ajaxSubPSGs view is also needed.
 def ajaxSublocations(request):
     html_string = ""
@@ -157,26 +161,55 @@ def ajaxSublocations(request):
             return HttpResponse(html_string)
 
 
-class ProjectUpdateView(GroupRequiredMixin, UpdateView):
+class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     template_name = "data_entry/project_update_form.html"
     group_required = [u"admin", u"data"]
 
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        self.object = self.get_object()
+
+        _funders = self.object.funders.all().values_list('name')
+        _implementers = self.object.implementers.all().values_list('name')
+        _user_organizations = UserOrganization.objects.filter(project=self.object).values_list('name')
+        try:
+            _my_org = (self.request.user.userprofile.organization.name,)
+        except Exception:
+            messages.warning(request, "You need to belong to an organization to edit a project.")
+            return HttpResponseRedirect(reverse('data-entry:dashboard'))
+
+        if _my_org not in _funders and _my_org not in _implementers and _my_org not in _user_organizations:
+            messages.warning(request,
+                             "Sorry, your organization is not involved in this project. You have no edit permissions.")
+            return HttpResponseRedirect(reverse('data-entry:dashboard'))
+        return UpdateView.dispatch(self, request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if not hasattr(self, '_object'):
+            self._object = super(ProjectUpdateView, self).get_object()
+        return self._object
+
     def get_context_data(self, **kwargs):
         ctx = super(ProjectUpdateView, self).get_context_data(**kwargs)
         if self.request.POST:
-            ctx['form1'] = SpendingForm(self.request.POST, prefix='spending', instance=Spending.objects.get(project=self.object))
-            ctx['form2'] = ContactForm(self.request.POST, prefix='contact', instance=Contact.objects.get(project=self.object))
+            ctx['form1'] = SpendingForm(self.request.POST, prefix='spending',
+                                        instance=Spending.objects.get(project=self.object))
+            ctx['form2'] = ContactForm(self.request.POST, prefix='contact',
+                                       instance=Contact.objects.get(project=self.object))
             ctx['formset'] = LocationAllocationFormset(self.request.POST, prefix='location', instance=self.object)
             ctx['formset1'] = SectorAllocationFormset(self.request.POST, prefix="sectors", instance=self.object)
             ctx['formset4'] = SubPSGAllocationFormset(self.request.POST, prefix='psg', instance=self.object)
-            ctx['formset2'] = UserOrganizationFormset(self.request.POST, prefix="user_organizations", instance=self.object)
+            ctx['formset2'] = UserOrganizationFormset(self.request.POST, prefix="user_organizations",
+                                                      instance=self.object)
             doc_values = Document.objects.filter(project=self.object).values()
             doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
                 doc_values), formset=BaseDocumentFormSet)
             ctx['formset3'] = doc_formset(self.request.POST, self.request.FILES, initial=doc_values, prefix='document')
         else:
+
             ctx['form1'] = SpendingForm(prefix='spending', instance=Spending.objects.get(project=self.object))
             ctx['form2'] = ContactForm(prefix='contact', instance=Contact.objects.get(project=self.object))
             ctx['formset'] = LocationAllocationFormset(prefix='location', instance=self.object)
@@ -187,6 +220,7 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
             doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
                 doc_values), formset=BaseDocumentFormSet)
             ctx['formset3'] = doc_formset(prefix='document', initial=doc_values)
+
         return ctx
 
     def form_valid(self, form):
@@ -236,7 +270,7 @@ class ProjectUpdateView(GroupRequiredMixin, UpdateView):
                 doc.project = project
                 doc.save()
 
-            return redirect('/data-entry/')
+            return HttpResponseRedirect(reverse('dashboard'))
 
         else:
             return self.render_to_response(self.get_context_data(form=form))
