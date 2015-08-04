@@ -10,7 +10,8 @@
 <div class="rows" style="padding-top: 40px;" ></div>
 <div class="row">
 <div class="col-md-12">
-    <div class="col-md-7">
+    <div class="col-md-1"></div>
+    <div class="col-md-6">
         <h4>Project Name:</h4>
         <h3>{{ project.name }}</h3>
         <h4>Description</h4>
@@ -71,7 +72,12 @@
         {% endfor %}
         {% endif %}
     </div>
-    <div class="col-md-5"></div>
+    <div class="col-md-3">
+         <div style="float: right;">
+            <a href="{% url 'reports:dashboard'%}"><button class="btn btn-default btn-large">Go back</button></a>
+         </div>
+    </div>
+    <div class="col-md-2"></div>
 </div>
 </div>
 <div class="row" style="padding-top: 10px;"></div>
