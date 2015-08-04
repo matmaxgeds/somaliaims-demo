@@ -103,5 +103,32 @@
 </div>
 <div class="col-md-2"></div>
 </div>
+<div class="row" style="padding-top: 30px;"></div>
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    {% if psgs %}
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <th>PSGs</th>
+            </tr>
+    {% for psg in psgs %}
+    <tr>
+        <td>
+        <a href="{% url 'psg_update' psg.id %}">{{ psg.name }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+<p><a href="#">View all PSGs</a></p>
+<span><a href="{% url 'psg_add' %}">Add PSG</a></span>
+{% else %}
+    <p>No psgs available</p>
+    <p><a href="{% url 'psg_add' %}">Add PSG</a></p>
+{% endif %}
+</div>
+<div class="col-md-2"></div>
+</div>
 </div>
 {% endblock %}

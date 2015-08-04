@@ -7,8 +7,7 @@ from .views import *
 urlpatterns = [
     url(r'^$', login_required(ManagementDashboard.as_view()), name='dashboard'),
     url(r'^location/create/$', login_required(LocationCreate.as_view()), name='location_add'),
-    #url(r'^location/update/(?P<uuid>\w+)/$', login_required(LocationUpdate.as_view()), name='location_update'),
-    url(r'^location/update/(?P<pk>[^/]+)/$', login_required(LocationUpdate.as_view()), name='location_update'),
+    url(r'^location/update/(?P<pk>[^/]+)/$', login_required(LocationUpdate), name='location_update'),
     url(r'^location/delete/(?P<pk>[^/]+)/$', login_required(LocationDelete.as_view()), name='location_delete'),
     url(r'^organization/create/$', login_required(OrganizationCreate.as_view()), name='organization_add'),
     url(r'^organization/update/(?P<pk>[^/]+)/$', login_required(OrganizationUpdate.as_view()), name='organization_update'),
@@ -19,5 +18,8 @@ urlpatterns = [
     url(r'^sector/delete/(?P<pk>[^/]+)/$', login_required(SectorDelete.as_view()),
         name='sector_delete'),
     url(r'^exchange-rate/update/$', login_required(ExchangeRateUpdateView.as_view()), name='rate_update'),
+    url(r'^psg/create/$', login_required(PSGCreate.as_view()), name='psg_add'),
+    url(r'^psg/update/(?P<pk>[^/]+)/$', login_required(PSGUpdate), name='psg_update'),
+    url(r'^psg/delete/(?P<pk>[^/]+)/$', login_required(PSGDelete.as_view()), name='psg_delete'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

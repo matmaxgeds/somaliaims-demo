@@ -2,9 +2,9 @@
 
 {% load staticfiles %}
 
-{% block title %} Add Location {% endblock %}
+{% block title %} Add PSG {% endblock %}
 
-{% block header_text%} Add Location {% endblock %}
+{% block header_text%} Add PSG {% endblock %}
 
 {% block content %}
 <div class="container">
@@ -14,7 +14,7 @@
 <div class="row">
 <div class="col-md-3"></div>
 <div class="col-md-6">
-<h3>Add Location</h3>
+<h3>Add PSG</h3>
 <form id="myForm" class="form" method="post" action="">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
@@ -24,15 +24,17 @@
                 {{ form.name.errors }}
             </div>
             <div class="form-group">
-                <label for="name">Location name</label>
+                <label for="name">PSG name</label>
                 {{ form.name }}
+                <label for="description">Description</label>
+                {{ form.description }}
             </div>
            <legend>
-                Sublocations
+                Sub-PSGs
             </legend>
            <table class="table" border="0" cellpadding="0" cellspacing="0">
                <tbody id="location">
-                   {% for form in formset.forms %}
+                   {% for form in formset %}
                    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
                    <tr>
                       <td>{{ form.name }}</td>
@@ -41,7 +43,7 @@
                </tbody>
            </table>
            {{ formset.management_form }}
-            <button class="btn btn-default btn-large" type="submit">Add Location</button>
+            <button class="btn btn-default btn-large" type="submit">Add PSG</button>
             &emsp; &ensp;
             <a href="{% url 'dashboard' %}">Go back</a>
        </form>

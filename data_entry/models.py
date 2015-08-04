@@ -1,11 +1,10 @@
-from management.models import Organization, Currency, Location, Sector, SubLocation
-from django.contrib.auth.models import User
 from django.db import models
-from django.conf import settings
+from management.models import Organization, Currency, Location, Sector, SubLocation, SubPSG, PSG
 import datetime
 from datetime import timedelta
 from calendar import monthrange
 import uuid
+from django.conf import settings
 
 
 class UnsavedForeighKey(models.ForeignKey):
@@ -18,6 +17,7 @@ class Project(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     name = models.CharField(max_length=250)
     description = models.TextField()
+    website = models.URLField(blank=True, null=True)
     lastModified = models.DateField(auto_now=True, blank=True, null=True)
     startDate = models.DateField()
     endDate = models.DateField()
@@ -27,6 +27,16 @@ class Project(models.Model):
     currency = models.ForeignKey(Currency)
     rateToUSD = models.DecimalField(max_digits=6, decimal_places=2)
     active = models.BooleanField(default=True, blank=True)
+    ocha_fts_reported = models.NullBooleanField(blank=True, null=True, choices=settings.BOOLEAN_CHOICES)
+    sdrf_ssa = models.CharField(max_length=100, blank=True, null=True, choices=settings.SDRF_SSA_CHOICES)
+    funding_instrument = models.CharField(max_length=100, blank=True, null=True, choices=settings.FUNDING_INSTRUMENTS)
+    funding_channel = models.CharField(max_length=20, blank=True, null=True, choices=settings.FUNDING_CHANNELS)
+    gender = models.CharField(max_length=20, blank=True, null=True, choices=settings.MULTIFIELD_CHOICES)
+    capacity_building = models.CharField(max_length=20, blank=True, null=True, choices=settings.MULTIFIELD_CHOICES)
+    stabilization = models.CharField(max_length=20, blank=True, null=True, choices=settings.MULTIFIELD_CHOICES)
+    conflict_sensitivity_analysis = models.CharField(max_length=100, blank=True, null=True,
+                                                     choices=settings.SENSITIVITY_ANALYSIS_CHOICES)
+    conflict_sensitivity_monitoring = models.NullBooleanField(blank=True, null=True, choices=settings.BOOLEAN_CHOICES)
 
     class Meta:
         db_table = 'project'
@@ -89,9 +99,11 @@ class Project(models.Model):
 class Spending(models.Model):
     """How a project's value has and is intended to been spent"""
     project = models.OneToOneField(Project)
-    spendingToDate = models.FloatField(help_text="Total amount of aid spent up to date")
-    lastYearSpending = models.FloatField(help_text="Total amount of aid spent last year")
-    nextYearSpending = models.FloatField(help_text="Total amount of aid anticipated to be spent next year")
+    spendingToDate = models.FloatField(help_text="Total amount of aid spent up to date", blank=True, null=True)
+    lastYearSpending = models.FloatField(help_text="Total amount of aid spent last year", blank=True, null=True)
+    thisYearSpending = models.FloatField(help_text="Amount expected to be spent this year", blank=True)
+    nextYearSpending = models.FloatField(help_text="Total amount of aid anticipated to be spent next year", blank=True,
+                                         null=True)
 
     class Meta:
         db_table = 'project_spending'
@@ -149,7 +161,7 @@ class SectorAllocation(models.Model):
 
 
 class LocationAllocation(models.Model):
-    """Amount of project's value spent in various locations"""
+    """Percentage of project's value spent in various locations"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = UnsavedForeighKey(Project)
     location = models.ForeignKey(Location)
@@ -183,3 +195,24 @@ class UserOrganization(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SubPSGAllocation(models.Model):
+    """Percentage of project's value allocated to various subPSGs"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    project = UnsavedForeighKey(Project)
+    psg = models.ForeignKey(PSG)
+    subpsg = models.ForeignKey(SubPSG)
+    allocatedPercentage = models.DecimalField(max_digits=4, decimal_places=1)
+
+    class Meta:
+        db_table = 'subpsg_allocations'
+
+    def __str__(self):
+        return "{0} - {1} - {2}".format(self.project.name, self.subpsg.name, self.allocatedPercentage)
+
+    @property
+    def percentage(self):
+        precentage = "{0:5.2f} %".format(self.allocatedPercentage)
+        return precentage
+

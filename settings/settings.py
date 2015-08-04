@@ -12,19 +12,14 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#loading the somaliaims config
-config_file = os.path.join(BASE_DIR, 'conf', 'general.yml')
-config = yaml.load(open(config_file, 'r'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.get('DJANGO_SECRET_KEY')
+SECRET_KEY = '(rrza$y^**w=h1(4v*mv6k=*b!lf&pz)338(4pq!_9yo3-km73'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -35,7 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    #TODO: organize installed apps
+    # TODO: organize installed apps
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,8 +49,8 @@ INSTALLED_APPS = (
     'django_filters',
     'reports',
     'help',
+    'profiles',
 )
-
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -94,7 +89,7 @@ WSGI_APPLICATION = 'aims.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = config.get('TIME_ZONE')
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -108,7 +103,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,  'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'documents')
 
@@ -118,13 +113,11 @@ LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/login_success/'
 
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR,  'templates'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -136,6 +129,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
             ],
         },
     },
@@ -145,7 +139,7 @@ TEMPLATES = [
 LOGIN_URL = '/login/'
 
 
-#Module settings
+# Module settings
 CURRENCY_ABBREVIATION_LENGTH = 3
 DOCUMENT_UPLOAD_DIR = os.path.join(BASE_DIR, 'documents')
 GRAPPELLI_ADMIN_TITLE = 'Somali AIMS'
@@ -166,11 +160,9 @@ DATABASES = {
     }
 }
 
-
 ADMIN_URL = '/admin/'
 DATA_ENTRY_URL = '/data-entry/'
 MANAGEMENT_URL = '/management/'
-
 
 try:
     if DEBUG:
@@ -179,3 +171,55 @@ except ImportError:
     pass
 
 SITE_ID = 1
+
+BOOLEAN_CHOICES = (
+    (None, ' '),
+    (True, 'Yes'),
+    (False, 'No')
+)
+
+SDRF_SSA_CHOICES = (
+    (None, ' '),
+    ('WB Multi-Partner Fund (MPF)', 'WB Multi-Partner Fund (MPF)'),
+    ('UN Multi-Partner Trust Fund (MPTF)', 'UN Multi-Partner Trust Fund (MPTF)'),
+    ('African Development Bank Multi-Partner Programme (AMPP)',
+     'African Development Bank Multi-Partner Programme (AMPP)'),
+    ('Special Financing Facility (SFF)', 'Special Financing Facility (SFF)'),
+    ('Somalia Stability Fund (SSF)', 'Somalia Stability Fund (SSF)'),
+    ('Not using SDRF', 'Not using SDRF'),
+)
+
+FUNDING_INSTRUMENTS = (
+    (None, ' '),
+    ('General Budget Support', 'General Budget Support'),
+    ('Sector Budget Support', 'Sector Budget Support'),
+    ('Pooled fund', 'Pooled fund'),
+    ('Project/program', 'Project/program')
+)
+
+FUNDING_CHANNELS = (
+    (None, ' '),
+    ('Channel 1', 'Channel 1'),
+    ('Channel 2', 'Channel 2'),
+    ('Channel 3', 'Channel 3')
+)
+
+MULTIFIELD_CHOICES = (
+    (None, ' '),
+    ('Principal', 'Principal'),
+    ('Significant', 'Significant'),
+    ('Not targeted', 'Not targeted'),
+    ('NA', 'NA')
+)
+
+SENSITIVITY_ANALYSIS_CHOICES = (
+    (None, ' '),
+    ('Conflict analysis conducted and updated regularly', 'Conflict analysis conducted and updated regularly'),
+    ('Conflict analysis conducted once but not updated', 'Conflict analysis conducted once but not updated'),
+    ('No conflict analysis conducted for activity', 'No conflict analysis conducted for activity')
+)
+
+
+
+
+
