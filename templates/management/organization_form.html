@@ -30,6 +30,8 @@
            </table>
            {{ formset.management_form }}
            <button class="btn btn-default btn-large" type="submit">Add Organizations(s)</button>
+           &emsp; &ensp;
+            <a href="{% url 'organization_create' object.id %}">Go back</a>
        </form>
 </div>
 <div class="col-md-3"></div>
