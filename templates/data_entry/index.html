@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %} Data Entry {% endblock %}
 
 {% block header_text%} Data Entry {% endblock %}
@@ -19,22 +19,104 @@
             </div>
         </div>
     </div>
-    <div id="row">
-        <div class="col-md-12">
-        {% if object_list %}
-        <h4>Project list</h4>
-        <table class="table table-bordered" style="padding-top: 20px;">
 
-            {% for project in object_list %}
-            <tr>
-                <td><a href="{% url 'data-entry:project_details' project.id %}">{{ project.name }}</a></td>
-                <td><a href="{% url 'data-entry:project_update' project.id %}">Edit</a></td>
-            </tr>
+        <div class="row" style="padding-top: 60px;"></div>
+    <div class="row">
+    <div>
+        <div class="col-md-2">
+            <form action="" method="get">
+                <input class="form-control" id="id_value__lt" name="value__lt" step="any" type="number"
+                       placeholder="value less than">
+                <input class="form-control" id="id_value__gt" name="value__gt" step="any" type="number"
+                       placeholder="value greater than">
+                <input class="form-control" id="id_name__icontains" name="name__icontains" type="text" placeholder="project name">
+                <br>
+                <div class="btns">
+                    <button type="submit">Submit</button>
+                    <button type="reset" id="reset">Reset</button>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <input class="form-control" id="id_startDate" name="startDate" type="text" placeholder="start date">
+                <input class="form-control" id="id_endDate" name="endDate" type="text" placeholder="end date">
+                <br>
+                <label for="id_myProjects">My projects</label>
+                <input id="id_myProjects" type="checkbox" name="myProjects" placeholder="show my projects">
+                <p></p>
+                <label for="id_description">Descriptions</label>
+                <input type="checkbox" name="description" id="id_description">
+            </div>
+            </form>
+        <div class="row" style="padding-bottom: 20px;"></div>
+    </div>
+
+    <div class="col-md-12">
+        <table id="myTable" class="display table table-bordered" width="100%">
+        <thead>
+        <tr>
+            {% if loc_display %}
+            <th>Locations</th>
+            {% endif %}
+            {% if sub_display %}
+            <th>Sublocations</th>
+            {% endif %}
+            {% if sec_display %}
+            <th>Sectors</th>
+            {% endif %}
+            <th>Project Name</th>
+            <th>Funders</th>
+            <th>Implementers</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Value in original currency</th>
+            <th>Original currency</th>
+        </tr>
+        </thead>
+    {% for obj in filtered %}
+        <tr>
+            <td class="col-md-3">
+                <a href={% url 'data-entry:project_update' obj.id %}>{{ obj.name }}</a>
+                <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>
+
+            </td>
+            <td class="col-md-2">
+            {% for funder in obj.funders.all %}
+                {{ funder }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
-        </table>
-        {% endif %}
-        </div>
+
+            </td>
+            <td class="col-md-2">
+            {% for implementer in obj.implementers.all %}
+                {{ implementer }}{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+
+            </td>
+            <td>{{ obj.startDate }}</td>
+            <td>{{ obj.endDate }}</td>
+            <td class="col-md-1">{{ obj.value|intcomma }}</td>
+            <td class="col-md-1">{{ obj.currency.abbrev }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#id_description').click(function () {
+            if ($("#id_description").is(':checked'))
+                $('td p').show();  // checked
+            else
+                $('td p').hide();
+        });
+    });
+    </script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $('#myTable').dataTable();
 
+        });
+    </script>
 {% endblock %}

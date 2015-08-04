@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, HttpResponseRedirect
+from django.shortcuts import redirect, HttpResponseRedirect, render_to_response
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
 from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization, \
@@ -15,6 +15,9 @@ from django.shortcuts import get_object_or_404
 from django.template.context import RequestContext
 from django.template.loader import get_template
 from django.contrib import messages
+from .filters import ProjectFilter
+from django.conf import settings
+from django.db.models import Q
 
 
 class ProjectDetailView(DetailView):
@@ -135,7 +138,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
                 doc.project = project
                 doc.save()
 
-            return HttpResponseRedirect(reverse('dashboard'))
+            return HttpResponseRedirect(reverse('data-entry:dashboard'))
 
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -144,11 +147,31 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class ProjectListView(GroupRequiredMixin, ListView):
-    model = Project
-    template_name = "data_entry/index.html"
-    group_required = [u"admin", u"data"]
-    queryset = Project.objects.all()
+# class ProjectListView(GroupRequiredMixin, ListView):
+#     model = Project
+#     template_name = "data_entry/index.html"
+#     group_required = [u"admin", u"data"]
+#     queryset = Project.objects.all()
+
+
+def ProjectListView(request):
+    user_org = request.user.userprofile.organization.name
+    if request.GET.get('myProjects'):
+        queryset = Project.objects.filter(
+            Q(funders__name__icontains=user_org) | Q(implementers__name__icontains=user_org)).distinct()
+        if not queryset:
+            projects = UserOrganization.objects.filter(name=user_org).values_list('project')
+            queryset = Project.objects.filter(id__in=projects).distinct()
+
+    else:
+        queryset = Project.objects.all()
+    my_groups = request.user.groups.values_list('name', flat=True)
+    if set(my_groups) & set(["admin", "data"]):
+        pass
+    else:
+        return HttpResponseRedirect(settings.LOGIN_URL)
+    filtered = ProjectFilter(request.GET, queryset=queryset)
+    return render_to_response("data_entry/index.html", locals(), context_instance=RequestContext(request))
 
 
 # TODO Kevin should work on the ajaxSublocations views. An ajaxSubPSGs view is also needed.
@@ -270,7 +293,7 @@ class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
                 doc.project = project
                 doc.save()
 
-            return HttpResponseRedirect(reverse('dashboard'))
+            return HttpResponseRedirect(reverse('data-entry:dashboard'))
 
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -281,5 +304,5 @@ class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ProjectDelete(GroupRequiredMixin, DeleteView):
     model = Project
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('data-entry:dashboard')
     group_required = [u"admin", u"data"]
