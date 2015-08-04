@@ -17,6 +17,7 @@ class Project(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     name = models.CharField(max_length=250)
     description = models.TextField()
+    website = models.URLField(blank=True, null=True)
     lastModified = models.DateField(auto_now=True, blank=True, null=True)
     startDate = models.DateField()
     endDate = models.DateField()
@@ -214,3 +215,4 @@ class SubPSGAllocation(models.Model):
     def percentage(self):
         precentage = "{0:5.2f} %".format(self.allocatedPercentage)
         return precentage
+

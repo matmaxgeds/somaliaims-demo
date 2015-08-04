@@ -11,6 +11,7 @@ class ProjectForm(ModelForm):
         self.fields['name'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['rows'] = '3'
+        self.fields['website'].widget.attrs['class'] = 'form-control'
         self.fields['startDate'].widget.attrs['class'] = 'form-control'
         self.fields['endDate'].widget.attrs['class'] = 'form-control'
         self.fields['funders'].widget.attrs['class'] = 'form-control'
