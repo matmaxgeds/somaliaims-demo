@@ -228,7 +228,7 @@ class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
             ctx['formset2'] = UserOrganizationFormset(self.request.POST, prefix="user_organizations",
                                                       instance=self.object)
             doc_values = Document.objects.filter(project=self.object).values()
-            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
+            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file', 'link_to_document_website'), can_delete=True, extra=len(
                 doc_values), formset=BaseDocumentFormSet)
             ctx['formset3'] = doc_formset(self.request.POST, self.request.FILES, initial=doc_values, prefix='document')
         else:
@@ -240,7 +240,7 @@ class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
             ctx['formset4'] = SubPSGAllocationFormset(prefix='psg', instance=self.object)
             ctx['formset2'] = UserOrganizationFormset(prefix="user_organizations", instance=self.object)
             doc_values = Document.objects.filter(project=self.object).values()
-            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=len(
+            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file', 'link_to_document_website'), can_delete=True, extra=len(
                 doc_values), formset=BaseDocumentFormSet)
             ctx['formset3'] = doc_formset(prefix='document', initial=doc_values)
 
