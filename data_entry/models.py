@@ -18,8 +18,8 @@ class Project(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
     lastModified = models.DateField(auto_now=True, blank=True, null=True)
-    startDate = models.DateField()
-    endDate = models.DateField()
+    startDate = models.DateField(blank=True, null=True)
+    endDate = models.DateField(blank=True, null=True)
     funders = models.ManyToManyField(Organization, related_name="funders")
     implementers = models.ManyToManyField(Organization, related_name="implementers")
     value = models.FloatField()
@@ -44,7 +44,7 @@ class Project(models.Model):
         return self.name
 
     def save(self):
-        if datetime.date.today() > datetime.datetime.strptime(self.endDate, "%d%m%Y").date():
+        if datetime.date.today() > self.endDate.date():
             self.active = False
         else:
             pass
