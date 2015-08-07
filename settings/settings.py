@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '(rrza$y^**w=h1(4v*mv6k=*b!lf&pz)338(4pq!_9yo3-km73'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -165,10 +165,9 @@ DATA_ENTRY_URL = '/data-entry/'
 MANAGEMENT_URL = '/management/'
 
 try:
-    if DEBUG:
-        from .local_settings import *
+    from .local_settings import *
 except ImportError:
-    pass
+    from .production import *
 
 SITE_ID = 1
 

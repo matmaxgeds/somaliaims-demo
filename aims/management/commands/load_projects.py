@@ -106,6 +106,6 @@ class Command(BaseCommand):
                 for j in d:
                     project.implementers.add(j)
 
-                
+
 
                 # TODO Parse dicts while saving data
