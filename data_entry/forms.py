@@ -11,7 +11,6 @@ class ProjectForm(ModelForm):
         self.fields['name'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['rows'] = '3'
-        self.fields['website'].widget.attrs['class'] = 'form-control'
         self.fields['startDate'].widget.attrs['class'] = 'form-control'
         self.fields['endDate'].widget.attrs['class'] = 'form-control'
         self.fields['funders'].widget.attrs['class'] = 'form-control'
@@ -112,6 +111,7 @@ class DocumentForm(ModelForm):
         super(DocumentForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
         self.fields['file'].widget.attrs['class'] = 'form-control'
+        self.fields['link_to_document_website'].widget.attrs['class'] = 'form-control'
 
     class Meta:
         model = Document
@@ -158,5 +158,6 @@ SectorAllocationFormset = inlineformset_factory(Project, SectorAllocation, field
 UserOrganizationFormset = inlineformset_factory(Project, UserOrganization, fields=('name', 'role'),
                                                 can_delete=True, extra=1, form=UserOrganizationForm)
 
-DocumentFormset = inlineformset_factory(Project, Document, fields=('name', 'file'), can_delete=True, extra=1,
+DocumentFormset = inlineformset_factory(Project, Document, fields=('name', 'file', 'link_to_document_website'),
+                                        can_delete=True, extra=1,
                                         form=DocumentForm)

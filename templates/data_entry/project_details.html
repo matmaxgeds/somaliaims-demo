@@ -69,6 +69,8 @@
             <p>{{ document.name }}
                 <a href="{% url 'data-entry:download' pk=document.id %}">Download</a>
             </p>
+            <p>Link to project document:</p>
+            <p>{{ document.link_to_document_website }}</p>
         {% endfor %}
         {% endif %}
     </div>

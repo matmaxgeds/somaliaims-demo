@@ -29,10 +29,6 @@
                 {{ form.description }}
             </div>
             <div class="form-group">
-                <label for="description">Project website</label>
-                {{ form.website }}
-            </div>
-            <div class="form-group">
                 <label for="startDate">Start Date</label>
                 {{ form.startDate }}
             </div>
@@ -287,10 +283,14 @@
                        <td>
                            File
                        </td>
+                        <td>
+                            Link
+                        </td>
                    </tr>
                    <tr>
                       <td>{{ form.name }}</td>
                       <td>{{ form.file }}</td>
+                      <td>{{ form.link_to_document_website }}</td>
                    </tr>
                    {% endfor %}
                </tbody>
