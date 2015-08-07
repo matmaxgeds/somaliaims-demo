@@ -44,14 +44,14 @@ class OrganizationCreate(GroupRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationCreate, self).get_context_data(**kwargs)
-        organizationFormset = modelformset_factory(Organization, form=OrganizationForm, fields=('name',),
+        organizationFormset = modelformset_factory(Organization, form=OrganizationForm, fields=('name', 'short_name'),
                                                    formset=BaseOrganizationFormSet)
         context['formset'] = organizationFormset()
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        sett = modelformset_factory(Organization, form=OrganizationForm, fields=('name',), extra=1,
+        sett = modelformset_factory(Organization, form=OrganizationForm, fields=('name', 'short_name'), extra=1,
                                     formset=BaseOrganizationFormSet)
         formset = sett(request.POST)
         if formset.is_valid():
@@ -216,8 +216,9 @@ class PSGCreate(GroupRequiredMixin, CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
-        if formset.is_valid():
+        if formset.is_valid() and form.is_valid():
             self.object = form.save()
+            form.save()
             saves = formset.save(commit=False)
             for save in saves:
                 save.psg = self.object

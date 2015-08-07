@@ -15,12 +15,11 @@ class Project(models.Model):
     """Projects receiving AID"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    name = models.CharField(max_length=250)
+    name = models.TextField()
     description = models.TextField()
-    website = models.URLField(blank=True, null=True)
     lastModified = models.DateField(auto_now=True, blank=True, null=True)
-    startDate = models.DateField()
-    endDate = models.DateField()
+    startDate = models.DateField(blank=True, null=True)
+    endDate = models.DateField(blank=True, null=True)
     funders = models.ManyToManyField(Organization, related_name="funders")
     implementers = models.ManyToManyField(Organization, related_name="implementers")
     value = models.FloatField()
@@ -45,7 +44,7 @@ class Project(models.Model):
         return self.name
 
     def save(self):
-        if datetime.date.today() > self.endDate:
+        if datetime.date.today() > self.endDate.date():
             self.active = False
         else:
             pass
@@ -131,8 +130,9 @@ class Document(models.Model):
     """Documents relevant to a project"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = UnsavedForeighKey(Project)
-    file = models.FileField(upload_to=settings.DOCUMENT_UPLOAD_DIR)
-    name = models.CharField(max_length=150)
+    file = models.FileField(upload_to=settings.DOCUMENT_UPLOAD_DIR, blank=True, null=True)
+    name = models.CharField(max_length=150, blank=True, null=True)
+    link_to_document_website = models.URLField(blank=True, null=True)
 
     class Meta:
         db_table = 'project_documents'
