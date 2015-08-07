@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, HttpResponseRedirect, render_to_response
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
@@ -194,6 +194,8 @@ def ajaxSublocations(request):
             html_string += '<option value="%s">%s</option>' % (sublocation.pk, sublocation.name)
 
             return HttpResponse(html_string)
+    else:
+        raise Http404
 
 
 class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
