@@ -15,7 +15,7 @@ class Project(models.Model):
     """Projects receiving AID"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    name = models.CharField(max_length=250)
+    name = models.TextField()
     description = models.TextField()
     lastModified = models.DateField(auto_now=True, blank=True, null=True)
     startDate = models.DateField(blank=True, null=True)
