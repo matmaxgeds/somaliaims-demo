@@ -11,7 +11,7 @@ class Organization(models.Model):
     """Organizations funding and implementing projects"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, unique=True)
-    short_name = models.CharField(max_length=20, blank=True, null=True)
+    short_name = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         db_table = 'organizations'
@@ -93,7 +93,7 @@ class ExchangeRate(models.Model):
 class PSG(models.Model):
     """PSGs for projects"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
 
     class Meta:
@@ -106,8 +106,8 @@ class PSG(models.Model):
 class SubPSG(models.Model):
     """SubPSGs for projects"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    psg = models.ForeignKey(PSG)
-    name = models.CharField(max_length=100)
+    psg = UnsavedForeighKey(PSG)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
 
     class Meta:

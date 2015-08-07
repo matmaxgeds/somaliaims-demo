@@ -24,10 +24,11 @@ class OrganizationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OrganizationForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['short_name'].widget.attrs['class'] = 'form-control'
 
     class Meta:
         model = Organization
-        fields = ('name',)
+        fields = ('name', 'short_name',)
 
 
 class BaseSubLocationFormset(BaseInlineFormSet):
@@ -81,10 +82,11 @@ class PSGForm(forms.ModelForm):
         super(PSGForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['rows'] = '3'
 
     class Meta:
         model = PSG
-        exclude = ('id',)
+        fields = ('name', 'description')
 
 
 class SubPSGForm(forms.ModelForm):
@@ -96,5 +98,5 @@ class SubPSGForm(forms.ModelForm):
 SubLocationFormset = inlineformset_factory(Location, SubLocation, fields=('name',), can_delete=True, extra=1,
                                            formset=BaseSubLocationFormset, form=SubLocationForm)
 
-SubPSGFormset = inlineformset_factory(PSG, SubPSG, fields=('name',), can_delete=True, extra=1,
+SubPSGFormset = inlineformset_factory(PSG, SubPSG, fields=('name', 'description'), can_delete=True, extra=1,
                                       formset=BaseSubPSGFormset, form=PSGForm)
