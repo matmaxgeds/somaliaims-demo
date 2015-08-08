@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from data_entry.models import Project
-from management.models import Organization, Currency
+from data_entry.models import Project, Spending, Contact, Document, SectorAllocation
+from management.models import Organization, Currency, Sector
 import codecs
 import csv
 from django.contrib.auth.models import User
@@ -91,10 +91,6 @@ class Command(BaseCommand):
                 except Exception:
                     rate = 0.0
 
-                print("*************")
-                print(row['Project title'])
-                print(value)
-                print(rate)
                 project = Project(user=user, name=row['Project title'], description=row['Project objectives / purpose'],
                                   startDate=dt, endDate=dt1,
                                   value=value, currency=currency,
@@ -106,6 +102,77 @@ class Command(BaseCommand):
                 for j in d:
                     project.implementers.add(j)
 
+                try:
+                    to_date = int(row['Amount spent to date'].strip().replace(",", ""))
+                except Exception:
+                    to_date = 0.0
 
+                try:
+                    last_year = int(row['Amount spent to end 2014'].strip().replace(",", ""))
+                except Exception:
+                    last_year = 0.0
+
+                try:
+                    next_year = int(row['Amount spent to end 2014'].strip().replace(",", ""))
+                except Exception:
+                    next_year = 0.0
+
+                spending = Spending(project=project, spendingToDate=to_date,
+                                    lastYearSpending=last_year, thisYearSpending=0,
+                                    nextYearSpending=next_year)
+                spending.save()
+
+                try:
+                    link = row['Link to project documents website']
+                except Exception:
+                    link = ''
+                doc = Document(project=project, link_to_document_website=link)
+                doc.save()
+
+                try:
+                    name = row['Project contact name']
+                except Exception:
+                    name = ''
+                try:
+                    email = row['Project contact email']
+                except Exception:
+                    email = ''
+
+                try:
+                    phone = row['Project contact phone']
+                except Exception:
+                    phone = ''
+
+                con = Contact(project=project, name=name, number=phone,
+                              email=email)  # Organization has not been included
+                con.save()
+
+                sec1 = row['Primary Sector'].rpartition(': ')[2]
+                try:
+                    sector1 = Sector.objects.get(name=sec1)
+                except Sector.DoesNotExist:
+                    sector1 = Sector(name=sec1)
+                    sector1.save()
+                try:
+                    sec1_percentage = float(row['Primary Sector %'].strip('%'))
+                except Exception:
+                    sec1_percentage = 0
+                if sec1 and sec1_percentage != 0:
+                    sec_alloc1 = SectorAllocation(project=project, sector=sector1, allocatedPercentage=sec1_percentage)
+                    sec_alloc1.save()
+
+                sec2 = row['Secondary Sector'].rpartition(': ')[2]
+                try:
+                    sector2 = Sector.objects.get(name=sec1)
+                except Sector.DoesNotExist:
+                    sector2 = Sector(name=sec2)
+                    sector2.save()
+                try:
+                    sec2_percentage = float(row['Secondary Sector %'].strip('%'))
+                except Exception:
+                    sec2_percentage = 0
+                if sec2 and sec2_percentage != 0:
+                    sec_alloc2 = SectorAllocation(project=project, sector=sector2, allocatedPercentage=sec2_percentage)
+                    sec_alloc2.save()
 
                 # TODO Parse dicts while saving data
