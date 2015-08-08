@@ -16,7 +16,7 @@ class Command(BaseCommand):
         parser.add_argument('file_path')
 
     def handle(self, file_path, *args, **options):
-        with codecs.open('/Users/alphabuddha/Downloads/csv.csv', "r", encoding='utf-8', errors='ignore') as f:
+        with codecs.open(file_path, "r", encoding='utf-8', errors='ignore') as f:
             reader = csv.DictReader(f, dialect='excel')
             for row in reader:
                 if row['Project title'] == '':
