@@ -66,7 +66,10 @@ class Project(models.Model):
     @property
     def percentage_spent(self):
         spending = Spending.objects.get(project=self).spendingToDate
-        percentage = (spending / self.value) * 100
+        try:
+            percentage = (spending / self.value) * 100
+        except ZeroDivisionError:
+            percentage = 0
         out = "{0:5.2f} %".format(percentage)
         return out
 
@@ -115,8 +118,8 @@ class Contact(models.Model):
     """Person who knows more about the Project"""
     project = models.OneToOneField(Project)
     name = models.CharField(max_length=100)
-    organization = models.CharField(max_length=100)
-    number = models.CharField(max_length=20)
+    organization = models.CharField(max_length=100, blank=True, null=True)
+    number = models.CharField(max_length=50)
     email = models.EmailField()
 
     class Meta:
