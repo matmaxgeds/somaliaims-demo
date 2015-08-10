@@ -65,6 +65,18 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
     form_class = ProjectForm
     group_required = [u"admin", u"data"]
 
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+
+        try:
+            self.request.user.userprofile.organization.name
+        except Exception:
+            messages.warning(request, "You need to belong to an organization to add a project.")
+            return HttpResponseRedirect(reverse('data-entry:dashboard'))
+
+        return ProjectCreateView.dispatch(self, request, *args, **kwargs)
+
     def get_success_url(self):
         return redirect('/data-entry/')
 
@@ -147,21 +159,18 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-# class ProjectListView(GroupRequiredMixin, ListView):
-#     model = Project
-#     template_name = "data_entry/index.html"
-#     group_required = [u"admin", u"data"]
-#     queryset = Project.objects.all()
-
 
 def ProjectListView(request):
-    user_org = request.user.userprofile.organization.name
     if request.GET.get('myProjects'):
-        queryset = Project.objects.filter(
-            Q(funders__name__icontains=user_org) | Q(implementers__name__icontains=user_org)).distinct()
-        if not queryset:
-            projects = UserOrganization.objects.filter(name=user_org).values_list('project')
-            queryset = Project.objects.filter(id__in=projects).distinct()
+        try:
+            user_org = request.user.userprofile.organization.name
+            queryset = Project.objects.filter(
+                Q(funders__name__icontains=user_org) | Q(implementers__name__icontains=user_org)).distinct()
+            if not queryset:
+                projects = UserOrganization.objects.filter(name=user_org).values_list('project')
+                queryset = Project.objects.filter(id__in=projects).distinct()
+        except AttributeError:
+            queryset = Project.objects.none()
 
     else:
         queryset = Project.objects.all()
