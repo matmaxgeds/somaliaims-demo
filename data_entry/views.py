@@ -65,6 +65,18 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
     form_class = ProjectForm
     group_required = [u"admin", u"data"]
 
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+
+        try:
+            self.request.user.userprofile.organization.name
+        except Exception:
+            messages.warning(request, "You need to belong to an organization to add a project.")
+            return HttpResponseRedirect(reverse('data-entry:dashboard'))
+
+        return ProjectCreateView.dispatch(self, request, *args, **kwargs)
+
     def get_success_url(self):
         return redirect('/data-entry/')
 
@@ -147,24 +159,24 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-# class ProjectListView(GroupRequiredMixin, ListView):
-#     model = Project
-#     template_name = "data_entry/index.html"
-#     group_required = [u"admin", u"data"]
-#     queryset = Project.objects.all()
-
-
 def ProjectListView(request):
-    user_org = request.user.userprofile.organization.name
     if request.GET.get('myProjects'):
-        queryset = Project.objects.filter(
-            Q(funders__name__icontains=user_org) | Q(implementers__name__icontains=user_org)).distinct()
-        if not queryset:
-            projects = UserOrganization.objects.filter(name=user_org).values_list('project')
-            queryset = Project.objects.filter(id__in=projects).distinct()
+        try:
+            user_org = request.user.userprofile.organization.name
+            queryset = Project.objects.filter(
+                Q(funders__name__icontains=user_org) | Q(
+                    implementers__name__icontains=user_org)).distinct().prefetch_related('funders', 'implementers',
+                                                                                         'currency')
+            if not queryset:
+                projects = UserOrganization.objects.filter(name=user_org).values_list('project')
+                queryset = Project.objects.filter(id__in=projects).distinct().prefetch_related('funders',
+                                                                                               'implementers',
+                                                                                               'currency')
+        except AttributeError:
+            queryset = Project.objects.none()
 
     else:
-        queryset = Project.objects.all()
+        queryset = Project.objects.all().prefetch_related('funders', 'implementers', 'currency')
     my_groups = request.user.groups.values_list('name', flat=True)
     if set(my_groups) & set(["admin", "data"]):
         pass
@@ -228,8 +240,9 @@ class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
             ctx['formset2'] = UserOrganizationFormset(self.request.POST, prefix="user_organizations",
                                                       instance=self.object)
             doc_values = Document.objects.filter(project=self.object).values()
-            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file', 'link_to_document_website'), can_delete=True, extra=len(
-                doc_values), formset=BaseDocumentFormSet)
+            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file', 'link_to_document_website'),
+                                                can_delete=True, extra=len(
+                    doc_values), formset=BaseDocumentFormSet)
             ctx['formset3'] = doc_formset(self.request.POST, self.request.FILES, initial=doc_values, prefix='document')
         else:
 
@@ -240,8 +253,9 @@ class ProjectUpdateView(GroupRequiredMixin, UserPassesTestMixin, UpdateView):
             ctx['formset4'] = SubPSGAllocationFormset(prefix='psg', instance=self.object)
             ctx['formset2'] = UserOrganizationFormset(prefix="user_organizations", instance=self.object)
             doc_values = Document.objects.filter(project=self.object).values()
-            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file', 'link_to_document_website'), can_delete=True, extra=len(
-                doc_values), formset=BaseDocumentFormSet)
+            doc_formset = inlineformset_factory(Project, Document, fields=('name', 'file', 'link_to_document_website'),
+                                                can_delete=True, extra=len(
+                    doc_values), formset=BaseDocumentFormSet)
             ctx['formset3'] = doc_formset(prefix='document', initial=doc_values)
 
         return ctx
