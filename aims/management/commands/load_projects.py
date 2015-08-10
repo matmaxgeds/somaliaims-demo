@@ -66,7 +66,7 @@ class Command(BaseCommand):
                     year = 1900
                 dtstr = "%s-%s" % (year, month)
                 dt = datetime.strptime(dtstr, '%Y-%m')
-                end = row['Start date'].split('-')
+                end = row['End date'].split('-')
                 try:
                     month1 = strptime(start[0], '%b').tm_mon
                 except TypeError:
