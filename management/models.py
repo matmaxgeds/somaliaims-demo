@@ -75,7 +75,7 @@ class Currency(models.Model):
         db_table = 'currencies'
 
     def __str__(self):
-        return "{0}({1})".format(self.abbrev, self.currency)
+        return self.abbrev
 
 
 class ExchangeRate(models.Model):
