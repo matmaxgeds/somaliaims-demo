@@ -32,7 +32,7 @@
 				return formats;
 			};
 
-			// Setup number formats from conf or default
+			// Setup number formats from config or default
 			t.numlist = ed.getParam("advlist_number_styles") || buildFormats("default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman");
 			t.bullist = ed.getParam("advlist_bullet_styles") || buildFormats("default,circle,disc,square");
 

@@ -817,7 +817,7 @@
 					process(new RegExp(rl, "gi"));
 				}
 
-				// Treat paragraphs as specified in the conf
+				// Treat paragraphs as specified in the config
 				if (linebr == "none") {
 					// Convert all line breaks to space
 					process([

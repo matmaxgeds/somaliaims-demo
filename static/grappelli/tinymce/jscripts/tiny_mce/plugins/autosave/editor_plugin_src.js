@@ -85,7 +85,7 @@
 				return (time[2] ? multipels[time[2]] : 1) * parseInt(time);
 			};
 
-			// Default conf
+			// Default config
 			tinymce.each({
 				ask_before_unload : TRUE,
 				interval : '30s',

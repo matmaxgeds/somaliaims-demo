@@ -2287,7 +2287,7 @@ tinymce.html.Styles = function(settings, schema) {
 
 				url = decode(url || url2 || url3);
 
-				// Convert the URL to relative/absolute depending on conf
+				// Convert the URL to relative/absolute depending on config
 				if (urlConverter)
 					url = urlConverter.call(urlConverterScope, url, 'style');
 
