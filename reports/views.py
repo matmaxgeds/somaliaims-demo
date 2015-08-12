@@ -10,43 +10,45 @@ from management.models import Sector, Location
 
 
 def list_generator(request):
-    allocated_projects = LocationAllocation.objects.values('project').distinct()
+    allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values('project').distinct()
     pList = allocated_projects
     if request.GET.getlist('locations') == [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_projects = LocationAllocation.objects.values('project').distinct()
+        allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values('project').distinct()
         pList = allocated_projects
     if request.GET.getlist('locations') != [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_projects = LocationAllocation.objects.filter(
+        allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
         pList = allocated_projects
     if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') == [] and request.GET.get(
             'sublocations') == []:
-        allocated_sectors = SectorAllocation.objects.filter(
+        allocated_sectors = SectorAllocation.select_related('project', 'sector').objects.filter(
             sector__in=request.GET.getlist('sectors')).distinct().values('project')
         pList = allocated_sectors
     if request.GET.getlist('sublocations') != [] and request.GET.get('locations') == [] and request.GET.get(
             'sectors') == []:
-        sublocations = LocationAllocation.objects.filter(
+        sublocations = LocationAllocation.select_related('project').objects.filter(
             sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
         pList = sublocations
     if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
             'sublocations') == []:
-        a = LocationAllocation.objects.filter(
+        a = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
-        b = SectorAllocation.objects.filter(sector__in=request.GET.getlist('sectors')).distinct().values(
+        b = SectorAllocation.objects.select_related('project', 'sector').filter(
+            sector__in=request.GET.getlist('sectors')).distinct().values(
             'project')
         for x, y in zip(a, b):
             x.update(y)
         pList = a
     if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
             'sublocations') != []:
-        a = LocationAllocation.objects.filter(
+        a = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
-        b = SectorAllocation.objects.filter(sector__in=request.GET.getlist('sectors')).distinct().values(
+        b = SectorAllocation.objects.select_related('project', 'sector').filter(
+            sector__in=request.GET.getlist('sectors')).distinct().values(
             'project')
-        c = LocationAllocation.objects.filter(
+        c = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
             sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
         for x, y in zip(a, b):
             x.update(y)
@@ -55,9 +57,10 @@ def list_generator(request):
         pList = a
     if request.GET.getlist('sectors') != [] and request.GET.getlist('sublocations') != [] and request.GET.getlist(
             'locations') == []:
-        b = SectorAllocation.objects.filter(sector__in=request.GET.getlist('sectors')).distinct().values(
+        b = SectorAllocation.objects.select_related('project', 'sector').filter(
+            sector__in=request.GET.getlist('sectors')).distinct().values(
             'project')
-        c = LocationAllocation.objects.filter(
+        c = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
             sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
         for x, y in zip(b, c):
             x.update(y)
@@ -65,14 +68,15 @@ def list_generator(request):
 
     if request.GET.getlist('locations') != [] and request.GET.getlist('sublocations') != [] and request.GET.getlist(
             'sectors') == []:
-        a = LocationAllocation.objects.filter(
+        a = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
-        c = LocationAllocation.objects.filter(
+        c = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
             sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
         for x, y in zip(a, c):
             x.update(y)
         pList = a
-    filtered = ProjectFilter(request.GET, queryset=Project.objects.filter(id__in=pList))
+    filtered = ProjectFilter(request.GET,
+                             queryset=Project.objects.prefetch_related('funders', 'implementers').filter(id__in=pList))
     return filtered
 
 
@@ -328,11 +332,13 @@ def sector_report(request):
         red_url)
     reports = True
     if request.GET.get('sector'):
-        project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = SectorAllocation.objects.prefetch_related('project').filter(
+            sector=request.GET.get('sector')).values_list('project')
+        projects = Project.objects.select_related('spending').prefetch_related('funders', 'currency', 'implementers').filter(
+            id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
@@ -350,11 +356,13 @@ def sector_report(request):
 def sector_pdf(request):
     context = {}
     if request.GET.get('sector'):
-        project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = SectorAllocation.objects.prefetch_related('project').filter(
+            sector=request.GET.get('sector')).values_list('project')
+        projects = Project.objects.prefetch_related('funders', 'currency', 'implementers').filter(
+            id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
@@ -381,11 +389,13 @@ def sector_csv(request):
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
     if request.GET.get('sector'):
-        project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = SectorAllocation.objects.prefetch_related('project').filter(
+            sector=request.GET.get('sector')).values_list('project')
+        projects = Project.objects.prefetch_related('funders', 'currency', 'implementers').filter(
+            id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
@@ -435,11 +445,13 @@ def sector_xls(request):
     font_style.alignment.wrap = 1
 
     if request.GET.get('sector'):
-        project_ids = SectorAllocation.objects.filter(sector=request.GET.get('sector')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = SectorAllocation.objects.prefetch_related('project').filter(
+            sector=request.GET.get('sector')).values_list('project')
+        projects = Project.objects.prefetch_related('funders', 'currency', 'implementers').filter(
+            id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
@@ -479,11 +491,13 @@ def location_report(request):
         red_url)
     reports = True
     if request.GET.get('location'):
-        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = LocationAllocation.objects.prefetch_related('project').filter(
+            location=request.GET.get('location')).values_list('project')
+        projects = Project.objects.prefetch_related('funders', 'currency', 'implementers').select_related(
+            'spending').filter(id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
@@ -493,7 +507,7 @@ def location_report(request):
                     value = 1
                     key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
-        location = Location.objects.get(id=request.GET.get('location'))
+        location = Location.objects.prefetch_related('sublocation_set').get(id=request.GET.get('location'))
         exporters = True
     return render_to_response("reports/location_report.html", locals(), context_instance=RequestContext(request))
 
@@ -501,11 +515,13 @@ def location_report(request):
 def loc_pdf(request):
     context = {}
     if request.GET.get('location'):
-        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = LocationAllocation.objects.prefetch_related('project').filter(
+            location=request.GET.get('location')).values_list('project')
+        projects = Project.objects.prefetch_related('funders', 'currency', 'implementers').filter(
+            id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
@@ -532,11 +548,13 @@ def loc_csv(request):
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
     if request.GET.get('location'):
-        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = LocationAllocation.objects.prefetch_related('project').filter(
+            location=request.GET.get('location')).values_list('project')
+        projects = Project.objects.prefetch_related('funders', 'currency', 'implementers').filter(
+            id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
@@ -586,11 +604,13 @@ def loc_xls(request):
     font_style.alignment.wrap = 1
 
     if request.GET.get('location'):
-        project_ids = LocationAllocation.objects.filter(location=request.GET.get('location')).values_list('project')
-        projects = Project.objects.filter(id__in=list(set(project_ids)))
+        project_ids = LocationAllocation.objects.prefetch_related('project').filter(
+            location=request.GET.get('location')).values_list('project')
+        projects = Project.objects.prefetch_related('funders', 'currency', 'implementers').filter(
+            id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
-            h = Project.objects.get(id=project_id)
+            h = Project.objects.prefetch_related('funders').get(id=project_id)
             funders = h.funders.all()
             for funder in funders:
                 try:
