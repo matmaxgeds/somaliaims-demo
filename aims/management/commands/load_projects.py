@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from data_entry.models import Project, Spending, Contact, Document, SectorAllocation, LocationAllocation
-from management.models import Organization, Currency, Sector, Location, SubLocation
+from data_entry.models import Project, Spending, Contact, Document, SectorAllocation
+from management.models import Organization, Currency, Sector
 import codecs
 import csv
 from django.contrib.auth.models import User
@@ -175,20 +175,4 @@ class Command(BaseCommand):
                     sec_alloc2 = SectorAllocation(project=project, sector=sector2, allocatedPercentage=sec2_percentage)
                     sec_alloc2.save()
 
-                locations = Location.objects.all()
-                for location in locations:
-                    allocation = row[location.name].strip('%')
-
-                    if allocation:
-                        aloc = LocationAllocation(location=location, allocatedPercentage=allocation, project=project)
-                        aloc.save()
-                        sublocations = SubLocation.objects.filter(location=location)
-                        for sublocation in sublocations:
-                            try:
-                                name = sublocation.name
-                                involved = row[name]
-                            except KeyError:
-                                continue
-                            if involved and involved != '-':
-                                aloc.sublocations.add(sublocation)
-
+                # TODO Parse dicts while saving data
