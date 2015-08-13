@@ -88,9 +88,9 @@
            <div class="form-group">
                  {{ formset.non_form_errors }}
                     {% for dict in formset.errors %}
-                    {% for error in dict.values %}
-                        {{ error }}
-                    {% endfor %}
+                      {% for error in dict.values %}
+                          {{ error }}
+                      {% endfor %}
                     {% endfor %}
            </div>
 
@@ -303,4 +303,8 @@
         <div class="col-md-2"></div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static "js/sublocations-update.js" %}"></script>
 {% endblock %}
