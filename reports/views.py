@@ -10,30 +10,32 @@ from management.models import Sector, Location
 
 
 def list_generator(request):
-    allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values('project').distinct()
+    allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values(
+        'project').distinct()
     pList = allocated_projects
     if request.GET.getlist('locations') == [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values('project').distinct()
+        allocated_projects = LocationAllocation.objects.select_related('project').values('project').distinct()
         pList = allocated_projects
     if request.GET.getlist('locations') != [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
+        allocated_projects = LocationAllocation.objects.select_related('project', 'location').prefetch_related(
+            'sublocations').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
         pList = allocated_projects
-    if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') == [] and request.GET.get(
+    if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_sectors = SectorAllocation.select_related('project', 'sector').objects.filter(
+        allocated_sectors = SectorAllocation.objects.select_related('project', 'sector').filter(
             sector__in=request.GET.getlist('sectors')).distinct().values('project')
         pList = allocated_sectors
-    if request.GET.getlist('sublocations') != [] and request.GET.get('locations') == [] and request.GET.get(
+    if request.GET.getlist('sublocations') != [] and request.GET.getlist('locations') == [] and request.GET.getlist(
             'sectors') == []:
-        sublocations = LocationAllocation.select_related('project').objects.filter(
+        sublocations = LocationAllocation.objects.prefetch_related('sublocations').select_related('project').filter(
             sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
         pList = sublocations
     if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
             'sublocations') == []:
-        a = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
+        a = LocationAllocation.objects.select_related('project', 'location').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
         b = SectorAllocation.objects.select_related('project', 'sector').filter(
             sector__in=request.GET.getlist('sectors')).distinct().values(
@@ -43,7 +45,7 @@ def list_generator(request):
         pList = a
     if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
             'sublocations') != []:
-        a = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
+        a = LocationAllocation.objects.select_related('project').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
         b = SectorAllocation.objects.select_related('project', 'sector').filter(
             sector__in=request.GET.getlist('sectors')).distinct().values(
@@ -334,7 +336,8 @@ def sector_report(request):
     if request.GET.get('sector'):
         project_ids = SectorAllocation.objects.prefetch_related('project').filter(
             sector=request.GET.get('sector')).values_list('project')
-        projects = Project.objects.select_related('spending').prefetch_related('funders', 'currency', 'implementers').filter(
+        projects = Project.objects.select_related('spending').prefetch_related('funders', 'currency',
+                                                                               'implementers').filter(
             id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
