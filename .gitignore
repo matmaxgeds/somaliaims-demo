@@ -70,3 +70,10 @@ documents/
 
 # Local settings
 settings/local_settings.py
+
+# collected staticfiles
+static/
+
+# Do not ignore static dirs in app folders
+!*/static/
+
