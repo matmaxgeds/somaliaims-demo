@@ -10,30 +10,32 @@ from management.models import Sector, Location
 
 
 def list_generator(request):
-    allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values('project').distinct()
+    allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values(
+        'project').distinct()
     pList = allocated_projects
     if request.GET.getlist('locations') == [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').values('project').distinct()
+        allocated_projects = LocationAllocation.objects.select_related('project').values('project').distinct()
         pList = allocated_projects
     if request.GET.getlist('locations') != [] and request.GET.getlist('sectors') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_projects = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
+        allocated_projects = LocationAllocation.objects.select_related('project', 'location').prefetch_related(
+            'sublocations').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
         pList = allocated_projects
-    if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') == [] and request.GET.get(
+    if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') == [] and request.GET.getlist(
             'sublocations') == []:
-        allocated_sectors = SectorAllocation.select_related('project', 'sector').objects.filter(
+        allocated_sectors = SectorAllocation.objects.select_related('project', 'sector').filter(
             sector__in=request.GET.getlist('sectors')).distinct().values('project')
         pList = allocated_sectors
-    if request.GET.getlist('sublocations') != [] and request.GET.get('locations') == [] and request.GET.get(
+    if request.GET.getlist('sublocations') != [] and request.GET.getlist('locations') == [] and request.GET.getlist(
             'sectors') == []:
-        sublocations = LocationAllocation.select_related('project').objects.filter(
+        sublocations = LocationAllocation.objects.prefetch_related('sublocations').select_related('project').filter(
             sublocations__in=request.GET.getlist('sublocations')).distinct().values('project')
         pList = sublocations
     if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
             'sublocations') == []:
-        a = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
+        a = LocationAllocation.objects.select_related('project', 'location').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
         b = SectorAllocation.objects.select_related('project', 'sector').filter(
             sector__in=request.GET.getlist('sectors')).distinct().values(
@@ -43,7 +45,7 @@ def list_generator(request):
         pList = a
     if request.GET.getlist('sectors') != [] and request.GET.getlist('locations') != [] and request.GET.getlist(
             'sublocations') != []:
-        a = LocationAllocation.objects.select_related('project').prefetch_related('sublocations').filter(
+        a = LocationAllocation.objects.select_related('project').filter(
             location__in=request.GET.getlist('locations')).distinct().values('project')
         b = SectorAllocation.objects.select_related('project', 'sector').filter(
             sector__in=request.GET.getlist('sectors')).distinct().values(
@@ -94,6 +96,7 @@ def xls_gen(request):
     q = request.GET.getlist('locations')
     r = request.GET.getlist('sublocations')
     s = request.GET.getlist('sectors')
+    w = request.GET.getlist('implementers__icontains')
 
     columns = [
         (u"Project Name", 6000),
@@ -103,31 +106,14 @@ def xls_gen(request):
         (u"Percentage Spent", 6000),
     ]
 
-    if not q and not r and not s:
-        pass
-    elif q and not r and not s:
-        columns.insert(0, (u"Locations", 12000))
-    elif q and r and not s:
-        columns.insert(0, (u"Locations", 12000))
-        columns.insert(1, (u"Sublocations", 12000))
-    elif q and r and s:
-        columns.insert(0, (u"Locations", 12000))
-        columns.insert(1, (u"Sublocations", 12000))
-        columns.insert(2, (u"Sectors", 12000))
-    elif not q and r and not s:
-        columns.insert(1, (u"Sublocations", 12000))
-    elif not q and not r and s:
-        columns.insert(2, (u"Sectors", 12000))
-    elif q and not r and s:
-        columns.insert(0, (u"Locations", 12000))
-        columns.insert(1, (u"Sectors", 12000))
-    elif not q and r and s:
+    if w:
+        columns.insert(0, (u"Implementers", 12000))
+    if s:
+        columns.insert(0, (u"Sectors", 12000))
+    if r:
         columns.insert(0, (u"Sublocations", 12000))
-        columns.insert(1, (u"Sectors", 12000))
-
-    import sys
-
-    sys.stderr.write(str(columns))
+    if q:
+        columns.insert(0, (u"Locations", 12000))
 
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
@@ -148,27 +134,15 @@ def xls_gen(request):
             obj.value,
             obj.percentage_spent,
         ]
-        if not q and not r and not s:
-            pass
-        elif q and not r and not s:
-            row.insert(0, ','.join([x.name for x in obj.locations]))
-        elif q and r and not s:
-            row.insert(0, ','.join([x.name for x in obj.locations]))
-            row.insert(1, ','.join([x.name for x in obj.sublocations]))
-        elif q and r and s:
-            row.insert(0, ','.join([x.name for x in obj.locations]))
-            row.insert(1, ','.join([x.name for x in obj.sublocations]))
-            row.insert(2, ','.join([x.name for x in obj.sectors]))
-        elif not q and r and not s:
-            row.insert(1, ','.join([x.name for x in obj.sublocations]))
-        elif not q and not r and s:
-            row.insert(2, ','.join([x.name for x in obj.sectors]))
-        elif q and not r and s:
-            row.insert(0, ','.join([x.name for x in obj.locations]))
-            row.insert(1, ','.join([x.name for x in obj.sectors]))
-        elif not q and r and s:
-            row.insert(0, ','.join([x.name for x in obj.sublocations]))
-            row.insert(1, ','.join([x.name for x in obj.sectors]))
+        if w:
+            row.insert(0, ','.join([x.short_name if x.short_name else x.name for x in obj.funders.all()]))
+        if s:
+            row.insert(0, ','.join([x for x in obj.sectors]))
+        if r:
+            row.insert(0, ','.join([x for x in obj.sublocations]))
+        if q:
+            row.insert(0, ','.join([x for x in obj.locations]))
+
         for col_num in moves.xrange(len(row)):
             ws.write(row_num, col_num, row[col_num], font_style)
 
@@ -186,76 +160,32 @@ def csv_gen(request):
     q = request.GET.getlist('locations')
     r = request.GET.getlist('sublocations')
     s = request.GET.getlist('sectors')
-    if not q and not r and not s:
-        head = csv.DictWriter(response, fieldnames=["Project Name", "Funders", "Duration", "Value", "Percentage Spent"],
-                              delimiter=',')
-        head.writeheader()
-        for i in filtered:
-            writer.writerow(
-                [i.name, ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]), i.duration,
-                 i.value,
-                 i.percentage_spent])
-    elif q and not r and not s:
-        head = csv.DictWriter(response, fieldnames=["Locations", "Project Name", "Funders", "Duration", "Value",
-                                                    "Percentage Spent"], delimiter=',')
-        head.writeheader()
-        for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), i.name,
-                             ','.join([x.short_name if x.short_name else x.name for x in
-                                       i.funders.all()]), i.duration,
-                             i.value,
-                             i.percentage_spent])
-    elif q and r and not s:
-        head = csv.DictWriter(response, fieldnames=["Locations", "Sublocations", "Project Name", "Funders", "Duration",
-                                                    "Value", "Percentage Spent"], delimiter=',')
-        head.writeheader()
-        for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
-                             i.name,
-                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
-                             i.duration, i.value, i.percentage_spent])
-    elif q and r and s:
-        head = csv.DictWriter(response, fieldnames=["Locations", "Sublocations", "Sectors", "Project Name", "Funders",
-                                                    "Duration",
-                                                    "Value", "Percentage Spent"], delimiter=',')
-        head.writeheader()
-        for i in filtered:
-            writer.writerow([','.join([x.name for x in i.locations]), ','.join([x for x in i.sublocations]),
-                             ','.join([x.name for x in i.sectors]),
-                             i.name,
-                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
-                             i.duration, i.value, i.percentage_spent])
-    elif not q and r and s:
-        head = csv.DictWriter(response, fieldnames=["Sublocations", "Sectors", "Project Name", "Funders",
-                                                    "Duration",
-                                                    "Value", "Percentage Spent"], delimiter=',')
-        head.writeheader()
-        for i in filtered:
-            writer.writerow([','.join([x.name for x in i.sublocations]),
-                             ','.join([x.name for x in i.sectors]),
-                             i.name,
-                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
-                             i.duration, i.value, i.percentage_spent])
-    elif not q and not r and s:
-        head = csv.DictWriter(response, fieldnames=["Sectors", "Project Name", "Funders",
-                                                    "Duration",
-                                                    "Value", "Percentage Spent"], delimiter=',')
-        head.writeheader()
-        for i in filtered:
-            writer.writerow([','.join([x.name for x in i.sectors]),
-                             i.name,
-                             ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]),
-                             i.duration, i.value, i.percentage_spent])
-    elif not q and r and not s:
-        head = csv.DictWriter(response, fieldnames=["Sublocations", "Project Name", "Funders",
-                                                    "Duration",
-                                                    "Value", "Percentage Spent"], delimiter=',')
-        head.writeheader()
-        for i in filtered:
-            writer.writerow(
-                [','.join([x.name for x in i.sublocations]), i.name,
-                 ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]), i.duration, i.value,
-                 i.percentage_spent])
+    w = request.GET.getlist('implementers__icontains')
+
+    fieldnames = ["Project Name", "Funders", "Duration", "Value", "Percentage Spent"]
+    if w:
+        fieldnames.insert(0, "Implementers")
+    if s:
+        fieldnames.insert(0, "Sectors")
+    if r:
+        fieldnames.insert(0, "Sublocations")
+    if q:
+        fieldnames.insert(0, "Locations")
+    head = csv.DictWriter(response, fieldnames=fieldnames)
+    head.writeheader()
+    for i in filtered:
+        row = [i.name, ','.join([x.short_name if x.short_name else x.name for x in i.funders.all()]), i.duration,
+               i.value, i.percentage_spent]
+        if w:
+            row.insert(0, ','.join([x.short_name if x.short_name else x.name for x in i.implementers.all()]))
+        if s:
+            row.insert(0, ','.join([x for x in i.sectors]))
+        if r:
+            row.insert(0, ','.join([x for x in i.sublocations]))
+        if q:
+            row.insert(0, ','.join([x for x in i.locations]))
+
+        writer.writerow(row)
 
     return response
 
@@ -280,6 +210,11 @@ def pdf_gen(request):
         pass
     else:
         context['sec_display'] = True
+    i = request.GET.getlist('implementers__icontains')
+    if not i:
+        pass
+    else:
+        context['imp_display'] = True
     context['filtered'] = filtered
     template = get_template('reports/report.html')
     html = template.render(RequestContext(request, context))
@@ -317,6 +252,11 @@ def project_list(request):
         pass
     else:
         sec_display = True
+    i = request.GET.getlist('implementers__icontains')
+    if not i:
+        pass
+    else:
+        imp_display = True
 
     return render_to_response('reports/index.html', locals(), context_instance=RequestContext(request))
 
@@ -334,7 +274,8 @@ def sector_report(request):
     if request.GET.get('sector'):
         project_ids = SectorAllocation.objects.prefetch_related('project').filter(
             sector=request.GET.get('sector')).values_list('project')
-        projects = Project.objects.select_related('spending').prefetch_related('funders', 'currency', 'implementers').filter(
+        projects = Project.objects.select_related('spending').prefetch_related('funders', 'currency',
+                                                                               'implementers').filter(
             id__in=list(set(project_ids)))
         allocation_dict = {}
         for project_id in project_ids:
@@ -349,6 +290,7 @@ def sector_report(request):
                     key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         sector = Sector.objects.get(id=request.GET.get('sector'))
+        filtered = ProjectFilter(request.GET, queryset=projects)
         exporters = True
     return render_to_response("reports/sector_report.html", locals(), context_instance=RequestContext(request))
 
@@ -509,6 +451,7 @@ def location_report(request):
                     allocation_dict[key] = value
         location = Location.objects.prefetch_related('sublocation_set').get(id=request.GET.get('location'))
         exporters = True
+        filtered = ProjectFilter(request.GET, queryset=projects)
     return render_to_response("reports/location_report.html", locals(), context_instance=RequestContext(request))
 
 

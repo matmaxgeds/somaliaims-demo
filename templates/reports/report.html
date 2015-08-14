@@ -41,6 +41,9 @@
             {% if sec_display %}
             <th>Sectors</th>
             {% endif %}
+            {% if imp_display %}
+            <th>Implementers</th>
+            {% endif %}
             <th>Project Name</th>
             <th>Funders</th>
             <th>Duration</th>
@@ -72,7 +75,13 @@
             {% endfor %}
             </td>
             {% endif %}
-
+            {% if imp_display %}
+            <td>
+                {% for implementer in obj.implementers.all %}
+                {{ implementer }}{% if forloop.last %}{% else %}, {% endif %}
+                {% endfor %}
+            </td>
+            {% endif %}
             <td>{{ obj.name }}</td>
             <td class="col-md-3">
             {% for funder in obj.funders.all %}
