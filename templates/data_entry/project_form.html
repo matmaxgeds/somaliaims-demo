@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
 {% block title %} Create Project {% endblock %}
 
 {% block header_text%} Create Project {% endblock %}
@@ -300,4 +302,8 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static "js/sublocations-update.js" %}"></script>
 {% endblock %}
