@@ -186,7 +186,7 @@ def ProjectListView(request):
     return render_to_response("data_entry/index.html", locals(), context_instance=RequestContext(request))
 
 
-# TODO Kevin should work on the ajaxSublocations views. An ajaxSubPSGs view is also needed.
+# TODO An ajaxSubPSGs view is also needed.
 def ajaxSublocations(request):
     if request.method == "POST" and request.is_ajax():
         subs = SubLocation.objects.filter(location__id=request.POST['location'])
