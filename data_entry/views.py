@@ -75,7 +75,7 @@ class ProjectCreateView(GroupRequiredMixin, CreateView):
             messages.warning(request, "You need to belong to an organization to add a project.")
             return HttpResponseRedirect(reverse('data-entry:dashboard'))
 
-        return ProjectCreateView.dispatch(self, request, *args, **kwargs)
+        return super(ProjectCreateView, self).dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return redirect('/data-entry/')

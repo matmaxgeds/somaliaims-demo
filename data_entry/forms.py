@@ -9,6 +9,7 @@ class ProjectForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['name'].widget.attrs['rows'] = '2'
         self.fields['description'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['rows'] = '3'
         self.fields['startDate'].widget.attrs['class'] = 'form-control'
