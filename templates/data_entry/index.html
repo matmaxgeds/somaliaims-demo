@@ -7,7 +7,7 @@
 {% block content %}
 <div class="container">
 
-    <div class="row" style="padding-top: 40px;"></div>
+    <div class="row" style="padding-top: 20px;"></div>
     <div id="row">
         <div class="col-md-12">
             <div class="row">
@@ -25,6 +25,15 @@
     <div>
         <div class="col-md-2">
             <form action="" method="get">
+                <label for="funders__icontains">Funders</label>
+                <div class="form-group">
+
+                    {{ filtered.form.funders__icontains }}
+                </div>
+                <label for="implementers__icontains">Implementers</label>
+                <div class="form-group">
+                    {{ filtered.form.implementers__icontains }}
+                </div>
                 <input class="form-control" id="id_name__icontains" name="name__icontains" type="text" placeholder="project name">
                 <br>
                 <div class="btns">
@@ -114,6 +123,29 @@
     <script>
         $(document).ready(function(){
         $('#myTable').dataTable();
+
+        });
+    </script>
+ <script>
+        $(document).ready(function() {
+            $('option', $('#id_funders__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('option', $('#id_implementers__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('#id_funders__icontains').multiselect('refresh');
+                $('#id_implementers__icontains').multiselect('refresh');
+            $('#reset').on('click', function () {
+                $('option', $('#id_funders__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('option', $('#id_implementers__icontains')).each(function (element) {
+                    $(this).removeAttr('selected').prop('selected', false);
+                });
+                $('#id_funders__icontains').multiselect('refresh');
+                $('#id_implementers__icontains').multiselect('refresh');
+            });
 
         });
     </script>
