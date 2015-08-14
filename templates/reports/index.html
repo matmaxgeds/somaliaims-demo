@@ -193,7 +193,7 @@
 
                 {{ filtered.form.funders__icontains }}
             </div>
-            <label for="funders__icontains">Implementers</label>
+            <label for="implementers__icontains">Implementers</label>
             <div class="form-group">
                 {{ filtered.form.implementers__icontains }}
             </div>
@@ -248,7 +248,7 @@
     {% for obj in filtered %}
         <tr>
             {% if loc_display %}
-            <td class="col-md-1">
+            <td>
                 {% for location in obj.locations %}
                 {{ location }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
@@ -256,7 +256,7 @@
             {% endif %}
 
             {% if sub_display %}
-            <td class="col-md-1">
+            <td>
                 {% for sublocation in obj.sublocations %}
                 {{ sublocation }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
@@ -264,14 +264,14 @@
             {% endif %}
 
             {% if sec_display %}
-            <td class="col-md-1">
+            <td>
                 {% for sector in obj.sectors %}
                 {{ sector }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
             </td>
             {% endif %}
 
-            <td class="col-md-5">
+            <td class="col-md-4">
                 <a href={% url 'data-entry:project_details' obj.id %}>{{ obj.name }}</a>
                 <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>
 
