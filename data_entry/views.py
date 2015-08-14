@@ -1,4 +1,4 @@
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, HttpResponseRedirect, render_to_response
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
@@ -188,12 +188,11 @@ def ProjectListView(request):
 
 # TODO Kevin should work on the ajaxSublocations views. An ajaxSubPSGs view is also needed.
 def ajaxSublocations(request):
-    html_string = ""
-    if request.is_ajax():
-        for sublocation in SubLocation.objects.filter(location=request.POST['location']):
-            html_string += '<option value="%s">%s</option>' % (sublocation.pk, sublocation.name)
-
-            return HttpResponse(html_string)
+    if request.method == "POST" and request.is_ajax():
+        subs = SubLocation.objects.filter(location__id=request.POST['location'])
+        options = [{'label': sub.__str__(), 'title': sub.__str__(), 'value': str(sub.id)}
+                   for sub in subs]
+        return JsonResponse(options, safe=False)
     else:
         raise Http404
 
