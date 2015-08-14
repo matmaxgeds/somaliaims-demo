@@ -349,6 +349,7 @@ def sector_report(request):
                     key = str('_'.join(funder.short_name.split() if funder.short_name else funder.name.split()))
                     allocation_dict[key] = value
         sector = Sector.objects.get(id=request.GET.get('sector'))
+        filtered = ProjectFilter(request.GET, queryset=projects)
         exporters = True
     return render_to_response("reports/sector_report.html", locals(), context_instance=RequestContext(request))
 
@@ -509,6 +510,7 @@ def location_report(request):
                     allocation_dict[key] = value
         location = Location.objects.prefetch_related('sublocation_set').get(id=request.GET.get('location'))
         exporters = True
+        filtered = ProjectFilter(request.GET, queryset=projects)
     return render_to_response("reports/location_report.html", locals(), context_instance=RequestContext(request))
 
 
