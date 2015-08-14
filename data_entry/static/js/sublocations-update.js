@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
   function getCookie(name) {
     var cookieValue = null;
@@ -21,7 +21,7 @@ $(document).ready(function(){
   var csrftoken = getCookie('csrftoken');
 
   // Trigger the event for location dropdowns
-  $('#location select[id$=\'location\']').change(function() {
+  $('#location').on('change', 'select[id$=\'location\']', function() {
     $.ajax({
       context: this,
       type: 'POST',
