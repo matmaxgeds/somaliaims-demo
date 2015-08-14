@@ -78,9 +78,6 @@ class Project(models.Model):
         l = LocationAllocation.objects.filter(project=self).values_list('location')
         f = Location.objects.filter(id__in=l).values_list('name')
         location_list = [' '.join(item) for item in f]
-        import sys
-
-        sys.stderr.write(str(location_list))
         return location_list
 
     @property
