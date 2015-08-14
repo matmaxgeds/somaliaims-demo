@@ -238,6 +238,9 @@
             {% if sec_display %}
             <th>Sectors</th>
             {% endif %}
+            {% if imp_display %}
+            <th>Implementers</th>
+            {% endif %}
             <th>Project Name</th>
             <th>Funders</th>
             <th>Duration</th>
@@ -247,6 +250,7 @@
         </thead>
     {% for obj in filtered %}
         <tr>
+
             {% if loc_display %}
             <td>
                 {% for location in obj.locations %}
@@ -270,13 +274,20 @@
             {% endfor %}
             </td>
             {% endif %}
+            {% if imp_display %}
+            <td>
+                {% for implementer in obj.implementers.all %}
+                {{ implementer }}{% if forloop.last %}{% else %}, {% endif %}
+                {% endfor %}
+            </td>
+            {% endif %}
 
-            <td class="col-md-4">
+            <td>
                 <a href={% url 'data-entry:project_details' obj.id %}>{{ obj.name }}</a>
                 <p id="desc" style="display:none">{{ obj.description|truncatechars:300 }}</p>
 
             </td>
-            <td class="col-md-3">
+            <td>
             {% for funder in obj.funders.all %}
                 {{ funder }}{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
