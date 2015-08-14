@@ -37,7 +37,7 @@
             <th>% Spent to Date</th>
         </tr>
         </thead>
-    {% for obj in projects %}
+    {% for obj in filtered %}
         <tr>
             <td>
                 <a href={% url 'data-entry:project_details' obj.id %}>{{ obj.name }}</a>
@@ -111,6 +111,14 @@
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
+    </script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $('#myTable').dataTable();
+
+        });
     </script>
     {% endif %}
 {% endblock %}
