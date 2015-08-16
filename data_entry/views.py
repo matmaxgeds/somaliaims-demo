@@ -4,7 +4,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
 from .models import Project, Spending, Contact, Document, LocationAllocation, SectorAllocation, UserOrganization, \
     SubPSGAllocation
-from management.models import SubLocation
+from management.models import SubLocation, SubPSG
 from .forms import ProjectForm, LocationAllocationFormset, SectorAllocationFormset, UserOrganizationFormset, \
     DocumentFormset, SpendingForm, ContactForm, BaseDocumentFormSet, SubPSGAllocationFormset
 from django.forms.models import inlineformset_factory
@@ -186,12 +186,21 @@ def ProjectListView(request):
     return render_to_response("data_entry/index.html", locals(), context_instance=RequestContext(request))
 
 
-# TODO An ajaxSubPSGs view is also needed.
 def ajaxSublocations(request):
     if request.method == "POST" and request.is_ajax():
         subs = SubLocation.objects.filter(location__id=request.POST['location'])
         options = [{'label': sub.__str__(), 'title': sub.__str__(), 'value': str(sub.id)}
                    for sub in subs]
+        return JsonResponse(options, safe=False)
+    else:
+        raise Http404
+
+
+def ajaxSubPSGs(request):
+    if request.method == "POST" and request.is_ajax():
+        subpsgs = SubPSG.objects.filter(psg__id=request.POST['psg'])
+        options = [{'label': sub.__str__(), 'title': sub.__str__(), 'value': str(sub.id)}
+                   for sub in subpsgs]
         return JsonResponse(options, safe=False)
     else:
         raise Http404
