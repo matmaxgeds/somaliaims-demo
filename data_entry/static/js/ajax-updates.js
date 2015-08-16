@@ -21,6 +21,24 @@ $(document).ready(function() {
   var csrftoken = getCookie('csrftoken');
 
   // Trigger the event for location dropdowns
+  $('#location').on('change', 'select[id$=\'location\']', function() {
+    $.ajax({
+      context: this,
+      type: 'POST',
+      url: '/data-entry/sublocations/',
+      data: {
+        'location': $(this).find(':selected').val(),
+      },
+      headers: {'X-CSRFToken': csrftoken},
+      success: function(options) {
+        // Find the sublocations select
+        var subl = $(this).parent().next().find('select');
+        subl.multiselect('dataprovider', options);
+      },
+    });
+  });
+
+  // Trigger the event for PSG dropdowns
   $('#psg').on('change', 'select[id$=\'\-psg\']', function() {
     $.ajax({
       context: this,
@@ -31,7 +49,7 @@ $(document).ready(function() {
       },
       headers: {'X-CSRFToken': csrftoken},
       success: function(options) {
-        // Find the subpsgs select
+        // Find the corresponding subpsgs select
         var subl = $(this).parent().next().find('select');
         subl.multiselect('dataprovider', options);
       },
