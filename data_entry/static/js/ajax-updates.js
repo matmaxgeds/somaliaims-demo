@@ -38,4 +38,22 @@ $(document).ready(function() {
     });
   });
 
+  // Trigger the event for PSG dropdowns
+  $('#psg').on('change', 'select[id$=\'\-psg\']', function() {
+    $.ajax({
+      context: this,
+      type: 'POST',
+      url: '/data-entry/subpsgs/',
+      data: {
+        'psg': $(this).find(':selected').val(),
+      },
+      headers: {'X-CSRFToken': csrftoken},
+      success: function(options) {
+        // Find the corresponding subpsgs select
+        var subl = $(this).parent().next().find('select');
+        subl.multiselect('dataprovider', options);
+      },
+    });
+  });
+
 });

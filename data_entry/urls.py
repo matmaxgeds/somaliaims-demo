@@ -14,4 +14,5 @@ urlpatterns = [
         name='project_delete'),
     #url(r'^sublocations/(?P<locationID>[^/]+)/', getSublocations, name='sublocations'),
     url(r'^sublocations/$', ajaxSublocations, name='ajax_sublocations'),
+    url(r'^subpsgs/$', ajaxSubPSGs, name='ajax_subpsgs'),
 ]
