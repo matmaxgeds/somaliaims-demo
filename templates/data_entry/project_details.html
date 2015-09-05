@@ -7,83 +7,139 @@
 
 {% block content %}
 
-<div class="rows" style="padding-top: 40px;" ></div>
-<div class="row">
-<div class="col-md-12">
-    <div class="col-md-1"></div>
-    <div class="col-md-6">
-        <h4>Project Name:</h4>
-        <h3>{{ project.name }}</h3>
-        <h4>Description</h4>
-        <p>{{ project.description }}</p>
-        <h4>Start date</h4>
-        <p>{{ project.startDate }}</p>
-        <h4>End date</h4>
-        <p>{{ project.endDate }}</p>
-        <h4>Project value</h4>
-        <p>{{ project.value|intcomma }} {{ project.currency }}</p>
-        <h4>Funders</h4>
-        {% for funder in project.funders.all %}
-            <p>{{ funder.name }}</p>
-        {% endfor %}
-        {% for org in other_organizations %}
-                {% if org.role == "Funder" %}
-                    <p>org.name</p>
-                {% endif %}
-            {% endfor %}
-        <h4>Implementers</h4>
-        {% for implementer in project.implementers.all %}
-            <p>{{ implementer.name }}</p>
+<style>
 
-        {% endfor %}
-        {% for org in other_organizations %}
-                {% if org.role == "Implementer" %}
+  .some-space-top{
+      padding-top: 40px;
+  }
+  .thirty-px-padding-top{
+    padding-top: 30px;
+  }
+
+</style>
+
+<div class="fluid-container"><!--Star of Wrapper-->
+<div class="row some-space-top"><!-- start of row -->
+        
+        <h3 class="">Project Name: {{ project.name }}</h3> <hr />
+        
+        <div class="row"><!-- start of row -->
+            
+            <div class="col-md-6">
+              <br />
+              <p><b>Desciption: </b> {{ project.description }}</p>
+            </div>
+
+            <div class="col-md-2">
+              <h4>Project Duration</h4>
+              <p><b>Start Date: </b> {{ project.startDate }}</p>
+              <p><b>End Date: </b> {{ project.endDate }}</p>
+            </div>
+
+            <div class="col-md-2">
+              <h4>Project value</h4>
+              <p>{{ project.value|intcomma }} {{ project.currency }}</p>
+
+              <h4>Funders</h4>
+              {% for funder in project.funders.all %}
+                    <p>{{ funder.name }}</p>
+              {% endfor %}
+              {% for org in other_organizations %}
+                  {% if org.role == "Funder" %}
+                      <p>org.name</p>
+                  {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="col-md-2">
+              <h4>Implementers</h4>
+              {% for implementer in project.implementers.all %}
+                    <p>{{ implementer.name }}</p>
+              {% endfor %}
+              {% for org in other_organizations %}
+                  {% if org.role == "Implementer" %}
                     <p>{{ org.name }}</p>
+                  {% endif %}
+              {% endfor %}           
+            
+              <h4>Sectors and allocations</h4>
+              {% for sector in sec_allocations %}
+                  <p>{{ sector.sector.name }} - {{ sector.percentage }}</p>
+              {% endfor %}
+            </div>
+
+        </div><!-- end of row -->
+
+        <div class="row"><!-- start of row -->
+          
+          <div class="col-md-8"><!-- start of col-md-9 -->
+            <div class="row"> <!-- start of row -->
+
+                    <h3>Locations And Respective Allocations</h3> <hr />
+
+                    <div class="col-md-6">
+                      {% for location in loc_allocations %}
+                          <h4>{{ location.location.name }} - {{ location.percentage }}</h4>
+                          <span>Sublocations involved</span>
+                          <ol>
+                          {% for sublocation in location.sublocations.all %}
+                              <li>{{ sublocation.name }}</li>
+                          {% endfor %}
+                          </ol>
+                      {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                      <h4>Sub-PSGs And Respective allocations</h4>
+                      {% if subpsg_allocations %}
+                      {% for subpsg in subpsg_allocations %}
+                          <p>{{ subpsg.subpsg.name }} - {{ subpsg.percentage }}</p>
+                      {% endfor %}
+                      {% else %}
+                          <span>No data available</span>
+                      {% endif %}
+                      {% if documents %}
+                    </div>
+            </div><!-- end of row -->
+          </div><!--end of col-md-9-->
+
+          <div class="col-md-1"></div>
+
+          <div class="col-md-3"><!-- start of col-md-3 -->
+
+              <h3>Projects</h3> <hr />
+              {% for document in documents %}
+                    <p>{{ document.name }}
+                        <a href="{% url 'data-entry:download' pk=document.id %}">Download</a>
+                    </p>
+                    <p>Link to project document:</p>
+                    <p>{{ document.link_to_document_website }}</p>
+                {% endfor %}
                 {% endif %}
-            {% endfor %}
-        <h4>Sectors and allocations</h4>
-        {% for sector in sec_allocations %}
-            <p>{{ sector.sector.name }} - {{ sector.percentage }}</p>
-        {% endfor %}
-        <h4>Locations and respective allocations</h4>
-        {% for location in loc_allocations %}
-            <h4>{{ location.location.name }} - {{ location.percentage }}</h4>
-            <span>Sublocations involved</span>
-            <ol>
-            {% for sublocation in location.sublocations.all %}
-                <li>{{ sublocation.name }}</li>
-            {% endfor %}
-            </ol>
-        {% endfor %}
-        <h4>Sub-PSGs and respective allocations</h4>
-        {% if subpsg_allocations %}
-        {% for subpsg in subpsg_allocations %}
-            <p>{{ subpsg.subpsg.name }} - {{ subpsg.percentage }}</p>
-        {% endfor %}
-        {% else %}
-            <span>No data available</span>
-        {% endif %}
-        {% if documents %}
-        <h4>Project files</h4>
-        {% for document in documents %}
-            <p>{{ document.name }}
-                <a href="{% url 'data-entry:download' pk=document.id %}">Download</a>
-            </p>
-            <p>Link to project document:</p>
-            <p>{{ document.link_to_document_website }}</p>
-        {% endfor %}
-        {% endif %}
-    </div>
-    <div class="col-md-3">
-         <div style="float: right;">
-            <a href="{% url 'reports:dashboard'%}"><button class="btn btn-default btn-large">Go back</button></a>
-         </div>
-    </div>
-    <div class="col-md-2"></div>
-</div>
-</div>
-<div class="row" style="padding-top: 10px;"></div>
-<div id="map-canvas"></div>
+          </div><!-- end of col-md-3 -->
+
+        </div><!-- end of row -->
+
+
+        <div class="row"><!-- start of row -->
+
+            <hr />
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                  <div class="pull-right">
+                      <a href="{% url 'reports:dashboard'%}"><button class="btn btn-default btn-large">Go back</button></a>
+                   </div>
+            </div>
+
+        </div><!-- end of row-->
+
+        <div class="row thirty-px-padding-top">
+          <div id="map-canvas"></div>
+        </div>
+
+</div><!--end of row -->
+</div><!--End Of Wrapper-->
+
 <script>
 function initialize() {
   country = new google.maps.LatLng(5.134736, 46.186371)

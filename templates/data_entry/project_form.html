@@ -7,19 +7,33 @@
 {% block header_text%} Create Project {% endblock %}
 
 {% block content %}
-<div class="container">
+<style>
+  .some-space-top{
+      padding-top: 40px;
+  }
+  textarea#id_name {
+    max-width: 200px;
+    max-height: 40px;
+  }
 
-    <div class="row" style="padding-top: 40px;"></div>
-    <div class="col-md-12">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
+</style>
+
+<div class="fluid-container"><!--Start of Wrapper-->
+    <div class="row some-space-top"><!--start of row-->
+
+          <div class="col-md-3"></div>
+
+          <div class="col-md-6"><!--start of col-md-612 -->
+
             <form id="myForm" class="form" method="post" action="" enctype="multipart/form-data">
+            
             {% csrf_token %}
             <div class="form-group">
                 {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
                 {{ form.non_field_errors }}
                 {{ form.name_of_field.errors }}
             </div>
+
             <div class="form-group">
                 <label for="name">Name</label>
                 {{ form.name }}
@@ -28,14 +42,23 @@
                 <label for="description">Description</label>
                 {{ form.description }}
             </div>
-            <div class="form-group">
-                <label for="startDate">Start Date</label>
-                {{ form.startDate }}
-            </div>
-            <div class="form-group">
-                <label for="endDate">End Date</label>
-                {{ form.endDate }}
-            </div>
+
+            <div class="row"><!--start of row for start and end date -->
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="startDate">Start Date</label>
+                      {{ form.startDate }}
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                    <label for="endDate">End Date</label>
+                    {{ form.endDate }}
+                </div>  
+              </div>
+            </div><!--end of row-->
+
             <div class="form-group">
                 <label for="funders">Funding Organization(s)</label>
                 {{ form.funders }}
@@ -44,103 +67,132 @@
                 <label for="implementers">Implementing Organization(s)</label>
                 {{ form.implementers }}
             </div>
+
+            <div class="row"><!-- start of row for project values, currency and rate to us dollar -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="value">Project Value</label>
+                        {{ form.value }}
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="sform-group">
+                        <label for="value">Currency</label> <br />
+                        {{ form.currency }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="value">Rate to US Dollar</label>
+                        {{ form.rateToUSD }}
+                    </div>
+                </div>
+            </div><!-- end of row -->
+
+            <!-- <hr /> -->
+
+            <h3 class="page-header text-center">Spending Details</h3>
+          
             <div class="form-group">
-                <label for="value">Project Value</label>
-                {{ form.value }}
-            </div>
-            <div class="form-group">
-                <label for="value">Currency</label>
-                {{ form.currency }}
-            </div>
-            <div class="form-group">
-                <label for="value">Rate to US Dollar</label>
-                {{ form.rateToUSD }}
-            </div>
-            <hr>
-            <legend>
-                Spending Details
-            </legend>
-             <div class="form-group">
                 {% for hidden in form1.hidden_fields %} {{ hidden }} {% endfor %}
                 {{ form1.non_field_errors }}
                 {{ form1.name_of_field.errors }}
             </div>
-            <div class="form-group">
-                <label for="spending-spendingToDate">Spending to date</label>
-                {{ form1.spendingToDate }}
-            </div>
-            <div class="form-group">
-                <label for="spending-spendingLastYear">Spending in 2014</label>
-                {{ form1.lastYearSpending }}
-            </div>
-            <div class="form-group">
-                <label for="spending-spendingThisYear">Expected spending in 2015</label>
-                {{ form1.thisYearSpending }}
-            </div>
-            <div class="form-group">
-                <label for="spending-spendingNextYear">Expected spending in 2016</label>
-                {{ form1.nextYearSpending }}
-            </div>
-            <hr>
-            <legend>
-                Locations and allocations
-            </legend>
-           <div class="form-group">
-                 {{ formset.non_form_errors }}
-                    {% for dict in formset.errors %}
-                    {% for error in dict.values %}
-                        {{ error }}
-                    {% endfor %}
-                    {% endfor %}
-           </div>
 
-           <table class="table table-bordered table-condensed">
-               <tbody id="location">
-               {{ formset.management_form }}
-                   {% for form in formset %}
+            <div class="row"><!-- start of row for spending -->
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="spending-spendingToDate">Spending to date</label>
+                      {{ form1.spendingToDate }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="spending-spendingLastYear">Spending in 2014</label>
+                      {{ form1.lastYearSpending }}
+                  </div>
+              </div>
+            </div><!-- end of row -->
 
-                   {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+            <div class="row"><!-- start of row for expected spedning date -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="spending-spendingThisYear">Expected spending in 2015</label>
+                        {{ form1.thisYearSpending }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="spending-spendingNextYear">Expected spending in 2016</label>
+                        {{ form1.nextYearSpending }}
+                    </div>
+                </div>
+            </div><!-- end of row -->
 
-                   <tr>
-                       <td>
-                           Location
-                       </td>
-                       <td>
-                           Sublocations
-                       </td>
-                       <td>
-                           Percentage allocated
-                       </td>
-                   </tr>
-                   <tr>
-                      <td>{{ form.location }}</td>
-                      <td>{{ form.sublocations }}</td>
-                      <td>{{ form.allocatedPercentage }}</td>
-                   </tr>
-                   {% endfor %}
-               </tbody>
-           </table>
-            <hr>
+            <!-- <hr /> -->
 
-            <legend>
-                PSG - Sub-PSG allocations.
-            </legend>
-           <div class="form-group">
-                 {{ formset4.non_form_errors }}
-                    {% for dict in formset4.errors %}
-                    {% for error in dict.values %}
-                        {{ error }}
-                    {% endfor %}
-                    {% endfor %}
-           </div>
-            <table class="table table-bordered table-condensed">
+            <h3 class="page-header text-center">Locations and allocations</h3>            
+
+             <div class="form-group">
+                   {{ formset.non_form_errors }}
+                      {% for dict in formset.errors %}
+                      {% for error in dict.values %}
+                          {{ error }}
+                      {% endfor %}
+                      {% endfor %}
+             </div>
+
+             <table class="table atable-bordered table-condensed">
+                 <tbody id="location">
+                 {{ formset.management_form }}
+                     {% for form in formset %}
+
+                     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+                     <tr class="active">
+                         <td class="text-center">
+                             Location
+                         </td>
+                         <td class="text-center">
+                             Sublocations
+                         </td>
+                         <td class="text-center">
+                             Percentage allocated
+                         </td>
+                     </tr>
+                     <tr>
+                        <td>{{ form.location }}</td>
+                        <td>{{ form.sublocations }}</td>
+                        <td>{{ form.allocatedPercentage }}</td>
+                     </tr>
+
+                     {% endfor %}
+                 </tbody>
+             </table>
+
+            <!-- <hr /> -->
+
+            <h3 class="page-header text-center">PSG - Sub-PSG allocations</h3>
+
+            <div class="form-group">
+                   {{ formset4.non_form_errors }}
+                      {% for dict in formset4.errors %}
+                      {% for error in dict.values %}
+                          {{ error }}
+                      {% endfor %}
+                      {% endfor %}
+            </div>
+
+          <table class="table atable-bordered table-condensed">
                <tbody id="psg">
                {{ formset4.management_form }}
                    {% for form in formset4 %}
 
                    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
-                   <tr>
+                   <tr class="active text-center">
                        <td>
                            PSG
                        </td>
@@ -158,27 +210,30 @@
                    </tr>
                    {% endfor %}
                </tbody>
-           </table>
-            <hr>
-            <legend>
-                Sectors and allocations
-            </legend>
-           <div class="form-group">
+          </table>
+
+          <!-- <hr> -->
+
+
+          <h3 class="page-header text-center">Sectors and allocations</h3>
+
+          <div class="form-group">
                  {{ formset1.non_form_errors }}
                     {% for dict in formset1.errors %}
                     {% for error in dict.values %}
                         {{ error }}
                     {% endfor %}
                     {% endfor %}
-           </div>
-           <table class="table table-bordered table-condensed">
+          </div>
+
+          <table class="table atable-bordered table-condensed">
                <tbody id="sector">
                     {{ formset1.management_form }}
 
                    {% for form in formset1.forms %}
                    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
-                   <tr>
+                   <tr class="active text-center">
                        <td>
                            Sector
                        </td>
@@ -194,26 +249,28 @@
                    {% endfor %}
                </tbody>
            </table>
-            <hr>
-            <legend>
-                Other organizations
-            </legend>
-           <div class="form-group">
+
+          <!-- <hr> -->
+
+          <h3 class="page-header text-center">Other organizations</h3>
+
+          <div class="form-group">
                  {{ formset2.non_form_errors }}
                     {% for dict in formset2.errors %}
                     {% for error in dict.values %}
                         {{ error }}
                     {% endfor %}
                     {% endfor %}
-           </div>
-           <table class="table table-bordered table-condensed">
+          </div>
+          
+          <table class="table table-condensed">
                <tbody id="user-organizations">
                     {{ formset2.management_form }}
 
                    {% for form in formset2.forms %}
                    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
-                   <tr>
+                   <tr class="active text-center">
                        <td>
                            Name
                        </td>
@@ -228,51 +285,68 @@
                    </tr>
                    {% endfor %}
                </tbody>
-           </table>
-            <hr>
-            <legend>
-                Contact
-            </legend>
-            <div class="form-group">
+          </table>
+
+          <!-- <hr> -->
+
+          <h3 class="page-header text-center">Contact</h3>
+
+          <div class="form-group">
                 {{ form2.non_field_errors }}
                 {{ form2.name_of_field.errors }}
-            </div>
-            <div class="form-group">
-                <label for="contact-name">Name</label>
-                {{ form2.name }}
-            </div>
-            <div class="form-group">
-                <label for="contact-organization">Organization</label>
-                {{ form2.organization }}
-            </div>
-            <div class="form-group">
-                <label for="contact-number">Number</label>
-                {{ form2.number }}
-            </div>
-            <div class="form-group">
-                <label for="contact-email">Email</label>
-                {{ form2.email }}
-            </div>
-            <hr>
-            <legend>
-                Project files
-            </legend>
-            <div class="form-group">
+          </div>
+
+          <div class="row"><!-- start of row -->
+              <div class="col-md-6">
+                    <div class="form-group">
+                          <label for="contact-name">Name</label>
+                          {{ form2.name }}
+                    </div>
+              </div>
+              <div class="col-md-6">
+                    <div class="form-group">
+                          <label for="contact-organization">Organization</label>
+                          {{ form2.organization }}
+                    </div>
+              </div>
+          </div><!-- end of row -->
+
+          <div class="row"> <!-- start of row -->
+              <div class="col-md-6">
+                  <div class="form-group">
+                        <label for="contact-number">Number</label>
+                        {{ form2.number }}
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                        <label for="contact-email">Email</label>
+                        {{ form2.email }}
+                  </div>
+              </div>
+          </div><!-- end of row-->
+          
+          <!-- <hr> -->
+
+          <h3 class="page-header text-center">Project files</h3>
+
+          <div class="form-group">
                 {{ formset3.non_form_errors }}
                     {% for dict in formset3.errors %}
                     {% for error in dict.values %}
                         {{ error }}
                     {% endfor %}
                     {% endfor %}
-            </div>
-           <table class="table table-bordered table-condensed">
+          </div>
+          
+          <table class="table table-condensed">
                <tbody id="documents">
                     {{ formset3.management_form }}
 
                    {% for form in formset3.forms %}
                    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
-                   <tr>
+                   <tr class="active text-center">
                        <td>
                            Name
                        </td>
@@ -284,7 +358,7 @@
                             Link
                         </td>
                    </tr>
-                   <tr>
+                   <tr class="text-center">
                       <td>{{ form.name }}</td>
                       <td>{{ form.file }}</td>
                       <td>{{ form.link_to_document_website }}</td>
@@ -292,15 +366,29 @@
                    {% endfor %}
                </tbody>
            </table>
-            <button type="submit" class="btn btn-default btn-lg">Create Project</button>
-            &emsp; &ensp;
-            <a href="{% url 'data-entry:dashboard' %}">Go back</a>
-       </form>
 
-        </div>
-        <div class="col-md-2"></div>
-    </div>
-</div>
+          <div class="row">
+            <div class="col-md-2"></div>
+
+            <div class="col-md-8">
+                <button type="submit" class="btn btn-default btn-lg">Create Project</button>
+                &emsp; &ensp;
+                <button class="btn btn-default btn-lg" href="{% url 'data-entry:dashboard' %}" role="button">Go back</button>
+            </div>
+
+            <div class="col-md-2"></div>
+          </div>
+
+        </form>
+        
+        <div class="some-space-top"></div>
+
+      </div><!--end of col-md-3 -->
+
+      <div class="col-md-3"></div>
+
+    </div><!--end of row-->    
+</div><!--End of Wrapper-->
 
 {% endblock %}
 
